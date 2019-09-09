@@ -9,6 +9,9 @@ const mutations = {
   [types.SET_AUDIOLIST](state, data) {
     state.audioList = data;
     state.isAudio = !state.isAudio;
+  },
+  [types.GET_DEVCACHEAll](state,data){
+	  
   }
 }
 export default mutations

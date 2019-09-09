@@ -5,6 +5,15 @@ import 'amfe-flexible'
 import App from './App.vue'
 import router from './router/index'
 import store from './store/index'
+import Vconsole from 'vconsole'
+const vConsole = new Vconsole()
+Vue.use(vConsole)
+//vant按需加载组件
+import {
+  Button,NavBar
+} from 'vant';
+Vue.use(Button);
+Vue.use(NavBar);
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios;
 new Vue({

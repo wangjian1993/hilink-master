@@ -7,14 +7,21 @@
 import * as types from "./mutation-type.js";
 
 export default {
-  setSongs({
-    commit
-  }, list) {
-    commit(types.SET_SONGSLIST, list);
-  },
-  setAudio({
-    commit
-  }, data) {
-    commit(types.SET_AUDIOLIST, data);
-  },
+	setSongs({
+		commit
+	}, list) {
+		commit(types.SET_SONGSLIST, list);
+	},
+	setAudio({
+		commit
+	}, data) {
+		commit(types.SET_AUDIOLIST, data);
+	},
+	//获取设备信息
+	getDevicesState({
+		commit
+	}, data) {
+		console.log(data)
+		commit(types.GET_DEVCACHEAll, data);
+	}
 };
