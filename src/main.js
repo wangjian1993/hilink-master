@@ -8,6 +8,9 @@ import store from './store/index'
 import Vconsole from 'vconsole'
 const vConsole = new Vconsole()
 Vue.use(vConsole)
+//hilink sdk公共函数
+import hilink from './hilink/index'
+Vue.use(hilink);
 //vant按需加载组件
 import {
   Button,NavBar

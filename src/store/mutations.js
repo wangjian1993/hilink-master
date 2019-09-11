@@ -3,16 +3,8 @@
 // }
 import * as types from './mutation-type.js';
 const mutations = {
-  [types.SET_SONGSLIST](state, list) {
-    state.songsList = list;
-  },
-  [types.SET_AUDIOLIST](state, data) {
-    state.audioList = data;
-    state.isAudio = !state.isAudio;
-  },
-  [types.GET_DEVCACHEAll](state,data){
-	  
-  }
+	[types.GET_DEVCACHEAll](state, data) {
+		state.devicesstate = data;
+	}
 }
 export default mutations
-
