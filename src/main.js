@@ -13,10 +13,11 @@ import hilink from './hilink/index'
 Vue.use(hilink);
 //vant按需加载组件
 import {
-  Button,NavBar
+  Button,NavBar,Slider
 } from 'vant';
 Vue.use(Button);
 Vue.use(NavBar);
+Vue.use(Slider);
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios;
 new Vue({

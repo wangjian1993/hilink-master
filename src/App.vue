@@ -18,4 +18,23 @@ export default {
   }
 };
 </script>
-<style></style>
+<style>
+	@font-face {
+		font-family: 'hwtext-zh';
+		src: url('assets/font/zh/HuaweiFont-Regular.ttf');
+	}
+	@font-face {
+		font-family: 'hwtext-en';
+		src: url('assets/font/en/HuaweiSans-Regular.ttf');
+	}
+	body{
+		background: #F7F7F7;
+	}
+	html {
+		font-family: "hwtext-zh","hwtext-en",Helvetica, STHeiTi, Arial, sans-serif;
+		-ms-text-size-adjust: 100%;
+		-webkit-text-size-adjust: 100%;
+		font-size: 62.5%;
+		background:#F7F7F7;
+	}
+</style>

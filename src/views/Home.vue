@@ -1,18 +1,58 @@
 <template>
 	<div class="home">
 		<!-- 导航 -->
-		<van-nav-bar title="火火兔" left-text="返回" right-text="按钮" left-arrow @click-left="onClickLeft" @click-right="onClickRight" />
-		<!-- 产品图 -->
-		<div class="devices-img"><img src="../assets/images/j7.png" /></div>
-		<div class="devices-status" @click="cheackErdeng()">
-			<div class="devices-status-text">
-				<span v-if="erdengSwitch.data.on == 1">已开启</span>
-				<span v-else>已关闭</span>
+		<div class="home-header">
+			<div class="home-header-back"><img src="../assets/images/ic_fanhui.png" alt="" /></div>
+			<div class="home-header-title"><p>火火兔故事机</p></div>
+			<div class="home-header-more">
+				<p><img src="../assets/images/ic_yichang01.png" alt="" /></p>
+				<p><img src="../assets/images/ic_gengduo.png" alt="" /></p>
 			</div>
-			<div class="devices-status-img"><img src="../assets/images/on.png" alt="" /></div>
 		</div>
-		<div class="devices-action-list"></div>
-		<!-- <div class="infoAll"><p>设备信息---{{devicesstate}}</p></div> -->
+		<!-- 产品图 -->
+		<div class="devices-img">
+			<img src="../assets/images/img_toutu_bule.png" alt="" />
+			<img src="../assets/images/logo.png" alt="" />
+		</div>
+		<!-- 故事机开关 -->
+		<div class="devices-status">
+			<div class="devices-status-text">已关闭</div>
+			<div class="devices-status-time">
+				<div>
+					<p>65:00</p>
+					<p>定时关机</p>
+				</div>
+			</div>
+			<div class="devices-status-btn">
+				<p><img src="../assets/images/swich.png" alt="" /></p>
+			</div>
+		</div>
+		<div class="devices-audio">
+			<div class="devices-audio-control">
+				<div class="devices-audio-control-text">
+					<div>
+						<p>小宝贝快快睡</p>
+						<p>未知</p>
+					</div>
+				</div>
+				<div class="devices-audio-control-icon">
+					<div>
+						<p><img src="../assets/images/ic_last.png" alt="" /></p>
+					</div>
+					<div>
+						<p><img src="../assets/images/ic_playing.png" alt="" /></p>
+					</div>
+					<div>
+						<p><img src="../assets/images/ic_next.png" alt="" /></p>
+					</div>
+				</div>
+			</div>
+			<div class="devices-audio-volume">
+				<div><p>音量</p></div>
+				<div><van-slider v-model="volume" bar-height="4px" active-color="#ee0a24" /></div>
+				<div><span>68%</span></div>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -23,14 +63,15 @@ export default {
 	name: 'home',
 	data() {
 		return {
-			erdengSwitch: []
+			erdengSwitch: [],
+			volume: 100
 		};
 	},
 	computed: {
 		...mapState(['devicesstate'])
 	},
 	created() {
-		this.getDevicesAll();
+		// this.getDevicesAll();
 	},
 	mounted() {
 		var self = this;
@@ -54,13 +95,13 @@ export default {
 		window['deviceEventCallback'] = event => {
 			let data = self.praseResponseData(event);
 			let type = data.sid;
-			console.log("设备返回========",type)
+			console.log('设备返回========', type);
 			switch (type) {
 				case 'switch':
 					self.erdengSwitch.data.on = data.data.on;
 					break;
 				case 'biaoqing':
-					console.log("表情灯")
+					console.log('表情灯');
 					break;
 				default:
 					break;
@@ -110,31 +151,5 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.infoAll {
-	font-size: 14px;
-}
-.devices-img {
-	width: 100%;
-	height: 100%;
-	img {
-		width: 100%;
-		height: 100%;
-	}
-}
-.devices-status {
-	width: 95%;
-	margin: 0 auto;
-	display: flex;
-	height: 100px;
-	line-height: 100px;
-	.devices-status-text {
-		font-size: 14px;
-		flex: 2;
-		text-align: center;
-	}
-	.devices-status-img {
-		flex: 2;
-		text-align: center;
-	}
-}
+@import '../assets/css/home.less';
 </style>
