@@ -7,5 +7,10 @@ export default {
 		commit
 	}, data) {
 		commit(types.GET_DEVCACHEAll, data);
+	},
+	setTimePopup({
+		commit
+	},data){
+		commit(types.SET_TIMEPOPUP, data);
 	}
 };

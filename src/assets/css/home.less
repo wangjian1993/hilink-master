@@ -136,68 +136,215 @@
 		}
 	}
 }
-.devices-audio {
+.devices-audio-div{
 	width: 328px;
 	margin: 8px auto 0;
-	height: 136px;
 	background: #fff;
 	border-radius: 8px;
-	.devices-audio-control {
-		width: 100%;
-		height: 80px;
-		display: flex;
-		.devices-audio-control-text {
-			flex: 2;
+}
+.devices-audio{
+	width: 328px;
+	margin: 8px auto 0;
+	.devices-audio-contro-box{
+		height: 136px;
+		background: #fff;
+		border-radius: 8px;
+		.devices-audio-control {
+			width:280px;
+			height: 80px;
+			margin: 0 auto;
 			display: flex;
-			align-items: center;
-			div {
-				text-align: left;
-				padding-left: 24px;
-				p {
-					color: #000000;
-					&:first-child {
-						font-size: 18px;
-					}
-					&:last-child {
-						font-size: 14px;
-						color: #ababab;
+			.devices-audio-control-text {
+				flex: 2;
+				display: flex;
+				align-items: center;
+				div {
+					text-align: left;
+					p {
+						color: #000000;
+						&:first-child {
+							font-size: 16px;
+						}
+						&:last-child {
+							font-size: 12px;
+							color: #ababab;
+						}
 					}
 				}
 			}
-		}
-		.devices-audio-control-icon {
-			flex: 2;
-			display: flex;
-			div {
-				flex:3;
-				position: relative;
-				p {
-					width: 48px;
-					height: 48px;
-					display: flex;
-					justify-content: center;
-					align-items: center;
-					position: absolute;
-					top: 50%;
-					left: 50%;
-					transform: translate(-50%, -50%);
-					img {
-						width: 48px;
-						height: 48px;
-						margin: 0 auto;
-						color: #000000;
-						display: block;
+			.devices-audio-control-icon {
+				flex: 2;
+				display: flex;
+				div {
+					flex:3;
+					position: relative;
+					p {
+						width: 36px;
+						height: 36px;
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						position: absolute;
+						top: 50%;
+						left: 50%;
+						transform: translate(-50%, -50%);
+						img {
+							width: 36px;
+							height: 36px;
+							margin: 0 auto;
+							color: #000000;
+							display: block;
+						}
 					}
 				}
 			}
 		}
 	}
+	
 	.devices-audio-volume{
-		width: 100%;
+		width: 280px;
 		height: 56px;
+		margin: 0 auto;
 		display: flex;
 		div{
-			
+			line-height: 56px;
+			font-size: 16px;
+			&:nth-of-type(1){
+				width: 53px;
+			}
+			&:nth-of-type(2){
+				width: 174px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				.van-slider{
+					width: 100%;
+				}
+			}
+			&:nth-of-type(3){
+				width: 53px;
+				text-align: right;
+			}
 		}
 	}
+}
+.devices-audio-else-controle{
+	width: 328px;
+	margin: 0 auto 0;
+	ul{
+		display: flex;
+		flex-wrap: wrap;
+		justify-content:space-between;
+		li{
+			width: 160px;
+			height: 64px;
+			background: #fff;
+			border-radius: 8px;
+			margin-top: 8px;
+			display: flex;
+			.devices-audio-else-text{
+				width: 88.3px;
+				height: 64px;
+				display: flex;
+				// justify-content: center;
+				align-items: center;
+				div{
+					padding-left:24px;
+					p{
+						&:nth-of-type(1){
+							font-size: 16px;
+							color: #000000;
+						}
+						&:nth-of-type(2){
+							font-size: 12px;
+							color: #007DFF;
+						}
+					}
+				}
+			}
+			.devices-audio-else-icon{
+				width: 71.7px;
+				text-align: center;
+				img{
+					width: 24px;
+					height: 24px;
+				}
+			}
+		}
+	}
+}
+.devices-audio-look:extend(.devices-audio-div){
+	height: 64px;
+	div{
+		width: 280px;
+		margin: 0 auto;
+		display: flex;
+		p{
+			flex: 2;
+			height: 64px;
+			line-height:64px;
+			font-size: 16px;
+			color: #000;
+		}
+		div{
+			flex: 2;
+			display:flex;
+			// text-align:right;
+			justify-content: center;
+			align-items: center;
+			img{
+				width: 24px;
+				height: 24px;
+			}
+		}
+	}
+}
+.devices-fold{
+	width: 100%;
+	margin: 8px auto 0;
+	height: 35px;
+	line-height: 35px;
+	div{
+		display:flex;
+		justify-content: center;
+		align-items: center;
+		p{
+			color:#000000;
+			font-size: 16px;
+		}
+		img{
+			width: 28px;
+			height: 25px;
+		}
+	}
+}
+.devices-content{
+	width: 328px;
+	margin: 24.3px auto 16.8px;
+	h3{
+		color: #000000;
+		font-size: 18px;
+	}
+	ul{
+		display: flex;
+		flex-wrap: wrap;
+		justify-content:space-between;
+		li{
+			width: 160px;
+			margin-top: 16.5px;
+			img{
+				width: 160px;
+				height: 92px;
+			}
+			p{
+				font-size: 14px;
+				color: #000000;
+				padding-top: 6.8px;
+			}
+		}
+	}
+}
+.devices-time{
+	width: 328px;
+	margin: 0 auto;
 }

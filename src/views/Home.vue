@@ -23,52 +23,137 @@
 					<p>定时关机</p>
 				</div>
 			</div>
-			<div class="devices-status-btn">
+			<div class="devices-status-btn" @click="devicesSwitch()">
 				<p><img src="../assets/images/swich.png" alt="" /></p>
 			</div>
 		</div>
 		<div class="devices-audio">
-			<div class="devices-audio-control">
-				<div class="devices-audio-control-text">
-					<div>
-						<p>小宝贝快快睡</p>
-						<p>未知</p>
+			<!-- 歌曲控制 -->
+			<div class="devices-audio-contro-box">
+				<div class="devices-audio-control">
+					<div class="devices-audio-control-text">
+						<div>
+							<p>小宝贝快快睡</p>
+							<p>未知</p>
+						</div>
+					</div>
+					<div class="devices-audio-control-icon">
+						<div>
+							<p><img src="../assets/images/ic_last.png" alt="" /></p>
+						</div>
+						<div>
+							<p><img src="../assets/images/ic_playing.png" alt="" /></p>
+						</div>
+						<div>
+							<p><img src="../assets/images/ic_next.png" alt="" /></p>
+						</div>
 					</div>
 				</div>
-				<div class="devices-audio-control-icon">
+				<!-- 音量 -->
+				<div class="devices-audio-volume">
+					<div><p>音量</p></div>
+					<div><van-slider v-model="volume" bar-height="2px" active-color="#007DFF" /></div>
 					<div>
-						<p><img src="../assets/images/ic_last.png" alt="" /></p>
-					</div>
-					<div>
-						<p><img src="../assets/images/ic_playing.png" alt="" /></p>
-					</div>
-					<div>
-						<p><img src="../assets/images/ic_next.png" alt="" /></p>
+						<span>{{ volume }}%</span>
 					</div>
 				</div>
 			</div>
-			<div class="devices-audio-volume">
-				<div><p>音量</p></div>
-				<div><van-slider v-model="volume" bar-height="4px" active-color="#ee0a24" /></div>
-				<div><span>68%</span></div>
+			<!-- 其他控制 -->
+			<div class="devices-audio-else-controle">
+				<ul>
+					<li>
+						<div class="devices-audio-else-text">
+							<div>
+								<p>模式</p>
+								<p>列表循环</p>
+							</div>
+						</div>
+						<div class="devices-audio-else-icon"><img src="../assets/images/ic_danqu.png" alt="" /></div>
+					</li>
+					<li>
+						<div class="devices-audio-else-text">
+							<div>
+								<p>定时关机</p>
+								<p>列表循环</p>
+							</div>
+						</div>
+						<div class="devices-audio-else-icon"><img src="../assets/images/ic_dingshi_off.png" alt="" /></div>
+					</li>
+					<li>
+						<div class="devices-audio-else-text">
+							<div>
+								<p>耳灯</p>
+								<p>列表循环</p>
+							</div>
+						</div>
+						<div class="devices-audio-else-icon"><img src="../assets/images/ic_fengsu_off5.png" alt="" /></div>
+					</li>
+					<li>
+						<div class="devices-audio-else-text">
+							<div>
+								<p>表情灯</p>
+								<p>列表循环</p>
+							</div>
+						</div>
+						<div class="devices-audio-else-icon"><img src="../assets/images/ic_shuimian_off.png" alt="" /></div>
+					</li>
+				</ul>
+			</div>
+			<div class="devices-audio-look" @click="onConfirm()">
+				<div>
+					<p>童锁</p>
+					<div><img src="../assets/images/ic_tongsuo_off.png" alt="" /></div>
+				</div>
 			</div>
 		</div>
+		<div class="devices-fold">
+			<div>
+				<p>收起</p>
+				<img src="../assets/images/ic_zhankai.png" alt="" />
+			</div>
+		</div>
+		<div class="devices-content">
+			<h3>内容推荐</h3>
+			<ul>
+				<li>
+					<img src="../assets/images/img_huohuotuneirongyun.png" alt="" />
+					<p>火火兔内容云</p>
+				</li>
+				<li>
+					<img src="../assets/images/img_qimengjiaoyu.png" alt="" />
+					<p>启蒙英语</p>
+				</li>
+				<li>
+					<img src="../assets/images/img_bendineir.png" alt="" />
+					<p>本地内容</p>
+				</li>
+				<li>
+					<img src="../assets/images/img_wodeshoucang.png" alt="" />
+					<p>我的收藏</p>
+				</li>
+			</ul>
+		</div>
+		<picker :timePopup.sync="timePopup"></picker>
 	</div>
 </template>
 
 <script>
 // @ is an alias to /src
 import { mapActions, mapMutations, mapState } from 'vuex';
+import picker from '@/components/picker.vue';
 export default {
 	name: 'home',
 	data() {
 		return {
 			erdengSwitch: [],
-			volume: 100
+			volume: 10,
+			show: false,
+			timePopup:false,
+			// currentTime: '12:00'
 		};
 	},
 	computed: {
-		...mapState(['devicesstate'])
+		// ...mapState(["timePopup"])
 	},
 	created() {
 		// this.getDevicesAll();
@@ -109,6 +194,10 @@ export default {
 		};
 	},
 	methods: {
+		onConfirm() {
+			let self = this;
+			self.timePopup = !self.timePopup;  //显示
+		},
 		//设备全部信息
 		devicesInfoAll(data) {
 			let self = this;
@@ -120,12 +209,14 @@ export default {
 			self.getDevCacheAll();
 		},
 		//切换耳灯
-		cheackErdeng() {
-			let self = this;
-			console.log('设置信息===', self.erdengSwitch);
-			let on = self.erdengSwitch.data.on == 1 ? 0 : 1;
-			let data = { switch: { on: on, name: 'dengguang' } };
-			self.setDeviceInfo(data);
+		devicesSwitch() {
+			console.log('设备开关');
+			this.$toast({
+				message: '今日签到+3',
+				position: 'bottom',
+				duration: '3000',
+				className: 'toastActive'
+			});
 		},
 		//回调函数转换
 		praseResponseData(resData) {
@@ -147,7 +238,9 @@ export default {
 		},
 		...mapActions(['getDevicesState'])
 	},
-	components: {}
+	components: {
+		picker
+	}
 };
 </script>
 <style lang="less" scoped>
