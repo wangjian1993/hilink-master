@@ -362,7 +362,7 @@ export default {
 		contentBtn(type) {
 			var url;
 			if (type == 0) {
-				url = '/content'; //火火兔内容云
+				url = '/cloudIndex'; //火火兔内容云
 			} else if (type == 1) {
 				url = '/english'; //启蒙英语
 			} else if (type == 2) {

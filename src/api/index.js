@@ -216,7 +216,7 @@ export default {
             }
         });
     },
-<<<<<<< HEAD
+//<<<<<<< HEAD
     //-----------------张志鹏---------------------------
     getSearch(type,key) {
         return fetch({
@@ -259,9 +259,9 @@ export default {
                 pageSize: 2,
             }
         });
-    }
+    },
     //-----------------张志鹏---------------------------
-=======
+//=======
 	//英语启蒙
 	getEnglishData(){
 		return fetch({
@@ -269,5 +269,5 @@ export default {
 			method:"get",
 		})
 	}
->>>>>>> d2bc8cf555851ae33fedf71251f79e5ad591132f
+//>>>>>>> d2bc8cf555851ae33fedf71251f79e5ad591132f
 };
