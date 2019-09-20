@@ -15,7 +15,7 @@
 					<p>定时关机</p>
 				</div>
 			</div>
-			<div class="devices-status-btn" @click="devicesSwitch()">
+			<div class="devices-status-btn" @click="devicesSwitch(0)">
 				<p :class="isLine == 1 ? 'switchAcitve' : ''"><img :src="switchIcon()" alt="" /></p>
 			</div>
 		</div>
@@ -25,34 +25,46 @@
 				<div class="devices-audio-control">
 					<div class="devices-audio-control-text">
 						<div>
-							<p>小宝贝快快睡</p>
+							<p>{{ audioInfo.data.song != '' ? audioInfo.data.song : '故事机暂停' }}</p>
 							<p>未知</p>
 						</div>
 					</div>
 					<div class="devices-audio-control-icon">
 						<div>
-							<p><img src="../../assets/images/ic_last.png" alt="" /></p>
+							<p @click="devicesSwitch(3)"><img src="../../assets/images/ic_last.png" alt="" /></p>
 						</div>
 						<div>
-							<p><img src="../../assets/images/ic_playing.png" alt="" /></p>
+							<p @click="devicesSwitch(5)">
+								<img v-if="audioInfo.data.play == 1" src="../../assets/images/ic_playing.png" alt="" />
+								<img v-if="audioInfo.data.play == 0" src="../../assets/images/ic_stop.png" alt="" />
+							</p>
 						</div>
 						<div>
-							<p><img src="../../assets/images/ic_next.png" alt="" /></p>
+							<p @click="devicesSwitch(4)"><img src="../../assets/images/ic_next.png" alt="" /></p>
 						</div>
 					</div>
 				</div>
 				<!-- 音量 -->
 				<div class="devices-audio-volume">
 					<div><p>音量</p></div>
-					<div><van-slider v-model="volume" bar-height="2px" active-color="#007DFF" /></div>
+					<div><van-slider v-model="volume" bar-height="2px" @change="onVolumeChange" active-color="#007DFF" /></div>
 					<div>
-						<span>{{ volume }}%</span>
+						<span>{{volume }}%</span>
 					</div>
 				</div>
 			</div>
 			<!-- 其他控制 -->
 			<div class="devices-audio-else-controle">
 				<ul>
+					<div class="devices-audio-else-mode" v-show="audioMode">
+						<ul>
+							<li><p>列表循环</p></li>
+							<li><p>单曲循环</p></li>
+							<!-- <li>
+								<p>随机循环</p>
+							</li> -->
+						</ul>
+					</div>
 					<li @click="devicesActionSwitch()" :class="isLine == 0 ? '' : 'lineAcitve'">
 						<div class="devices-audio-else-text">
 							<div>
@@ -77,19 +89,25 @@
 						<div class="devices-audio-else-text">
 							<div>
 								<p>耳灯</p>
-								<p>列表循环</p>
+								<p>{{ earLight.data.on == 0 ? '已关闭' : '已开启' }}</p>
 							</div>
 						</div>
-						<div class="devices-audio-else-icon"><img src="../../assets/images/ic_fengsu_off5.png" alt="" /></div>
+						<div class="devices-audio-else-icon" @click="devicesSwitch(1)">
+							<img v-if="earLight.data.on == 0" src="../../assets/images/ic_fengsu_off5.png" alt="" />
+							<img v-if="earLight.data.on == 1" src="../../assets/images/ic_fengsu_on5.png" alt="" />
+						</div>
 					</li>
 					<li @click="devicesActionSwitch()" :class="isLine == 0 ? '' : 'lineAcitve'">
 						<div class="devices-audio-else-text">
 							<div>
 								<p>表情灯</p>
-								<p>列表循环</p>
+								<p>{{ faceLight.data.on == 0 ? '已关闭' : '已开启' }}</p>
 							</div>
 						</div>
-						<div class="devices-audio-else-icon"><img src="../../assets/images/ic_shuimian_off.png" alt="" /></div>
+						<div class="devices-audio-else-icon" @click="devicesSwitch(2)">
+							<img v-if="faceLight.data.on == 0" src="../../assets/images/ic_shuimian_off.png" alt="" />
+							<img v-if="faceLight.data.on == 1" src="../../assets/images/ic_shuimian_on.png" alt="" />
+						</div>
 					</li>
 				</ul>
 			</div>
@@ -140,16 +158,20 @@ export default {
 	name: 'home',
 	data() {
 		return {
-			lampSwitch: [],
-			volume: 10,
+			lampSwitch: [], //开关
+			audioInfo: [], //歌曲信息
+			earLight: [], //耳灯
+			faceLight: [], //表情灯
+			volume:0,
 			show: false,
 			timePopup: false,
 			isLine: 0, //是否在线
 			isFold: false, //折叠展开
 			foldText: '展开更多',
 			switchText: '已关闭',
-			title:"火火兔讲故事",
-			headerType:"home",
+			title: '火火兔讲故事',
+			headerType: 'home',
+			audioMode: false, //音乐模式
 			foldIcon: require('../../assets/images/ic_shouqi.png')
 		};
 	},
@@ -165,7 +187,7 @@ export default {
 		var self = this;
 		//获取设备全部信息回调
 		window['resultCallback'] = resultStr => {
-			self.devicesInfoAll(resultStr);
+			// self.devicesInfoAll(resultStr);
 			let data = self.praseResponseData(resultStr);
 			data.services.forEach(function(item, index) {
 				let type = item.sid;
@@ -173,6 +195,16 @@ export default {
 					case 'switch':
 						self.lampSwitch = item;
 						self.isLine = item.data.on;
+						break;
+					case 'Music':
+						self.audioInfo = item;
+						self.volume=item.data.volume
+						break;
+					case 'earLight':
+						self.earLight = item;
+						break;
+					case 'faceLight':
+						self.faceLight = item;
 						break;
 					default:
 						break;
@@ -189,9 +221,16 @@ export default {
 					self.lampSwitch.data.on = data.data.on;
 					self.isLine = data.data.on;
 					break;
-				case 'biaoqing':
-					console.log('表情灯');
+				case 'earLight':
+					self.earLight.data.on = data.data.on;
 					break;
+				case 'faceLight':
+					self.faceLight.data.on = data.data.on;
+					break;
+				case 'Music':
+					self.audioInfo.data = data.data;
+					self.volume=data.data.volume
+					break;	
 				default:
 					break;
 			}
@@ -215,10 +254,10 @@ export default {
 			}
 		},
 		//设备全部信息
-		devicesInfoAll(data) {
-			let self = this;
-			self.getDevicesState(data);
-		},
+		// devicesInfoAll(data) {
+		// 	let self = this;
+		// 	self.getDevicesState(data);
+		// },
 		//获取设备全部信息
 		getDevicesAll() {
 			let self = this;
@@ -226,15 +265,56 @@ export default {
 				self.getDevCacheAll();
 			}
 		},
-		//切换耳灯
-		devicesSwitch() {
+		/*
+		 *设备开关控制
+		 * type:   开挂那类型
+		 * 0:关机
+		 * 1:耳灯
+		 * 2:表情灯
+		 * 3:上一曲
+		 * 4:下一曲
+		 * 5:播放暂停
+		 */
+		devicesSwitch(type) {
 			console.log('设备开关');
 			let self = this;
 			if (window.hilink != undefined) {
-				let on = self.lampSwitch.data.on == 1 ? 0 : 1;
-				let data = { switch: { on: on, name: 'switch' } };
+				var data;
+				var on;
+				switch (type) {
+					case 0:
+						on = self.lampSwitch.data.on == 1 ? 0 : 1;
+						data = { switch: { on: on, name: 'switch' } }
+						break;
+					case 1:
+						on = self.earLight.data.on == 1 ? 0 : 1;
+						data = { earLight: { on: on, name: 'earLight' } }
+						break;
+					case 2:
+						on = self.faceLight.data.on == 1 ? 0 : 1;
+						data = { faceLight: { on: on, name: 'faceLight' } }
+						break;
+					case 3:
+						data = { Music: { cutSong: 0, name: 'cutSong' } }
+						break;
+					case 4:
+						data = { Music: { cutSong: 1, name: 'cutSong' } }
+						break;
+					case 5:
+						on = self.audioInfo.data.play == 1 ? 0 : 1;
+						data = { Music: { play: on, name: 'play' } }
+					default:
+						break;
+				}
+				console.log(data);
 				self.setDeviceInfo(data);
 			}
+		},
+		//故事机音量调节
+		onVolumeChange(value){
+			let self =this;
+			let data = { Music: { volume:value, name: 'volume' } };
+			self.setDeviceInfo(data);
 		},
 		/*
 		 *设备功能开关
@@ -286,17 +366,19 @@ export default {
 			} else if (type == 1) {
 				url = '/english'; //启蒙英语
 			} else if (type == 2) {
+				url = '/locallist';
 			} else if (type == 3) {
+				url = '/localList';
 			}
 			this.$router.push({
 				path: url
 			});
-		},
-		...mapActions(['getDevicesState'])
+		}
+		// ...mapActions(['getDevicesState'])
 	},
 	components: {
-		"v-picker":picker,
-		"v-header":Header
+		'v-picker': picker,
+		'v-header': Header
 	}
 };
 </script>

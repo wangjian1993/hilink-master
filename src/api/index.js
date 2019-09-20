@@ -214,5 +214,12 @@ export default {
                 id: id
             }
         });
-    }
+    },
+	//英语启蒙
+	getEnglishData(){
+		return fetch({
+			url:cloudUrl + "yyqm",
+			method:"get",
+		})
+	}
 };

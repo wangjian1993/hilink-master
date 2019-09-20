@@ -1,7 +1,9 @@
 <template>
 	<div id="app">
-		<keep-alive><router-view></router-view></keep-alive>
-		<Play v-if="isPlay"></Play>
+		<transition :name="transitionName">
+			<keep-alive><router-view></router-view></keep-alive>
+			<Play v-if="isPlay"></Play>
+		</transition>
 	</div>
 </template>
 <script>
@@ -9,7 +11,8 @@ import Play from '@/components/play';
 export default {
 	data() {
 		return {
-			isPlay: false
+			isPlay: false,
+			transitionName: null
 		};
 	},
 	created() {
@@ -27,11 +30,17 @@ export default {
 	},
 	watch: {
 		$route(e) {
-			if (e.name != 'home' && e.name != "help") {
+			console.log('路由信息', e);
+			if (e.name != 'home' && e.name != 'help') {
 				this.isPlay = true;
 			} else {
 				this.isPlay = false;
 			}
+		},
+		$route(to, from) {
+			const toDepth = to.path.split('/').length;
+			const fromDepth = from.path.split('/').length;
+			this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left';
 		}
 	},
 	components: {
@@ -58,5 +67,49 @@ html {
 	font-size: 62.5%;
 	background: #f7f7f7;
 	margin-top: 24px;
+}
+.slide-right-enter-active,
+.slide-right-leave-active,
+.slide-left-enter-active,
+.slide-left-leave-active {
+  will-change: transform;
+  transition: all 500ms;
+  position: absolute;
+}
+.slide-right-enter {
+  opacity: 0;
+  transform: translate3d(-100%, 0, 0);
+}
+.slide-right-leave-active {
+  opacity: 0;
+  transform: translate3d(100%, 0, 0);
+}
+.slide-left-enter {
+  opacity: 0;
+  transform: translate3d(100%, 0, 0);
+}
+.slide-left-leave-active {
+  opacity: 0;
+  transform: translate3d(-100%, 0, 0);
+}
+/* .router-view {
+  width: 100%;
+  height:100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: 0 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+} */
+.router-view{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	margin: 0 auto;
+	overflow: auto hidden; 
+	/* overflow: hidden; */
 }
 </style>

@@ -187,6 +187,7 @@
 	width: 328px;
 	margin: 0 auto 0;
 	ul{
+		position: relative;
 		display: flex;
 		flex-wrap: wrap;
 		justify-content:space-between;
@@ -230,6 +231,24 @@
 				}
 			}
 		}
+		.devices-audio-else-mode{
+			width: 160px;
+			background: #fff;
+			position: absolute;
+			border-radius: 8px;
+			bottom: 65px;
+			box-shadow: 0 12px 24px 0 rgba(0,0,0,0.03);
+			z-index: 1000;
+			li{
+				height: 48px;
+				line-height: 48px;
+				p{
+					font-size: 16px;
+					padding-left: 16px;
+					color: #000000;
+				}
+			}
+		}
 	}
 }
 .devices-audio-look:extend(.devices-audio-div){
@@ -248,8 +267,7 @@
 		div{
 			flex: 2;
 			display:flex;
-			// text-align:right;
-			justify-content: center;
+			justify-content: flex-end;
 			align-items: center;
 			img{
 				width: 24px;

@@ -43,7 +43,7 @@ export default {
 		// 离线帮助
 		helpRoute() {
 			this.$router.push({
-				path: 'help'
+				path: 'instructions'
 			});
 		}
 	}

@@ -1,14 +1,16 @@
 <template>
-	<div class="content">
-		内容页哈哈哈哈
-	</div>
+	<div class="content">内容页哈哈哈哈</div>
 </template>
 
 <script>
-	export default{
-		
+import Header from '@/components/header.vue';
+export default {
+	data(){
+		return{
+			
+		}
 	}
+};
 </script>
 
-<style>
-</style>
+<style></style>

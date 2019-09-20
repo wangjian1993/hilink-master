@@ -1,0 +1,432 @@
+<template>
+ <div class="container">
+     <!--搜索-->
+    <div class="search">
+      <div class="searchIcon center">
+        <img src="../../assets/images/home_icon_search.png"/>
+      </div>
+      <div class="searchInput">
+        <van-cell-group >
+          <van-field style="height:35px;padding:10px 10px 5px" v-model="serchValue" placeholder="搜索关键字" @click="goSearch" />
+        </van-cell-group>
+      </div>
+      <div class="selectIcon center">
+        <img src="../../assets/images/home_icon_shaixuan.png"/>
+      </div>
+    </div>
+    <!--标签-->
+    <div class="label">
+      <div class="labelCell center" @click="goListen">听儿歌</div>
+      <div class="labelCell center">讲故事</div>
+      <div class="labelCell center">学英语</div>
+      <div class="labelCell center">赏国学</div>
+    </div>
+    <!--轮播-->
+    <div class="swiper" style="margin-top:15px">
+      <van-swipe :autoplay="3000" style="height: 165px;border-radius: 12px;">
+        <van-swipe-item v-for="(image, index) in swiperList" :key="index" @click="goDetail(image.link)">
+          <img  :src="image.path" />
+        </van-swipe-item>
+      </van-swipe>
+    </div>
+    <!--精品推荐-->
+    <div class="part">
+      <div class="title">
+        <div class="titleLeft">
+          <div class="titleLeftTop">精品推荐</div>
+          <div class="titleLeftBottom">火火兔为您精选好内容</div>
+        </div>
+        <div class="titleRight">
+          <!-- <img src="../../assets/images/home_icon_more.png"/> -->
+        </div>
+      </div>
+      <div class="content">
+        <div class="contentCell" v-for="(item,index) in recommendSpecialList" :key="index" @click="goDetail(item.id)">
+          <img :src="item.coverpath"/>
+          <div class="text">{{item.name}}</div>
+          <div class="text1">{{item.description}}</div>
+          <!--absolute-->
+          <!-- <div class="pay center">付费</div> -->
+          <div class="number">
+           <img src="../../assets/images/home_icon_yinyue.png"/>
+            {{item.musicCount}}首
+          </div>
+        </div>
+      </div>
+    </div>
+     <!--视频推荐-->
+    <div class="part">
+      <div class="title">
+        <div class="titleLeft">
+          <div class="titleLeftTop">视频推荐</div>
+          <div class="titleLeftBottom">益智视频，精彩不断</div>
+        </div>
+        <div class="titleRight">
+          <!-- <img src="../../assets/images/home_icon_more.png"/> -->
+        </div>
+      </div>
+      <div class="content">
+        <div class="contentCell" v-for="(item,index) in videoList" :key="index" @click="goVideoDetail(item.id)">
+          <img :src="item.picurl"/>
+          <div class="text">{{item.name}}</div>
+          <div class="text1">{{item.description}}</div>
+          <!--absolute-->
+          <!-- <div class="pay center">付费</div> -->
+          <div class="number">
+           <img src="../../assets/images/home_icon_yinyue.png"/>
+            {{item.musicCount}}首
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--广告位-->
+    <div class="banner" @click="goVideoDetail(link)">
+      <img class="content" :src="getVideoAdPath"/>
+    </div>
+     <!--性格养成 -->
+    <div class="part">
+      <div class="title">
+        <div class="titleLeft">
+          <div class="titleLeftTop">性格养成</div>
+          <div class="titleLeftBottom">从小养成好性格</div>
+        </div>
+        <div class="titleRight">
+           <!-- <img src="../../assets/images/home_icon_more.png"/> -->
+        </div>
+      </div>
+      <div class="content">
+         <div class="contentCell" v-for="(item,index) in getMusicXGYCList" :key="index" @click="goDetail(item.id)">
+          <img :src="item.coverpath"/>
+          <div class="text">{{item.name}}</div>
+          <div class="text1">{{item.description}}</div>
+          <!--absolute-->
+          <!-- <div class="pay center">付费</div> -->
+          <div class="number">
+           <img src="../../assets/images/home_icon_yinyue.png" />
+            {{item.musicCount}}首
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--付费精选-->
+    <div class="part">
+      <div class="title">
+        <div class="titleLeft">
+          <div class="titleLeftTop">付费首选</div>
+          <div class="titleLeftBottom">学习知识好帮手</div>
+        </div>
+        <div class="titleRight">
+           <!-- <img src="../../assets/images/home_icon_more.png"/> -->
+        </div>
+      </div>
+      <div class="content">
+        <div class="contentCell" v-for="(item,index) in getPayDataList" :key="index" >
+          <img :src="item.path"/>
+          <div class="text">{{item.name}}</div>
+          <div class="text1"><span style="color: #fa4f4b;font-size: 14px;font-weight:bold">￥{{item.fee}}</span><span style="color: #aaaaaa;font-size: 13px;margin-left:12px;text-decoration:line-through;">原价￥{{item.oldfee}}</span></div>
+          <!--absolute-->
+          <div class="pay center">付费</div>
+          <!-- <div class="number">
+           <img src="../../assets/images/home_icon_yinyue.png" />
+            99首
+          </div> -->
+        </div>
+      </div>
+    </div>
+    <!--优选主播-->
+    <div class="part">
+      <div class="title">
+        <div class="titleLeft">
+          <div class="titleLeftTop">优选主播</div>
+          <div class="titleLeftBottom">陪孩子一起听世界</div>
+        </div>
+        <div class="titleRight">
+           <!-- <img src="../../assets/images/home_icon_more.png"/> -->
+        </div>
+      </div>
+      <div class="content1">
+        <div class="content1Cell" v-for="(item,index) in getHostFMList" :key="index" @click="goHostDetail(item.id)">
+          <div class="img">
+           <img :src="item.pic"/>
+
+          </div>
+          <div class="text">
+            <div style="font-size: 15px;color: #222222;">{{item.name}}</div>
+            <div class="introduct">{{item.introduction}}</div>
+            <div class="hot">
+              <div class="text">100万人气</div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+     <!--国学熏陶 -->
+    <div class="part">
+        <div class="title">
+          <div class="titleLeft">
+            <div class="titleLeftTop">国学熏陶</div>
+            <div class="titleLeftBottom">培养孩子良好品德素养</div>
+          </div>
+          <div class="titleRight">
+             <!-- <img src="../../assets/images/home_icon_more.png"/> -->
+          </div>
+      </div>
+      <div class="content">
+        <div class="contentCell" v-for="(item,index) in getgxxtDataList" :key="index" @click="goDetail(item.id)">
+          <img :src="item.coverpath"/>
+          <div class="text">{{item.name}}</div>
+          <div class="text1">{{item.description}}</div>
+          <!--absolute-->
+          <!-- <div class="pay center">付费</div> -->
+          <div class="number">
+           <img src="../../assets/images/home_icon_yinyue.png" />
+            {{item.musicCount}}首
+          </div>
+        </div>
+      </div>
+    </div> 
+      <!--财商启蒙 -->
+    <div class="part">
+      <div class="title">
+        <div class="titleLeft">
+          <div class="titleLeftTop">财商启蒙 </div>
+          <div class="titleLeftBottom">孩子的财商是这么玩出来的</div>
+        </div>
+        <div class="titleRight">
+           <!-- <img src="../../assets/images/home_icon_more.png"/> -->
+        </div>
+      </div>
+      <div class="content">
+         <div class="contentCell" v-for="(item,index) in getcsqmDataList" :key="index" @click="goDetail(item.id)">
+          <img :src="item.coverpath"/>
+          <div class="text">{{item.name}}</div>
+          <div class="text1">{{item.description}}</div>
+          <!--absolute-->
+          <!-- <div class="pay center">付费</div> -->
+          <div class="number">
+           <img src="../../assets/images/home_icon_yinyue.png" />
+            {{item.musicCount}}首
+          </div>
+        </div>
+      </div>
+    </div> 
+    <!--情商培养 -->
+    <div class="part">
+      <div class="title">
+        <div class="titleLeft">
+          <div class="titleLeftTop">情商培养 </div>
+          <div class="titleLeftBottom">从小就做聪明人</div>
+        </div>
+        <div class="titleRight">
+           <!-- <img src="../../assets/images/home_icon_more.png"/> -->
+        </div>
+      </div>
+      <div class="content">
+         <div class="contentCell" v-for="(item,index) in getqspyDataList" :key="index" @click="goDetail(item.id)">
+          <img :src="item.coverpath"/>
+          <div class="text">{{item.name}}</div>
+          <div class="text1">{{item.description}}</div>
+          <!--absolute-->
+          <!-- <div class="pay center">付费</div> -->
+          <div class="number">
+           <img src="../../assets/images/home_icon_yinyue.png" />
+            {{item.musicCount}}首
+          </div>
+        </div>
+      </div>
+    </div> 
+     <!--哄睡儿歌 -->
+    <div class="part"> 
+      <div class="title">
+        <div class="titleLeft">
+          <div class="titleLeftTop">哄睡儿歌 </div>
+          <div class="titleLeftBottom">小摇床，轻轻晃，月亮伴我入梦乡</div>
+        </div>
+        <div class="titleRight">
+           <!-- <img src="../../assets/images/home_icon_more.png"/> -->
+        </div>
+      </div>
+      <div class="content">
+        <div class="contentCell" v-for="(item,index) in getSleepDataList" :key="index" @click="goDetail(item.id)">
+          <img :src="item.coverpath"/>
+          <div class="text">{{item.name}}</div>
+          <div class="text1">{{item.description}}</div>
+          <!--absolute-->
+          <!-- <div class="pay center">付费</div> -->
+          <div class="number">
+           <img src="../../assets/images/home_icon_yinyue.png" />
+            {{item.musicCount}}首
+          </div>
+        </div>
+      </div>
+    </div> 
+    <!--最新上架 -->
+    <div class="part"> 
+      <div class="title">
+        <div class="titleLeft">
+          <div class="titleLeftTop">最新上架 </div>
+          <div class="titleLeftBottom">好多新内容，快来听听吧</div>
+        </div>
+        <div class="titleRight">
+           <!-- <img src="../../assets/images/home_icon_more.png"/> -->
+        </div>
+      </div>
+      <div class="content">
+        <div class="contentCell" v-for="(item,index) in getNewSpecialsList" :key="index" @click="goDetail(item.id)">
+          <img :src="item.coverpath"/>
+          <div class="text">{{item.name}}</div>
+          <div class="text1">{{item.description}}</div>
+          <!--absolute-->
+          <!-- <div class="pay center">付费</div> -->
+          <div class="number">
+           <img src="../../assets/images/home_icon_yinyue.png" />
+            {{item.musicCount}}首
+          </div>
+        </div>
+      </div>
+    </div> 
+    <p class="PageBottom">暂无更多</p>
+    <div class="loadingding center" v-show="isLoaded">
+         <van-loading size="50px" style="color:#81b4ff" color="#81b4ff">加载中...</van-loading>
+    </div>
+ </div>
+</template>
+ 
+<script>
+import http from '../../api/index.js'
+ export default {
+   data () {
+     return {
+       serchValue:'',
+       swiperList:[],
+       recommendSpecialList:[],
+       getMusicXGYCList:[],
+       getPayDataList:[],
+       getHostFMList:[],
+       getgxxtDataList:[],
+       getcsqmDataList:[],
+       getqspyDataList:[],
+       getSleepDataList:[],
+       getNewSpecialsList:[],
+       videoList:[],
+       getVideoAdPath:'',
+       isLoaded:false
+     }
+   },
+   created(){
+    
+   },
+   methods: {
+     //跳转视频详情页
+     goVideoDetail(id){
+        this.$router.push({name:'cloudVideo',params:{id:id}})
+     },
+     //跳转主播详情页
+     goHostDetail(id){
+        this.$router.push({name:'cloudHostDetail',params:{id:id}})
+     },
+     //跳转详情页
+      goDetail(id){
+        if(!parseInt(id)){
+         return
+        }
+        this.$router.push({name:'cloudListenDetail',params:{id:id}})
+      },
+     //跳转搜索页
+      goSearch(){
+        this.$router.push('/cloudContent/search')
+      },
+      //跳转听儿歌页
+      goListen(){
+        this.$router.push('/cloudContent/listen')
+      }
+   },
+   async mounted(){
+     //轮播
+     this.isLoaded = true
+     await http.getBannerList().then(res=>{
+       this.swiperList = res.data.content.bannerList
+     }).catch(err=>{
+              console.log(err)
+          })
+     //精品推荐
+     await http.recommendSpecial().then(res=>{
+        this.recommendSpecialList = res.data.content.list
+      
+     }).catch(err=>{
+              console.log(err)
+          })
+     //视频列表
+     await http.getMusicXGYC().then(res=>{
+       this.getMusicXGYCList = res.data.content.list
+     }).catch(err=>{
+              console.log(err)
+          })
+     //付费首选
+     await http.getPayData().then(res=>{
+       this.getPayDataList = res.data.content.list
+     }).catch(err=>{
+              console.log(err)
+          })
+     //优选主播
+     await http.getHostFM().then(res=>{
+       this.getHostFMList = res.data.content.list
+     }).catch(err=>{
+              console.log(err)
+          })
+     //国学熏陶
+     await http.getgxxtData().then(res=>{
+       this.getgxxtDataList = res.data.content.list
+     }).catch(err=>{
+              console.log(err)
+          })
+     //财商启蒙
+     await http.getcsqmData().then(res=>{
+       this.getcsqmDataList = res.data.content.list
+     }).catch(err=>{
+              console.log(err)
+          })
+     //情商培养
+     await http.getqspyData().then(res=>{
+       this.getqspyDataList = res.data.content.list
+     }).catch(err=>{
+              console.log(err)
+          })
+     //哄睡儿歌
+     await http.getSleepData().then(res=>{
+       this.getSleepDataList = res.data.content.list
+     }).catch(err=>{
+              console.log(err)
+          })
+     //最新上架
+     await http.getNewSpecials().then(res=>{
+       this.getNewSpecialsList = res.data.content.list
+     }).catch(err=>{
+              console.log(err)
+          })
+     //广告
+     await http.getVideoAd().then(res=>{
+      this.getVideoAdPath = res.data.content.ad.path
+      this.link = res.data.content.ad.link
+     }).catch(err=>{
+              console.log(err)
+          })
+      //视频推荐
+     await http.getVideoAlbumList().then(res=>{
+      this.videoList = res.data.content.list
+     }).catch(err=>{
+              console.log(err)
+          })    
+      this.isLoaded = false
+   },
+   components: {
+    
+   }
+ }
+</script>
+
+<style lang='less' scoped>
+  @import '../../assets/css/cloud/index.less';
+  @import '../../assets/css/cloud/common.less';
+</style>

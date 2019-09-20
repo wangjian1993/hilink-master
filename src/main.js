@@ -13,14 +13,9 @@ import hilink from './hilink/index'
 Vue.use(hilink);
 //vant按需加载组件
 import {
-  Button,NavBar,Slider,Toast,DatetimePicker,Popup 
+  Button,NavBar,Slider,Toast,DatetimePicker,Popup,Tab, Tabs
 } from 'vant';
-Vue.use(Button);
-Vue.use(NavBar);
-Vue.use(Slider);
-Vue.use(Toast);
-Vue.use(DatetimePicker);
-Vue.use(Popup);
+Vue.use(Tab).use(Tabs).use(Button).use(NavBar).use(Slider).use(Toast).use(DatetimePicker).use(Popup);
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios;
 new Vue({
