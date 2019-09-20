@@ -115,7 +115,7 @@
 		<div class="devices-content">
 			<h3>内容推荐</h3>
 			<ul>
-				<li>
+				<li @click="goCloud">
 					<img src="../assets/images/img_huohuotuneirongyun.png" alt="" />
 					<p>火火兔内容云</p>
 				</li>
@@ -194,6 +194,10 @@ export default {
 		};
 	},
 	methods: {
+		//跳转火火兔云内容
+		goCloud(){
+			this.$router.push('/cloudContent/index')
+		},
 		onConfirm() {
 			let self = this;
 			self.timePopup = !self.timePopup;  //显示

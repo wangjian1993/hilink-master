@@ -95,6 +95,7 @@ export default {
             }
         });
     },
+
     // 热门主播
     getHostFM() {
         return fetch({
@@ -190,8 +191,8 @@ export default {
             params: {
                 page: 0,
                 pageSize: 50,
-                st: 2,
-                type: tabStates
+                st: tabStates,
+                type: 1
             }
         });
     },
@@ -214,5 +215,49 @@ export default {
                 id: id
             }
         });
+    },
+    //-----------------张志鹏---------------------------
+    getSearch(type,key) {
+        return fetch({
+            url: cloudUrl + "search",
+            method: "get",
+            params: {
+                page: 0,
+                pageSize: 350,
+                type: type,
+                w: key
+            }
+        });
+    },
+    getHostDetail(val) {
+        return fetch({
+            url: cloudUrl + "rmzb/detail",
+            method: "get",
+            params: {
+                zbid:val
+            }
+        });
+    },
+    getVideoList(val) {
+        return fetch({
+            url: cloudUrl + "videoList",
+            method: "get",
+            params: {
+                id:val,
+                page: 0,
+                pageSize: 200,
+            }
+        });
+    },
+    getVideoAlbumList(val) {
+        return fetch({
+            url: cloudUrl + "videoAlbumList",
+            method: "get",
+            params: {
+                page: 0,
+                pageSize: 2,
+            }
+        });
     }
+    //-----------------张志鹏---------------------------
 };
