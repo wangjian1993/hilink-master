@@ -3,7 +3,7 @@
 		<div class="date-time-div">
 			<van-popup v-model="timePopup" position="bottom" :overlay="true" class="datetimeBox" :close-on-click-overlay="false">
 				<p>定时关机</p>
-				<van-datetime-picker v-model="currentTime" type="time" :min-hour="0" :max-hour="23" :show-toolbar="false" :formatter="formatter" />
+				<van-datetime-picker v-model="currentTime" type="time" :min-hour="0" :max-hour="23" :show-toolbar="false" :formatter="formatter" @change="Change"/>
 				<div class="datetime-btn">
 					<p @click="timeCancel()">取消</p>
 					<p @click="timeConfirm()">确定</p>
@@ -38,23 +38,30 @@ export default {
 			this.$emit('update:timePopup', false)  //弹框隐藏，意为timePopup为false
 		},
 		timeConfirm() {
-			
+			console.log(this.currentTime);
+			this.$emit('update:timePopup', false)  //弹框隐藏，意为timePopup为false
+		},
+		Change(){
+			// let self =this;
+			// let time =self.currentTime.split(":");
+			// let m =time[0].replace(/\b(0+)/gi,"");
+			// self.currentTime = "2小时:00"
 		},
 		formatter(type, value) {
 			if (type === 'hour') {
 				if(value == '00'){
 					let m =0;
-					return `${m}小时`;
+					return `${m}`;
 				}
 				let m =value.replace(/\b(0+)/gi,"");
-				return `${m}小时`;
+				return `${m}`;
 			} else if (type === 'minute') {
 				if(value == '00'){
 					let m =0;
-					return `${m}分钟`;
+					return `${m}`;
 				}
 				let m =value.replace(/\b(0+)/gi,"");
-				return `${m}分钟`;
+				return `${m}`;
 			}
 			return value;
 		}

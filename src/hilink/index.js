@@ -16,7 +16,7 @@ exports.install = function(Vue) {
 	 *body,                //string, json格式，可选，{"characteristicName1","characteristicName2"}, 为空则获取sid里面所有的 characteristic 的值
 	 *resultCallback       //string，回调函数名称，成功或失败时，将调用传入resultStr返回结果
 	 */
-	Vue.prototype.getDevInfo = function(sid, data) {
+	Vue.prototype.getDevInfo = function(sid,data) {
 		let body = JSON.stringify(data);
 		window.hilink.getDevInfo("0", sid, body, "resultCallback");
 	};

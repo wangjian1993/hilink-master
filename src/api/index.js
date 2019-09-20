@@ -216,6 +216,7 @@ export default {
             }
         });
     },
+<<<<<<< HEAD
     //-----------------张志鹏---------------------------
     getSearch(type,key) {
         return fetch({
@@ -260,4 +261,13 @@ export default {
         });
     }
     //-----------------张志鹏---------------------------
+=======
+	//英语启蒙
+	getEnglishData(){
+		return fetch({
+			url:cloudUrl + "yyqm",
+			method:"get",
+		})
+	}
+>>>>>>> d2bc8cf555851ae33fedf71251f79e5ad591132f
 };
