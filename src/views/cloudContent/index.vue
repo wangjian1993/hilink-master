@@ -51,7 +51,6 @@
            <img src="../../assets/images/home_icon_yinyue.png"/>
             {{item.musicCount}}首
           </div>
-
         </div>
       </div>
     </div>

@@ -258,6 +258,15 @@ export default {
                 pageSize: 2,
             }
         });
-    }
+    },
     //-----------------张志鹏---------------------------
+
+	//英语启蒙
+	getEnglishData(){
+		return fetch({
+			url:cloudUrl + "yyqm",
+			method:"get",
+		})
+	}
+
 };

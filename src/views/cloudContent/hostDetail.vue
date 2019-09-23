@@ -73,5 +73,4 @@ import http from '../../api/index.js'
 <style lang='less' scoped>
 @import url('../../assets/css/cloud/common.less');
 @import url('../../assets/css/cloud/hostDetail.less');
-
 </style>

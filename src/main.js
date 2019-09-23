@@ -18,17 +18,8 @@ Vue.use(hilink);
 import {
   Button,NavBar,Slider,Toast,DatetimePicker,Popup,Field,Swipe, SwipeItem, Tab, Tabs,Icon,Loading 
 } from 'vant';
-Vue.use(Button);
-Vue.use(NavBar);
-Vue.use(Slider);
-Vue.use(Toast);
-Vue.use(DatetimePicker);
-Vue.use(Popup);
-Vue.use(Field);
-Vue.use(Icon);
-Vue.use(Loading);
+Vue.use(Tab).use(Tabs).use(Button).use(NavBar).use(Slider).use(Toast).use(DatetimePicker).use(Popup).use(Field).use(Icon).use(Loading);
 Vue.use(Swipe).use(SwipeItem);
-Vue.use(Tab).use(Tabs);
 Vue.use(VueVideoPlayer)
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios;

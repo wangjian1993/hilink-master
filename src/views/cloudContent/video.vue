@@ -178,5 +178,4 @@ import http from '../../api/index.js'
 @import url('../../assets/css/cloud/common.less');
 @import url('../../assets/css/cloud/video.less');
 
-
 </style>
