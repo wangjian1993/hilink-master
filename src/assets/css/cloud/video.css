@@ -1,0 +1,26 @@
+.video-player-box{
+    width:100%;
+    height:200px;
+}
+.videoBox{
+    width:100%;
+    height:200px;
+}
+.vjs-poster{
+    width:100%;
+    height:100px;
+    position: static;
+}
+.vjs-tech{
+    position: static;
+    width:100%;
+    height:200px
+}
+.vjs-user-active,.vjs-user-inactive{
+    width:100%;
+    height:200px    
+}
+.video-js .vjs-big-play-button{
+  
+    margin: 20% 0 0 34%;
+}
