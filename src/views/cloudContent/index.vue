@@ -16,10 +16,10 @@
     </div>
     <!--标签-->
     <div class="label">
-      <div class="labelCell center" @click="goListen">听儿歌</div>
-      <div class="labelCell center">讲故事</div>
-      <div class="labelCell center">学英语</div>
-      <div class="labelCell center">赏国学</div>
+      <div class="labelCell center" @click="goListen(1)">听儿歌</div>
+      <div class="labelCell center" @click="goListen(2)">讲故事</div>
+      <div class="labelCell center" @click="goListen(3)">学英语</div>
+      <div class="labelCell center" @click="goListen(4)">赏国学</div>
     </div>
     <!--轮播-->
     <div class="swiper" >
@@ -51,6 +51,7 @@
            <img src="../../assets/images/home_icon_yinyue.png"/>
             {{item.musicCount}}首
           </div>
+
         </div>
       </div>
     </div>
@@ -72,10 +73,10 @@
           <div class="text1">{{item.description}}</div>
           <!--absolute-->
           <!-- <div class="pay center">付费</div> -->
-          <div class="number">
+          <!-- <div class="number">
            <img src="../../assets/images/home_icon_yinyue.png"/>
             {{item.musicCount}}首
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -290,6 +291,9 @@
     <div class="loadingding center" v-show="isLoaded">
          <van-loading size="50px" color="#81b4ff">加载中...</van-loading>
     </div>
+    <div class="goTop" v-show="isBottom" @click="goTop">
+      <img src="../../assets/images/top.png"/>
+    </div>
  </div>
 </template>
  
@@ -313,7 +317,8 @@ import http from '../../api/index.js'
        getVideoAdPath:'',
        isLoaded:false,
        page:0,
-       isShowNoMore:false
+       isShowNoMore:false,
+       isBottom:false
      }
    },
    created(){
@@ -340,8 +345,21 @@ import http from '../../api/index.js'
         this.$router.push('/cloudContent/search')
       },
       //跳转听儿歌页
-      goListen(){
-        this.$router.push('/cloudContent/listen')
+      goListen(type){
+        this.$router.push({name:'cloudListen'})
+        this.$store.state.params = type
+      },
+      //回到顶部
+      goTop(){
+        let scrollTop = document.documentElement.scrollTop || document.body.crollTop
+        let timer = setInterval(()=>{
+          let speed = -(Math.ceil(scrollTop)/5)
+          scrollTop = scrollTop + speed
+          document.documentElement.scrollTop = document.body.crollTop = scrollTop
+          if(speed == 0){
+            clearInterval(timer)
+          }
+        })
       }
    },
    async mounted(){
@@ -421,7 +439,6 @@ import http from '../../api/index.js'
               console.log(err)
           })    
       this.isLoaded = false
-
       var that = this
       window.onscroll = function(){
    		//变量scrollTop是滚动条滚动时，距离顶部的距离
@@ -431,23 +448,28 @@ import http from '../../api/index.js'
    		//变量scrollHeight是滚动条的总高度
    		var scrollHeight = document.documentElement.scrollHeight||document.body.scrollHeight;
                //滚动条到底部的条件
-               if(scrollTop+windowHeight==scrollHeight){
-                  if(that.getNewSpecialsList.length%10!=0){
-                      this.isShowNoMore = true
-                      return
-                  }
-                  ++that.page
-                  that.isLoaded =true,
-                  //最新上架
-                  http.getNewSpecials(that.page).then(res=>{
-                    that.getNewSpecialsList = that.getNewSpecialsList.concat(res.data.content.list)
-                    that.isLoaded =false
-                  }).catch(err=>{
-                            console.log(err)
-                        })
-         	        console.log("距顶部"+scrollTop+"可视区高度"+windowHeight+"滚动条总高度"+scrollHeight);
-              }   
-        }
+      if(scrollTop+windowHeight==scrollHeight){
+        if(that.getNewSpecialsList.length%10!=0){
+            this.isShowNoMore = true
+            return
+        }
+        ++that.page
+        that.isLoaded =true,
+        //最新上架
+        http.getNewSpecials(that.page).then(res=>{
+          that.getNewSpecialsList = that.getNewSpecialsList.concat(res.data.content.list)
+          that.isLoaded =false
+        }).catch(err=>{
+                  console.log(err)
+              })
+       }
+      if(scrollTop>windowHeight){
+
+        that.isBottom = true
+      }else{
+        that.isBottom = false
+      }     
+     }
    },
    components: {
     

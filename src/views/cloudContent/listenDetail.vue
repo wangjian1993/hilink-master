@@ -2,24 +2,24 @@
  <div class="container">
     <div class="musicTitle">
         <div class="musicImgBox">
-            <img :src="dataList.info.coverpath" class="musicImg"/>
+            <img :src="info.coverpath" class="musicImg"/>
         </div>
         <div>
             <div class="musicName">
-                {{dataList.info.name}}
+                {{info.name}}
             </div>
             <div class="musicMusic">
-                共{{dataList.info.musicCount}}首
+                共{{info.musicCount}}首
             </div>
         </div>
     </div>
     <div class="musicIntro">
         专辑介绍
         <div class="">
-            {{dataList.info.description}}
+            {{info.description}}
         </div>
     </div>
-    <div v-bind:class="[active == index?'active':'','musicList']" v-for="(item,index) in dataList.musicList" :key="index">
+    <div v-bind:class="[active == index?'active':'','musicList']" v-for="(item,index) in musicList" :key="index">
         <div class="left">
             <p class="inroName">{{item.name}}</p>
             <p class="inroName">{{item.timelength}}</p>
@@ -42,7 +42,8 @@ import http from '../../api/index.js'
  export default {
    data () {
      return {
-         dataList:[],
+         musicList:[],
+         info:[],
          audio:null,
          src:'',
          active:-1,
@@ -71,7 +72,10 @@ import http from '../../api/index.js'
                    }
                }
            });
-           this.dataList = res.data.content
+           
+           this.musicList = res.data.content.musicList
+           this.info = res.data.content.info
+          
        }).catch(err=>{
            console.log(err)
        })

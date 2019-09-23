@@ -1,6 +1,7 @@
 const state = {
   devicesstate:[],
-  timePopup:false
+  timePopup:false,
+  params:null,
 };
 
 export default state;

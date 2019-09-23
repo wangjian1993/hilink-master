@@ -184,7 +184,7 @@ export default {
             }
         });
     },
-    getAlbumsData(tabStates,page) {
+    getAlbumsData(tabStates,page,type) {
         return fetch({
             url: cloudUrl + "enterClassByType",
             method: "post",
@@ -192,7 +192,7 @@ export default {
                 page: page,
                 pageSize: 10,
                 st: tabStates,
-                type: 1
+                type: type
             }
         });
     },

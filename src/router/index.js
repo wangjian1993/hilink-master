@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
@@ -35,7 +35,10 @@ export default new Router({
      {
       path: '/cloudContent/listen',
       name: 'cloudListen',
-      component: () => import('@/views/cloudContent/listen.vue')
+      component: () => import('@/views/cloudContent/listen.vue'),
+      meta:{
+        keepAlive: false
+      }
     },
     //火火兔云内容听儿歌详情页
     {
@@ -66,3 +69,9 @@ export default new Router({
     },
   ]
 })
+
+
+router.beforeEach((to, from, next) => {
+  next()
+ })
+export default router

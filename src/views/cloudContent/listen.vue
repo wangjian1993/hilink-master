@@ -1,6 +1,6 @@
 <template>
  <div class="container">
-    <van-tabs v-model="active" color="#81b4ff" @click="refresh">
+    <van-tabs v-model="active" color="#81b4ff" @click="refresh" class="tabs">
         <van-tab title="0">
             <div slot="title" class='tab'>
                 最新上架<van-icon name="arrow-down" class="arrowDown"/>
@@ -60,17 +60,20 @@ import http from '../../api/index.js'
         tabTitle:0,
         isLoaded:false,
         page:0,
-        isShowNoMore:false
+        isShowNoMore:false,
+        params:null
      }
    },
-    mounted(){
+    activated(){
        //获取页面数据
         this.isLoaded = true
-         http.getAlbumsData(1,0).then(res=>{
+        var type = this.tabTitle == 0?1:2
+        this.params = this.$store.state.params
+         http.getAlbumsData(type,0,this.params).then(res=>{
             this.dataList = res.data.content.list
             this.isLoaded = false
-        }).catch(err=>{
-            console.log(err)
+            }).catch(err=>{
+                console.log(err)
         })
         var that = this
         window.onscroll = function(){
@@ -91,19 +94,23 @@ import http from '../../api/index.js'
                   //刷新数据
                    that.isLoaded = true
                     var type = that.tabTitle == 0?1:2
-                    http.getAlbumsData(type,that.page).then(res=>{
+                    http.getAlbumsData(type,that.page,that.params).then(res=>{
                         that.dataList = that.dataList.concat(res.data.content.list)
                          that.isLoaded =false
-                    }).catch(err=>{
+                        }).catch(err=>{
                         console.log(err)
                     })
-         	        console.log("距顶部"+scrollTop+"可视区高度"+windowHeight+"滚动条总高度"+scrollHeight);
               }   
         }
+   },
+   beforeRouteLeave(to,from,next){
+      
+       next()
    },
    methods: {
        //刷新数据
      async refresh(name,title){
+         console.log(name)
          if(name == this.tabTitle){
              return
          }
@@ -111,7 +118,7 @@ import http from '../../api/index.js'
          this.tabTitle = name
          this.isLoaded = true
          var type = name == 0?1:2
-         await http.getAlbumsData(type,this.page).then(res=>{
+         await http.getAlbumsData(type,this.page,this.params).then(res=>{
             this.dataList = res.data.content.list
         }).catch(err=>{
             console.log(err)

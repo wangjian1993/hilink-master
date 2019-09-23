@@ -2,7 +2,6 @@
  <div class="container">
       <!--顶部-->
    <div class="top center">
-       
         <div class="search">
             <div class="searchIcon center">
                 <img src="../../assets/images/home_icon_search.png"/>
@@ -17,7 +16,7 @@
    </div>
    <!--热门搜索-->
    
-    <div class="hotSearch" v-show="!isShowResult">
+    <div class="hotSearch" v-if="!isShowResult">
         <div class="hotKey">热门搜索</div>
         <div class="hotSearchList">
             <div class="hotSearchCell" @click="hotSearch('爸爸')">爸爸</div>
@@ -28,7 +27,7 @@
         </div>
     </div>
     <!--搜索结果-->
-     <van-tabs v-model="active" color="#81b4ff" sticky  class="tabs" v-show="isShowResult">
+     <van-tabs v-model="active" color="#81b4ff" sticky  class="tabs" v-if="isShowResult">
         <van-tab title="专辑" >
             <div slot="title" class='tab'>
                 专辑<van-icon name="arrow-down" class="icon"/>
@@ -54,22 +53,23 @@
                 单曲<van-icon name="arrow-down" class="arrowDown"/>
             </div>
             <div>
-                <div class="musicList" v-for="(item,index) in singleList" :key="index">
+                <div v-bind:class="[toIndex == index?'active':'','musicList']" v-for="(item,index) in singleList" :key="index">
                     <div class="left">
-                        <p class="musicName">{{item.name}}</p>
-                        <p class="musicName">{{item.timelength}}</p>
+                        <p class="inroName">{{item.name}}</p>
+                        <p class="inroName">{{item.timelength}}</p>
                     </div>
-                    <div class="right" @click="play(item.path)">
-                        <img src="../../assets/images/icon_listen_pause.png" class="rightImg"/>
-                        <div class="try">试听</div>
+                    <div class="right" @click="play(item.path,index)">
+                        <img src="../../assets/images/icon_listen_pause.png" class="rightImg" v-show="toIndex != index"/>
+                        <img src="../../assets/images/icon_listen_playing.png" class="rightImg" v-show="toIndex == index"/>
+                        <div class="rightTry">试听</div>
                     </div>
                 </div>
             </div>
         </van-tab>
     </van-tabs>
-    <p class="PageBottom" v-show="isShowResult">暂无更多</p>
+    <p class="PageBottom" v-show="isNoMore">暂无更多</p>
     <div class="loadingding center" v-show="isLoaded">
-         <van-loading size="50px">加载中...</van-loading>
+         <van-loading size="50px" color="#81b4ff">加载中...</van-loading>
     </div>
 </div>
 </template>
@@ -84,7 +84,10 @@ import http from '../../api/index.js'
         singleList:[],
         isShowResult:false,
         src:'',
-        isLoaded:false
+        isLoaded:false,
+        active:0,
+        toIndex:-1,
+        isNoMore:false
      }
    },
    mounted(){
@@ -110,7 +113,6 @@ import http from '../../api/index.js'
               console.log(err)
           })
           await  http.getSearch(2,this.serchValue).then(res=>{
-              console.log(res)
               res.data.content.list.forEach((v,i) => {
                if(v.timelength/60<10){
                    if(v.timelength%60<10){
@@ -127,7 +129,7 @@ import http from '../../api/index.js'
                }
            });
               this.singleList = res.data.content.list
-              console.log(this.singleList)
+              this.isNoMore = true
           }).catch(err=>{
               console.log(err)
           })
@@ -135,37 +137,29 @@ import http from '../../api/index.js'
           this.isLoaded = false
       },
       //播放音乐
-       play(src){
+       play(src,index){
          if(src == this.src){
             if(this.audio.paused){
+               this.toIndex = index
                this.audio.play()
            }else{
                this.audio.pause()
+               this.toIndex = -1
            }
          }else{
+            this.toIndex = index
             this.audio.pause()
             this.src = this.audio.src = src
             this.audio.play()
+            this.audio.onended=()=>{
+               this.toIndex = -1
+            }
            }    
        },
        //进入详情页
        goDetail(item){
          this.$router.push({name:'cloudListenDetail',params:{id:item}})
         },
-     //播放音乐
-       play(src){
-         if(src == this.src){
-            if(this.audio.paused){
-               this.audio.play()
-           }else{
-               this.audio.pause()
-           }
-         }else{
-            this.audio.pause()
-            this.src = this.audio.src = src
-            this.audio.play()
-           }    
-       },
        //热门搜索
        hotSearch(val){
            this.serchValue = val
