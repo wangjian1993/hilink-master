@@ -4,7 +4,7 @@ Vue.use(Router)
 
 export default new Router({
 	//<<<<<<< HEAD
-	mode: 'history',
+	mode: 'hash',
 	base: process.env.BASE_URL,
 	routes: [{ //首页
 			path: '/',
@@ -16,11 +16,6 @@ export default new Router({
 			name: 'help',
 			component: () => import( /* webpackChunkName: "help" */ '@/views/Home/Help.vue')
 		},
-		{ //内容
-			path: '/content',
-			name: 'content',
-			component: () => import( /* webpackChunkName: "content" */ '@/views/Content/Content.vue')
-		},
 		{
 			path: '/instructions',
 			name: 'instructions',
@@ -29,12 +24,18 @@ export default new Router({
 		{ //启蒙英语
 			path: '/locallist',
 			name: 'locallist',
-			component: () => import( /* webpackChunkName: "english" */ '@/views/Content/LocalList.vue')
+			component: () => import( /* webpackChunkName: "english" */ '@/views/Content/LocalList.vue'),
+			meta: {
+				title: "本地歌曲"
+			}
 		},
 		{ //本地内容
 			path: '/english',
 			name: 'english',
-			component: () => import( /* webpackChunkName: "english" */ '@/views/Content/English.vue')
+			component: () => import( /* webpackChunkName: "english" */ '@/views/Content/English.vue'),
+			meta: {
+				title: "英语启蒙"
+			}
 		},
 		{ //首页
 			path: '/about',
@@ -48,27 +49,36 @@ export default new Router({
 		{
 			path: '/cloudContent/index',
 			name: 'cloudIndex',
-			component: () => import('@/views/cloudContent/index.vue')
+			component: () => import('@/views/cloudContent/index.vue'),
+			meta: {
+				title: "火火兔内容云"
+			}
 		},
 		//火火兔云内容搜索页
 		{
 			path: '/cloudContent/search',
 			name: 'cloudSearch',
-			component: () => import('@/views/cloudContent/search.vue')
+			component: () => import('@/views/cloudContent/search.vue'),
+			meta: {
+				title: "搜索"
+			}
 		},
 		//火火兔云内容听儿歌页
 		{
 			path: '/cloudContent/listen',
 			name: 'cloudListen',
-			component: () => import('@/views/cloudContent/listen.vue')
+			component: () => import('@/views/cloudContent/listen.vue'),
+			meta: {
+				title: "火火兔内容云"
+			}
 		},
 		//火火兔云内容听儿歌详情页
 		{
 			path: '/cloudContent/listenDetail',
 			name: 'cloudListenDetail',
-			component: () => import('@/views/cloudContent/listenDetail.vue'),
+			component: () => import(/* webpackChunkName: "cloudListenDetail" */'@/views/cloudContent/listenDetail.vue'),
 			meta: {
-				keepAlive: false
+				keepAlive: false,
 			}
 		},
 		//火火兔云内容主播详情页面

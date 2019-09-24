@@ -1,11 +1,10 @@
 <template>
 	<div class="container">
-		<v-header :title="title"></v-header>
 		<!--搜索-->
 		<div class="search">
 			<div class="searchIcon center"><img src="../../assets/images/home_icon_search.png" /></div>
 			<div class="searchInput">
-				<van-cell-group><van-field class="field" v-model="serchValue" placeholder="搜索关键字" @click="goSearch" /></van-cell-group>
+				<van-cell-group><van-field class="field" v-model="serchValue" placeholder="搜索关键字" @click="goSearch()" /></van-cell-group>
 			</div>
 			<div class="selectIcon center"><img src="../../assets/images/home_icon_shaixuan.png" /></div>
 		</div>
@@ -46,7 +45,7 @@
 			</div>
 		</div>
 		<!--视频推荐-->
-		<div class="part">
+		<div class="part-video">
 			<div class="title">
 				<div class="titleLeft">
 					<div class="titleLeftTop">视频推荐</div>
@@ -59,12 +58,6 @@
 					<img :src="item.picurl" />
 					<div class="text">{{ item.name }}</div>
 					<div class="text1">{{ item.description }}</div>
-					<!--absolute-->
-					<!-- <div class="pay center">付费</div> -->
-					<!-- <div class="number">
-           <img src="../../assets/images/home_icon_yinyue.png"/>
-            {{item.musicCount}}首
-          </div> -->
 				</div>
 			</div>
 		</div>
@@ -262,7 +255,6 @@
 
 <script>
 import http from '../../api/index.js';
-import Header from '@/components/header.vue';
 export default {
 	data() {
 		return {
@@ -283,7 +275,6 @@ export default {
 			page: 0,
 			isShowNoMore: false,
 			isBottom: false,
-			title:"火火兔内容云"
 		};
 	},
 	created() {},
@@ -469,7 +460,7 @@ export default {
 		};
 	},
 	components: {
-		'v-header': Header
+		
 	}
 };
 </script>

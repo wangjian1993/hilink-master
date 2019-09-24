@@ -25,7 +25,7 @@
 				<div class="devices-audio-control">
 					<div class="devices-audio-control-text">
 						<div>
-							<p>{{ audioInfo.data.song != '' ? audioInfo.data.song : '故事机暂停' }}</p>
+							<p><van-notice-bar color="#000" background="#fff" :text="audioInfo.data.song != ''?audioInfo.data.song:'歌曲正在路上'"  style="padding: 0;"/></p>
 							<p></p>
 						</div>
 					</div>
@@ -49,7 +49,7 @@
 					<div><p>音量</p></div>
 					<div><van-slider v-model="volume" bar-height="2px" @change="onVolumeChange" active-color="#007DFF" /></div>
 					<div>
-						<span>{{volume }}%</span>
+						<span>{{ volume }}%</span>
 					</div>
 				</div>
 			</div>
@@ -159,10 +159,16 @@ export default {
 	data() {
 		return {
 			lampSwitch: [], //开关
-			audioInfo: [], //歌曲信息
+			audioInfo: [
+				{
+					"data":{
+						song:"正在加载歌曲"
+					}
+				}
+			], //歌曲信息
 			earLight: [], //耳灯
 			faceLight: [], //表情灯
-			volume:0,
+			volume: 0,
 			show: false,
 			timePopup: false,
 			isLine: 0, //是否在线
@@ -191,7 +197,7 @@ export default {
 			let data = self.praseResponseData(resultStr);
 			data.services.forEach(function(item, index) {
 				let type = item.sid;
-				console.log("type=======",type)
+				console.log('type=======', type);
 				switch (type) {
 					case 'switch':
 						self.lampSwitch = item || [];
@@ -200,8 +206,7 @@ export default {
 					case 'Music':
 						self.devicesPlayInfo(item);
 						self.audioInfo = item || [];
-						console.log("nusic=========",self.audioInfo)
-						self.volume=item.data.volume 
+						self.volume = item.data.volume;
 						break;
 					case 'earLight':
 						self.earLight = item || [];
@@ -219,6 +224,7 @@ export default {
 			let data = self.praseResponseData(event);
 			let type = data.sid;
 			console.log('设备返回========', type);
+			console.log("设备返回数据========",data);
 			switch (type) {
 				case 'switch':
 					self.lampSwitch.data.on = data.data.on || [];
@@ -233,8 +239,8 @@ export default {
 				case 'Music':
 					self.devicesPlayInfo(data);
 					self.audioInfo.data = data.data || [];
-					self.volume=data.data.volume
-					break;	
+					self.volume = data.data.volume;
+					break;
 				default:
 					break;
 			}
@@ -263,8 +269,8 @@ export default {
 			self.getDevicesState(data);
 		},
 		//设置播放器信息
-		devicesPlayInfo(data){
-			let self =this;
+		devicesPlayInfo(data) {
+			let self = this;
 			self.setPlayData(data);
 		},
 		//获取设备全部信息
@@ -293,25 +299,25 @@ export default {
 				switch (type) {
 					case 0:
 						on = self.lampSwitch.data.on == 1 ? 0 : 1;
-						data = { switch: { on: on, name: 'switch' } }
+						data = { switch: { on: on, name: 'switch' } };
 						break;
 					case 1:
 						on = self.earLight.data.on == 1 ? 0 : 1;
-						data = { earLight: { on: on, name: 'earLight' } }
+						data = { earLight: { on: on, name: 'earLight' } };
 						break;
 					case 2:
 						on = self.faceLight.data.on == 1 ? 0 : 1;
-						data = { faceLight: { on: on, name: 'faceLight' } }
+						data = { faceLight: { on: on, name: 'faceLight' } };
 						break;
 					case 3:
-						data = { Music: { cutSong: 0, name: 'cutSong' } }
+						data = { Music: { cutSong: 0, name: 'cutSong' } };
 						break;
 					case 4:
-						data = { Music: { cutSong: 1, name: 'cutSong' } }
+						data = { Music: { cutSong: 1, name: 'cutSong' } };
 						break;
 					case 5:
 						on = self.audioInfo.data.play == 1 ? 0 : 1;
-						data = { Music: { play: on, name: 'play' } }
+						data = { Music: { play: on, name: 'play' } };
 					default:
 						break;
 				}
@@ -320,9 +326,9 @@ export default {
 			}
 		},
 		//故事机音量调节
-		onVolumeChange(value){
-			let self =this;
-			let data = { Music: { volume:value, name: 'volume' } };
+		onVolumeChange(value) {
+			let self = this;
+			let data = { Music: { volume: value, name: 'volume' } };
 			self.setDeviceInfo(data);
 		},
 		/*

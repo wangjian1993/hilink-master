@@ -1,6 +1,5 @@
 <template>
 	<div class="app">
-		<v-header :title="title"></v-header>
 		<div class="english-content">
 			<div class="content-box">
 				<p class="content-title-zh">英文儿歌</p>
@@ -79,7 +78,7 @@
 				</div>
 			</div>
 			<div class="english-btn">
-				<div @click="setEnglish()" :class="setCheck ?'englishActive':''">{{setCheck ?'保存':'设置'}}</div>
+				<div @click="setEnglish()" :class="setCheck ? 'englishActive' : ''">{{ setCheck ? '保存' : '设置' }}</div>
 				<p>设置英语点播内容，点击机器人上英语键(图标)播放</p>
 			</div>
 		</div>
@@ -87,7 +86,6 @@
 </template>
 
 <script>
-import Header from '@/components/header.vue';
 export default {
 	data() {
 		return {
@@ -113,16 +111,14 @@ export default {
 			self.setCheck = !self.setCheck;
 		}
 	},
-	components: {
-		'v-header': Header
-	}
+	components: {}
 };
 </script>
 
 <style lang="less" scoped>
-.app{
+.app {
 	margin-top: 80px;
-}	
+}
 .english-content {
 	margin-top: 16px;
 }
@@ -228,7 +224,7 @@ export default {
 		padding-top: 10px;
 	}
 }
-.english-btn div.englishActive{
+.english-btn div.englishActive {
 	background: #f45a5a;
 	color: #fff;
 }

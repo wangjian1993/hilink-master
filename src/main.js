@@ -16,9 +16,9 @@ import hilink from './hilink/index'
 Vue.use(hilink);
 //vant按需加载组件
 import {
-  Button,NavBar,Slider,Toast,DatetimePicker,Popup,Field,Swipe, SwipeItem, Tab, Tabs,Icon,Loading 
+  Button,NavBar,Slider,Toast,DatetimePicker,Popup,Field,Swipe, SwipeItem, Tab, Tabs,Icon,Loading ,NoticeBar 
 } from 'vant';
-Vue.use(Tab).use(Tabs).use(Button).use(NavBar).use(Slider).use(Toast).use(DatetimePicker).use(Popup).use(Field).use(Icon).use(Loading);
+Vue.use(Tab).use(Tabs).use(Button).use(NavBar).use(Slider).use(Toast).use(DatetimePicker).use(Popup).use(Field).use(Icon).use(Loading).use(NoticeBar);
 Vue.use(Swipe).use(SwipeItem);
 Vue.use(VueVideoPlayer)
 Vue.config.productionTip = false

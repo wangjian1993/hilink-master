@@ -1,17 +1,20 @@
 <template>
 	<div id="app">
-		<router-view></router-view>
+		<v-header :title="title"></v-header>
+		<keep-alive><router-view></router-view></keep-alive>
 		<v-play v-show="isPlay"></v-play>
 	</div>
 </template>
 <script>
 import Play from '@/components/play';
+import Header from '@/components/header.vue';
 export default {
 	data() {
 		return {
 			isPlay: false,
 			transitionName: null,
-			path:""
+			path:"",
+			title:"火火兔故事机"
 		};
 	},
 	created() {
@@ -29,7 +32,7 @@ export default {
 	},
 	watch: {
 		$route(e) {
-			console.log("路由信息=======",e)
+			this.title =e.meta.title;
 			if(e.name != "home" && e.name !=""){
 				this.isPlay =true;
 				console.log("显示")
@@ -40,7 +43,8 @@ export default {
 		}
 	},
 	components: {
-		"v-play":Play
+		"v-play":Play,
+		"v-header":Header
 	}
 };
 </script>
