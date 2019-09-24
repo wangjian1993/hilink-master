@@ -7,7 +7,7 @@
 			<img src="../../assets/images/logo.png" alt="" />
 		</div>
 		<!-- 故事机开关 -->
-		<div class="devices-status">
+		<!-- <div class="devices-status">
 			<div class="devices-status-text">{{ isLine == 0 ? '已关闭' : '已开启' }}</div>
 			<div class="devices-status-time" v-show="">
 				<div>
@@ -18,10 +18,10 @@
 			<div class="devices-status-btn" @click="devicesSwitch(0)">
 				<p :class="isLine == 1 ? 'switchAcitve' : ''"><img :src="switchIcon()" alt="" /></p>
 			</div>
-		</div>
+		</div> -->
 		<div class="devices-audio" style="background: #F7F7F7;">
 			<!-- 歌曲控制 -->
-			<div class="devices-audio-contro-box" :class="isLine == 0 ? '' : 'lineAcitve'">
+			<!-- <div class="devices-audio-contro-box" :class="isLine == 0 ? '' : 'lineAcitve'">
 				<div class="devices-audio-control">
 					<div class="devices-audio-control-text">
 						<div>
@@ -52,7 +52,7 @@
 						<span>{{volume }}%</span>
 					</div>
 				</div>
-			</div>
+			<!--</div> -->
 			<!-- 其他控制 -->
 			<div class="devices-audio-else-controle">
 				<ul>
@@ -65,7 +65,7 @@
 							</li> -->
 						</ul>
 					</div>
-					<li @click="devicesActionSwitch()" :class="isLine == 0 ? '' : 'lineAcitve'">
+					<!-- <li @click="devicesActionSwitch()" :class="isLine == 0 ? '' : 'lineAcitve'">
 						<div class="devices-audio-else-text">
 							<div>
 								<p>模式</p>
@@ -82,10 +82,10 @@
 							</div>
 						</div>
 						<div class="devices-audio-else-icon"><img src="../../assets/images/ic_dingshi_off.png" alt="" /></div>
-					</li>
+					</li> -->
 				</ul>
 				<ul v-show="isFold">
-					<li @click="devicesActionSwitch()" :class="isLine == 0 ? '' : 'lineAcitve'">
+					<!-- <li @click="devicesActionSwitch()" :class="isLine == 0 ? '' : 'lineAcitve'">
 						<div class="devices-audio-else-text">
 							<div>
 								<p>耳灯</p>
@@ -108,7 +108,7 @@
 							<img v-if="faceLight.data.on == 0" src="../../assets/images/ic_shuimian_off.png" alt="" />
 							<img v-if="faceLight.data.on == 1" src="../../assets/images/ic_shuimian_on.png" alt="" />
 						</div>
-					</li>
+					</li> -->
 				</ul>
 			</div>
 			<div class="devices-audio-look" @click="devicesActionSwitch()" v-show="isFold" :class="isLine == 0 ? '' : 'lineAcitve'">

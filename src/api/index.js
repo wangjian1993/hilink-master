@@ -249,13 +249,13 @@ export default {
             }
         });
     },
-    getVideoAlbumList(val) {
+    getVideoAlbumList(size) {
         return fetch({
             url: cloudUrl + "videoAlbumList",
             method: "get",
             params: {
                 page: 0,
-                pageSize: 2,
+                pageSize: size,
             }
         });
     },

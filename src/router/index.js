@@ -4,7 +4,7 @@ Vue.use(Router)
 
 export default new Router({
 	//<<<<<<< HEAD
-	mode: 'history',
+	mode: 'hash',
 	base: process.env.BASE_URL,
 	routes: [{ //首页
 			path: '/',
@@ -85,6 +85,15 @@ export default new Router({
 			path: '/cloudContent/video',
 			name: 'cloudVideo',
 			component: () => import('@/views/cloudContent/video.vue'),
+			meta: {
+				keepAlive: false
+			}
+		},
+		//火火兔云内容视频列表页面
+		{
+			path: '/cloudContent/videoList',
+			name: 'cloudVideoList',
+			component: () => import('@/views/cloudContent/videoList.vue'),
 			meta: {
 				keepAlive: false
 			}

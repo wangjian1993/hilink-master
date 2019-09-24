@@ -1,9 +1,9 @@
 <template>
 	<div id="app">
-		<transition :name="transitionName">
+		<!-- <transition :name="transitionName"> -->
 			<keep-alive><router-view></router-view></keep-alive>
-			<Play v-if="isPlay"></Play>
-		</transition>
+			<!-- <Play v-if="isPlay"></Play> -->
+		<!-- </transition> -->
 	</div>
 </template>
 <script>

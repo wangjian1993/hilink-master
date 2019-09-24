@@ -19,17 +19,30 @@
             {{info.description}}
         </div>
     </div>
-    <div v-bind:class="[active == index?'active':'','musicList']" v-for="(item,index) in musicList" :key="index">
-        <div class="left">
-            <p class="inroName">{{item.name}}</p>
-            <p class="inroName">{{item.timelength}}</p>
+    <div  v-for="(item,index) in musicList" :key="index">
+        <div v-bind:class="[active == index?'active':'','musicList']" @click="show(index)">
+            <div class="left">
+                <p class="inroName">{{item.name}}</p>
+                <p class="inroName">{{item.timelength}}</p>
+            </div>
+            <div class="right" @click="play(item.path,index)" >
+                <img src="../../assets/images/icon_listen_pause.png" class="rightImg" v-show="active != index"/>
+                <img src="../../assets/images/icon_listen_playing.png" class="rightImg" v-show="active == index"/>
+                <div class="rightTry">试听</div>
+            </div>
         </div>
-        <div class="right" @click="play(item.path,index)">
-            <img src="../../assets/images/icon_listen_pause.png" class="rightImg" v-show="active != index"/>
-            <img src="../../assets/images/icon_listen_playing.png" class="rightImg" v-show="active == index"/>
-            <div class="rightTry">试听</div>
+        <div class="playOrFavor" v-if="showIndex == index">
+            <div class="playCell">
+                <img src="../../assets/images/icon_demand.png"/>
+                <p>点播</p>
+            </div>
+            <div class="playCell">
+                <img src="../../assets/images/sc.png"/>
+                 <p>收藏</p>
+            </div>
         </div>
     </div>
+   
    <div class="loadingding center" v-show="isLoaded">
          <van-loading size="50px"  color="#81b4ff">加载中...</van-loading>
     </div>
@@ -47,7 +60,8 @@ import http from '../../api/index.js'
          audio:null,
          src:'',
          active:-1,
-         isLoaded:false
+         isLoaded:false,
+         showIndex:-1
      }
    },
    created(){
@@ -109,8 +123,16 @@ import http from '../../api/index.js'
                this.active = -1
             }
            }    
-       }
+       },
+       //显示点播收藏
+       show(index){
+            if(this.showIndex == index){
+                return
+            }
+            this.showIndex = index
+        },
    },
+        
    components: {
     
    }

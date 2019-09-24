@@ -61,9 +61,9 @@
           <div class="titleLeftTop">视频推荐</div>
           <div class="titleLeftBottom">益智视频，精彩不断</div>
         </div>
-        <div class="titleRight">
-          <!-- <img src="../../assets/images/home_icon_more.png"/> -->
-        </div>
+        <router-link to='/cloudContent/videoList' class="titleRight">
+          <img src="../../assets/images/home_icon_more.png"/>
+        </router-link>
       </div>
       <div class="content">
         <div class="contentCell" v-for="(item,index) in videoList" :key="index" @click="goVideoDetail(item.id)">
@@ -432,7 +432,7 @@ import http from '../../api/index.js'
               console.log(err)
           })
       //视频推荐
-     await http.getVideoAlbumList().then(res=>{
+     await http.getVideoAlbumList(2).then(res=>{
       this.videoList = res.data.content.list
      }).catch(err=>{
               console.log(err)
