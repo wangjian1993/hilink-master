@@ -362,16 +362,16 @@ export default {
 		contentBtn(type) {
 			var url;
 			if (type == 0) {
-				url = '/cloudIndex'; //火火兔内容云
+				url = 'cloudIndex'; //火火兔内容云
 			} else if (type == 1) {
-				url = '/english'; //启蒙英语
+				url = 'english'; //启蒙英语
 			} else if (type == 2) {
-				url = '/locallist';
+				url = 'locallist';
 			} else if (type == 3) {
-				url = '/localList';
+				url = 'localList';
 			}
 			this.$router.push({
-				path: url
+				name: url
 			});
 		}
 		// ...mapActions(['getDevicesState'])

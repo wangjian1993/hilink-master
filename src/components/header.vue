@@ -1,13 +1,15 @@
 <template>
 	<!-- 导航 -->
-	<div class="home-header">
-		<div class="home-header-back" @click="onClickLeft()"><img src="../assets/images/ic_fanhui.png" alt="" /></div>
-		<div class="home-header-title">
-			<p>{{ title }}</p>
-		</div>
-		<div class="home-header-more">
-			<p v-if="type == 'home'" @click="helpRoute()"><img src="../assets/images/ic_yichang01.png" alt="" /></p>
-			<p v-if="type == 'home'" @click="onClickRight()"><img src="../assets/images/ic_gengduo.png" alt="" /></p>
+	<div class="app-header">
+		<div class="home-header">
+			<div class="home-header-back" @click="onClickLeft()"><img src="../assets/images/ic_fanhui.png" alt="" /></div>
+			<div class="home-header-title">
+				<p>{{ title }}</p>
+			</div>
+			<div class="home-header-more">
+				<p v-if="type == 'home'" @click="helpRoute()"><img src="../assets/images/ic_yichang01.png" alt="" /></p>
+				<p v-if="type == 'home'" @click="onClickRight()"><img src="../assets/images/ic_gengduo.png" alt="" /></p>
+			</div>
 		</div>
 	</div>
 </template>
@@ -50,12 +52,16 @@ export default {
 };
 </script>
 <style lang="less">
-.home-header {
+.app-header{
 	width: 100%;
-	// position: fixed;
-	// top: 24px;
+	position: fixed;
+	top: 0px;
 	background: #ffffff;
+	height: 80px;
 	z-index: 3000;
+}	
+.home-header {
+	margin-top: 24px;
 	height: 56px;
 	display: flex;
 	.home-header-back {

@@ -1,9 +1,7 @@
 <template>
 	<div id="app">
-		<transition :name="transitionName">
-			<keep-alive><router-view></router-view></keep-alive>
-			<Play v-if="isPlay"></Play>
-		</transition>
+		<keep-alive><router-view></router-view></keep-alive>
+		<Play v-if="isPlay"></Play>
 	</div>
 </template>
 <script>
@@ -37,11 +35,6 @@ export default {
 				this.isPlay = false;
 			}
 		},
-		$route(to, from) {
-			const toDepth = to.path.split('/').length;
-			const fromDepth = from.path.split('/').length;
-			this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left';
-		}
 	},
 	components: {
 		Play
@@ -72,25 +65,25 @@ html {
 .slide-right-leave-active,
 .slide-left-enter-active,
 .slide-left-leave-active {
-  will-change: transform;
-  transition: all 500ms;
-  position: absolute;
+	will-change: transform;
+	transition: all 500ms;
+	position: absolute;
 }
 .slide-right-enter {
-  opacity: 0;
-  transform: translate3d(-100%, 0, 0);
+	opacity: 0;
+	transform: translate3d(-100%, 0, 0);
 }
 .slide-right-leave-active {
-  opacity: 0;
-  transform: translate3d(100%, 0, 0);
+	opacity: 0;
+	transform: translate3d(100%, 0, 0);
 }
 .slide-left-enter {
-  opacity: 0;
-  transform: translate3d(100%, 0, 0);
+	opacity: 0;
+	transform: translate3d(100%, 0, 0);
 }
 .slide-left-leave-active {
-  opacity: 0;
-  transform: translate3d(-100%, 0, 0);
+	opacity: 0;
+	transform: translate3d(-100%, 0, 0);
 }
 /* .router-view {
   width: 100%;
@@ -102,14 +95,14 @@ html {
   overflow-y: auto;
   overflow-x: hidden;
 } */
-.router-view{
+.router-view {
 	width: 100%;
 	height: 100%;
 	position: absolute;
 	top: 0;
 	bottom: 0;
 	margin: 0 auto;
-	overflow: auto hidden; 
+	overflow: auto hidden;
 	/* overflow: hidden; */
 }
 </style>

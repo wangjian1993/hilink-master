@@ -120,6 +120,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.app{
+	margin-top: 80px;
+}	
 .english-content {
 	margin-top: 16px;
 }
