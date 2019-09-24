@@ -12,5 +12,10 @@ export default {
 		commit
 	},data){
 		commit(types.SET_TIMEPOPUP, data);
+	},
+	setPlayData({
+		commit
+	},data){
+		commit(types.SET_PLAYDATA,data);
 	}
 };

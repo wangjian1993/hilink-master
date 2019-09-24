@@ -1,7 +1,7 @@
 <template>
 	<div id="app">
-		<keep-alive><router-view></router-view></keep-alive>
-		<Play v-if="isPlay"></Play>
+		<router-view></router-view>
+		<v-play v-show="isPlay"></v-play>
 	</div>
 </template>
 <script>
@@ -10,7 +10,8 @@ export default {
 	data() {
 		return {
 			isPlay: false,
-			transitionName: null
+			transitionName: null,
+			path:""
 		};
 	},
 	created() {
@@ -28,16 +29,18 @@ export default {
 	},
 	watch: {
 		$route(e) {
-			console.log('路由信息', e);
-			if (e.name != 'home' && e.name != 'help') {
-				this.isPlay = true;
-			} else {
-				this.isPlay = false;
+			console.log("路由信息=======",e)
+			if(e.name != "home" && e.name !=""){
+				this.isPlay =true;
+				console.log("显示")
+			}else{
+				this.isPlay =false;
+				console.log("隐藏")
 			}
-		},
+		}
 	},
 	components: {
-		Play
+		"v-play":Play
 	}
 };
 </script>

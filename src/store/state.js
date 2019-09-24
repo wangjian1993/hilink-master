@@ -1,6 +1,7 @@
 const state = {
   devicesstate:[],
   timePopup:false,
+  playData:[],
   params:null,
 };
 

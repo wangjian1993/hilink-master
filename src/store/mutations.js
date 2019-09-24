@@ -8,6 +8,11 @@ const mutations = {
 	},
 	[types.SET_TIMEPOPUP](state,data){
 		state.timePopup = !state.timePopup;
+	},
+	[types.SET_PLAYDATA](state,data){
+		state.playData=[];
+		console.log("修改的数据=========", data)
+		state.playData =data;
 	}
 }
 export default mutations

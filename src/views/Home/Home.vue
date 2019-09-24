@@ -26,7 +26,7 @@
 					<div class="devices-audio-control-text">
 						<div>
 							<p>{{ audioInfo.data.song != '' ? audioInfo.data.song : '故事机暂停' }}</p>
-							<p>未知</p>
+							<p></p>
 						</div>
 					</div>
 					<div class="devices-audio-control-icon">
@@ -191,20 +191,23 @@ export default {
 			let data = self.praseResponseData(resultStr);
 			data.services.forEach(function(item, index) {
 				let type = item.sid;
+				console.log("type=======",type)
 				switch (type) {
 					case 'switch':
-						self.lampSwitch = item;
+						self.lampSwitch = item || [];
 						self.isLine = item.data.on;
 						break;
 					case 'Music':
-						self.audioInfo = item;
-						self.volume=item.data.volume
+						self.devicesPlayInfo(item);
+						self.audioInfo = item || [];
+						console.log("nusic=========",self.audioInfo)
+						self.volume=item.data.volume 
 						break;
 					case 'earLight':
-						self.earLight = item;
+						self.earLight = item || [];
 						break;
 					case 'faceLight':
-						self.faceLight = item;
+						self.faceLight = item || [];
 						break;
 					default:
 						break;
@@ -218,17 +221,18 @@ export default {
 			console.log('设备返回========', type);
 			switch (type) {
 				case 'switch':
-					self.lampSwitch.data.on = data.data.on;
+					self.lampSwitch.data.on = data.data.on || [];
 					self.isLine = data.data.on;
 					break;
 				case 'earLight':
-					self.earLight.data.on = data.data.on;
+					self.earLight.data.on = data.data.on || [];
 					break;
 				case 'faceLight':
-					self.faceLight.data.on = data.data.on;
+					self.faceLight.data.on = data.data.on || [];
 					break;
 				case 'Music':
-					self.audioInfo.data = data.data;
+					self.devicesPlayInfo(data);
+					self.audioInfo.data = data.data || [];
 					self.volume=data.data.volume
 					break;	
 				default:
@@ -254,10 +258,15 @@ export default {
 			}
 		},
 		//设备全部信息
-		// devicesInfoAll(data) {
-		// 	let self = this;
-		// 	self.getDevicesState(data);
-		// },
+		devicesInfoAll(data) {
+			let self = this;
+			self.getDevicesState(data);
+		},
+		//设置播放器信息
+		devicesPlayInfo(data){
+			let self =this;
+			self.setPlayData(data);
+		},
 		//获取设备全部信息
 		getDevicesAll() {
 			let self = this;
@@ -368,13 +377,13 @@ export default {
 			} else if (type == 2) {
 				url = 'locallist';
 			} else if (type == 3) {
-				url = 'localList';
+				url = 'locallist';
 			}
 			this.$router.push({
 				name: url
 			});
-		}
-		// ...mapActions(['getDevicesState'])
+		},
+		...mapActions(['setPlayData'])
 	},
 	components: {
 		'v-picker': picker,
