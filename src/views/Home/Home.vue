@@ -25,7 +25,7 @@
 				<div class="devices-audio-control">
 					<div class="devices-audio-control-text">
 						<div>
-							<p><van-notice-bar color="#000" background="#fff" :text="audioInfo.data.song != ''?audioInfo.data.song:'歌曲正在路上'"  style="padding: 0;"/></p>
+							<p><van-notice-bar color="#000" speed=30 background="#fff" :text="audioInfo.data.song != ''?audioInfo.data.song:'歌曲正在路上'"  style="padding: 0;"/></p>
 							<p></p>
 						</div>
 					</div>
@@ -111,7 +111,7 @@
 					</li>
 				</ul>
 			</div>
-			<div class="devices-audio-look" @click="devicesActionSwitch()" v-show="isFold" :class="isLine == 0 ? '' : 'lineAcitve'">
+			<div class="devices-audio-look" @click="devicesSwitch(6)" v-show="isFold" :class="isLine == 0 ? '' : 'lineAcitve'">
 				<div>
 					<p>童锁</p>
 					<div><img src="../../assets/images/ic_tongsuo_off.png" alt="" /></div>
@@ -194,10 +194,12 @@ export default {
 		//获取设备全部信息回调
 		window['resultCallback'] = resultStr => {
 			// self.devicesInfoAll(resultStr);
+			console.log("全部信息=====",resultStr)
 			let data = self.praseResponseData(resultStr);
 			data.services.forEach(function(item, index) {
 				let type = item.sid;
 				console.log('type=======', type);
+				console.log('item=======', item);
 				switch (type) {
 					case 'switch':
 						self.lampSwitch = item || [];
@@ -289,6 +291,7 @@ export default {
 		 * 3:上一曲
 		 * 4:下一曲
 		 * 5:播放暂停
+		 * 6:童锁
 		 */
 		devicesSwitch(type) {
 			console.log('设备开关');
@@ -318,6 +321,11 @@ export default {
 					case 5:
 						on = self.audioInfo.data.play == 1 ? 0 : 1;
 						data = { Music: { play: on, name: 'play' } };
+					case 6:
+						var body={
+							
+						}
+						data = { custom: { function: body, name: 'custom'}};	
 					default:
 						break;
 				}
