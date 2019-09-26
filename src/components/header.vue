@@ -52,14 +52,14 @@ export default {
 };
 </script>
 <style lang="less">
-.app-header{
+.app-header {
 	width: 100%;
 	position: fixed;
 	top: 0px;
 	background: #ffffff;
 	height: 80px;
 	z-index: 3000;
-}	
+}
 .home-header {
 	margin-top: 24px;
 	height: 56px;
