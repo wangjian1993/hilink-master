@@ -323,9 +323,14 @@ export default {
 						data = { Music: { play: on, name: 'play' } };
 					case 6:
 						var body={
-							
+							"from":"DID:0",
+							"to":"UID:-1",
+							"action":427,
+							"on":1
 						}
-						data = { custom: { function: body, name: 'custom'}};	
+						var f =JSON.stringify(body);
+						console.log("f" +f)
+						data = { custom: { function: f, name: 'custom'}};	
 					default:
 						break;
 				}
