@@ -14,7 +14,6 @@
 				<img v-if="playData.data.play == 0" src="../assets/images/icon_device_pause.png" alt="" />
 			</p>
 			<p @click="devicesSwitch(4)"><img src="../assets/images/icon_device_next.png" alt="" /></p>
-
 			<p @click="devicesSwitch(2)"><img class="play-mode" src="../assets/images/icon_device_one.png" alt="" /></p>
 		</div>
 	</div>

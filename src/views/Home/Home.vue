@@ -7,7 +7,7 @@
 			<img src="../../assets/images/logo.png" alt="" />
 		</div>
 		<!-- 故事机开关 -->
-		<!-- <div class="devices-status">
+		<div class="devices-status">
 			<div class="devices-status-text">{{ isLine == 0 ? '已关闭' : '已开启' }}</div>
 			<div class="devices-status-time" v-show="">
 				<div>
@@ -18,14 +18,22 @@
 			<div class="devices-status-btn" @click="devicesSwitch(0)">
 				<p :class="isLine == 1 ? 'switchAcitve' : ''"><img :src="switchIcon()" alt="" /></p>
 			</div>
-		</div> -->
+		</div>
 		<div class="devices-audio" style="background: #F7F7F7;">
 			<!-- 歌曲控制 -->
-			<!-- <div class="devices-audio-contro-box" :class="isLine == 0 ? '' : 'lineAcitve'">
+			<div class="devices-audio-contro-box" :class="isLine == 0 ? '' : 'lineAcitve'">
 				<div class="devices-audio-control">
 					<div class="devices-audio-control-text">
 						<div>
-							<p><van-notice-bar color="#000" speed=30 background="#fff" :text="audioInfo.data.song != ''?audioInfo.data.song:'歌曲正在路上'"  style="padding: 0;"/></p>
+							<p>
+								<van-notice-bar
+									color="#000"
+									speed="30"
+									background="#fff"
+									:text="audioInfo.data.song != '' ? audioInfo.data.song : '歌曲正在路上'"
+									style="padding: 0;"
+								/>
+							</p>
 							<p></p>
 						</div>
 					</div>
@@ -52,7 +60,7 @@
 						<span>{{ volume }}%</span>
 					</div>
 				</div>
-			<!--</div> -->
+			</div>
 			<!-- 其他控制 -->
 			<div class="devices-audio-else-controle">
 				<ul>
@@ -65,7 +73,7 @@
 							</li> -->
 						</ul>
 					</div>
-					<!-- <li @click="devicesActionSwitch()" :class="isLine == 0 ? '' : 'lineAcitve'">
+					<li @click="devicesActionSwitch()" :class="isLine == 0 ? '' : 'lineAcitve'">
 						<div class="devices-audio-else-text">
 							<div>
 								<p>模式</p>
@@ -82,10 +90,10 @@
 							</div>
 						</div>
 						<div class="devices-audio-else-icon"><img src="../../assets/images/ic_dingshi_off.png" alt="" /></div>
-					</li> -->
+					</li>
 				</ul>
 				<ul v-show="isFold">
-					<!-- <li @click="devicesActionSwitch()" :class="isLine == 0 ? '' : 'lineAcitve'">
+					<li @click="devicesActionSwitch()" :class="isLine == 0 ? '' : 'lineAcitve'">
 						<div class="devices-audio-else-text">
 							<div>
 								<p>耳灯</p>
@@ -108,7 +116,7 @@
 							<img v-if="faceLight.data.on == 0" src="../../assets/images/ic_shuimian_off.png" alt="" />
 							<img v-if="faceLight.data.on == 1" src="../../assets/images/ic_shuimian_on.png" alt="" />
 						</div>
-					</li> -->
+					</li>
 				</ul>
 			</div>
 			<div class="devices-audio-look" @click="devicesSwitch(6)" v-show="isFold" :class="isLine == 0 ? '' : 'lineAcitve'">
@@ -161,8 +169,8 @@ export default {
 			lampSwitch: [], //开关
 			audioInfo: [
 				{
-					"data":{
-						song:"正在加载歌曲"
+					data: {
+						song: '正在加载歌曲'
 					}
 				}
 			], //歌曲信息
@@ -194,7 +202,7 @@ export default {
 		//获取设备全部信息回调
 		window['resultCallback'] = resultStr => {
 			// self.devicesInfoAll(resultStr);
-			console.log("全部信息=====",resultStr)
+			console.log('全部信息=====', resultStr);
 			let data = self.praseResponseData(resultStr);
 			data.services.forEach(function(item, index) {
 				let type = item.sid;
@@ -226,7 +234,7 @@ export default {
 			let data = self.praseResponseData(event);
 			let type = data.sid;
 			console.log('设备返回========', type);
-			console.log("设备返回数据========",data);
+			console.log('设备返回数据========', data);
 			switch (type) {
 				case 'switch':
 					self.lampSwitch.data.on = data.data.on || [];
@@ -322,15 +330,15 @@ export default {
 						on = self.audioInfo.data.play == 1 ? 0 : 1;
 						data = { Music: { play: on, name: 'play' } };
 					case 6:
-						var body={
-							"from":"DID:0",
-							"to":"UID:-1",
-							"action":427,
-							"on":1
-						}
-						var f =JSON.stringify(body);
-						console.log("f" +f)
-						data = { custom: { function: f, name: 'custom'}};	
+						var body = {
+							from: 'DID:0',
+							to: 'UID:-1',
+							action: 427,
+							on: 1
+						};
+						var f = JSON.stringify(body);
+						console.log('f' + f);
+						data = { custom: { function: f, name: 'custom' } };
 					default:
 						break;
 				}
