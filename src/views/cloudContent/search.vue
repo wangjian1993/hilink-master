@@ -53,15 +53,28 @@
                 单曲<van-icon name="arrow-down" class="arrowDown"/>
             </div>
             <div>
-                <div v-bind:class="[toIndex == index?'active':'','musicList']" v-for="(item,index) in singleList" :key="index">
-                    <div class="left">
-                        <p class="inroName">{{item.name}}</p>
-                        <p class="inroName">{{item.timelength}}</p>
+                
+                <div  v-for="(item,index) in singleList" :key="index">
+                    <div v-bind:class="[toIndex == index?'active':'','musicList']" @click="show(index)">
+                        <div class="left">
+                            <p class="inroName">{{item.name}}</p>
+                            <p class="inroName">{{item.timelength}}</p>
+                        </div>
+                        <div class="right" @click="play(item.path,index)" >
+                            <img src="../../assets/images/icon_listen_pause.png" class="rightImg" v-show="toIndex != index"/>
+                            <img src="../../assets/images/icon_listen_playing.png" class="rightImg" v-show="toIndex == index"/>
+                            <div class="rightTry">试听</div>
+                        </div>
                     </div>
-                    <div class="right" @click="play(item.path,index)">
-                        <img src="../../assets/images/icon_listen_pause.png" class="rightImg" v-show="toIndex != index"/>
-                        <img src="../../assets/images/icon_listen_playing.png" class="rightImg" v-show="toIndex == index"/>
-                        <div class="rightTry">试听</div>
+                    <div class="playOrFavor" v-if="showIndex == index">
+                        <div class="playCell">
+                            <img src="../../assets/images/icon_demand.png"/>
+                            <p>点播</p>
+                        </div>
+                        <div class="playCell">
+                            <img src="../../assets/images/sc.png"/>
+                            <p>收藏</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -87,7 +100,8 @@ import http from '../../api/index.js'
         isLoaded:false,
         active:0,
         toIndex:-1,
-        isNoMore:false
+        isNoMore:false,
+        showIndex:-1
      }
    },
    mounted(){
@@ -96,6 +110,7 @@ import http from '../../api/index.js'
    methods: {
       //返回或者清除
       goBack(){
+          this.isNoMore = false
         if(this.cancelOrDelete == '取消'){
             this.$router.go(-1)
           }else{
@@ -107,6 +122,7 @@ import http from '../../api/index.js'
           this.albumList = this.singleList = []
           this.isShowResult = true
           this.isLoaded = true
+          this.showIndex = -1
           await  http.getSearch(1,this.serchValue).then(res=>{
               this.albumList = res.data.content.list
           }).catch(err=>{
@@ -129,12 +145,13 @@ import http from '../../api/index.js'
                }
            });
               this.singleList = res.data.content.list
-              this.isNoMore = true
+              
           }).catch(err=>{
               console.log(err)
           })
 
           this.isLoaded = false
+          this.isNoMore = true
       },
       //播放音乐
        play(src,index){
@@ -164,7 +181,14 @@ import http from '../../api/index.js'
        hotSearch(val){
            this.serchValue = val
            this.SearchResult()
-       }
+       },
+         //显示点播收藏
+       show(index){
+            if(this.showIndex == index){
+                return
+            }
+            this.showIndex = index
+        },
    },
    beforeRouteLeave (to, from, next) {
     // 销毁组件，避免通过vue-router再次进入时，仍是上次的history缓存的状态

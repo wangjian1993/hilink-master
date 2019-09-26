@@ -99,6 +99,15 @@ export default new Router({
 				keepAlive: false
 			}
 		},
+		//火火兔云内容视频列表页面
+		{
+			path: '/cloudContent/videoList',
+			name: 'cloudVideoList',
+			component: () => import('@/views/cloudContent/videoList.vue'),
+			meta: {
+				keepAlive: false
+			}
+		},
 	]
 })
 

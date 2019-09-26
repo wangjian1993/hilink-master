@@ -1,8 +1,15 @@
 <template>
 	<div id="app">
+<<<<<<< HEAD
 		<v-header :title="title"></v-header>
 		<keep-alive><router-view></router-view></keep-alive>
 		<v-play v-show="isPlay"></v-play>
+=======
+		<!-- <transition :name="transitionName"> -->
+			<keep-alive><router-view></router-view></keep-alive>
+			<!-- <Play v-if="isPlay"></Play> -->
+		<!-- </transition> -->
+>>>>>>> gitlab/developer
 	</div>
 </template>
 <script>
