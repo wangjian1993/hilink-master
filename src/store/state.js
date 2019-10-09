@@ -1,5 +1,5 @@
 const state = {
-  devicesstate:[],
+  devicesInfo:[],  //设备信息
   timePopup:false,
   playData:[],
   params:null,

@@ -184,77 +184,12 @@ export default {
 		};
 	},
 	computed: {
-		// ...mapState(["timePopup"])
+		...mapState(["devicesInfo"])
 	},
 	created() {
 		if (window.hilink != undefined) {
 			this.getDevicesAll();
 		}
-	},
-	mounted() {
-		var self = this;
-		//获取设备全部信息回调
-		window['resultCallback'] = resultStr => {
-			// self.devicesInfoAll(resultStr);
-			console.log('全部信息=====', resultStr);
-			let data = self.praseResponseData(resultStr);
-			data.services.forEach(function(item, index) {
-				let type = item.sid;
-				console.log('type=======', type);
-				console.log('item=======', item);
-				switch (type) {
-					case 'switch':
-						self.lampSwitch = item || [];
-						self.isLine = item.data.on;
-						break;
-					case 'Music':
-						self.devicesPlayInfo(item);
-						self.audioInfo = item || [];
-						self.volume = item.data.volume;
-						break;
-					case 'earLight':
-						self.earLight = item || [];
-						break;
-					case 'faceLight':
-						self.faceLight = item || [];
-						break;
-					default:
-						break;
-				}
-			});
-		};
-		window['deviceInfoCallback'] = resultStr => {
-			console.log("获取设备单独信息======",resultStr);
-		};
-		//设备主动上报回调信息
-		window['deviceEventCallback'] = event => {
-			let data = self.praseResponseData(event);
-			let type = data.sid;
-			console.log('设备返回========', type);
-			console.log('设备返回数据========', data);
-			switch (type) {
-				case 'switch':
-					self.lampSwitch.data.on = data.data.on || [];
-					self.isLine = data.data.on;
-					break;
-				case 'earLight':
-					self.earLight.data.on = data.data.on || [];
-					break;
-				case 'faceLight':
-					self.faceLight.data.on = data.data.on || [];
-					break;
-				case 'Music':
-					self.devicesPlayInfo(data);
-					self.audioInfo.data = data.data || [];
-					self.volume = data.data.volume;
-					break;
-				default:
-					break;
-			}
-		};
-		window['devicesInfo'] = event => {
-			console.log('设备设置');
-		};
 	},
 	methods: {
 		onConfirm() {
@@ -396,17 +331,6 @@ export default {
 			} else {
 				self.foldText = '展开更多';
 				self.foldIcon = require('../../assets/images/ic_shouqi.png');
-			}
-		},
-		//回调函数转换
-		praseResponseData(resData) {
-			try {
-				return JSON.parse(resData);
-			} catch (error) {
-				var dataStr = resData.replace(/:"{/g, ':{');
-				dataStr = dataStr.replace(/}",/g, '},');
-				dataStr = dataStr.replace(/\\/g, '');
-				return JSON.parse(dataStr);
 			}
 		},
 		//进入内容
