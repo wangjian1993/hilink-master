@@ -30,7 +30,7 @@
      <van-tabs v-model="active" color="#81b4ff" sticky  class="tabs" v-if="isShowResult">
         <van-tab title="专辑" >
             <div slot="title" class='tab'>
-                专辑<van-icon name="arrow-down" class="icon"/>
+                专辑
             </div>
             <div>
                 <div class="cell" v-for="(item,index) in albumList" :key="index" @click="goDetail(item.id)">
@@ -50,7 +50,7 @@
         </van-tab>
         <van-tab title="单曲">
             <div slot="title" class='tab'>
-                单曲<van-icon name="arrow-down" class="arrowDown"/>
+                单曲
             </div>
             <div>
                 

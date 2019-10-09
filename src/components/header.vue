@@ -81,6 +81,10 @@ export default {
 		width: 218.3px;
 		height: 100%;
 		line-height: 56px;
+		overflow: hidden;
+		white-space: nowrap;
+		width: 100%;
+		text-overflow: ellipsis;
 		p {
 			color: #000000;
 			text-align: left;

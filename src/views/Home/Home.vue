@@ -66,14 +66,14 @@
 				<ul>
 					<div class="devices-audio-else-mode" v-show="audioMode">
 						<ul>
-							<li><p>列表循环</p></li>
-							<li><p>单曲循环</p></li>
+							<li @click="devicesModeAction(1)"><p>列表循环</p></li>
+							<li @click="devicesModeAction(0)"><p>单曲循环</p></li>
 							<!-- <li>
 								<p>随机循环</p>
 							</li> -->
 						</ul>
 					</div>
-					<li @click="devicesActionSwitch()" :class="isLine == 0 ? '' : 'lineAcitve'">
+					<li @click="devicesMode()" :class="isLine == 0 ? '' : 'lineAcitve'">
 						<div class="devices-audio-else-text">
 							<div>
 								<p>模式</p>
@@ -93,7 +93,7 @@
 					</li>
 				</ul>
 				<ul v-show="isFold">
-					<li @click="devicesActionSwitch()" :class="isLine == 0 ? '' : 'lineAcitve'">
+					<li :class="isLine == 0 ? '' : 'lineAcitve'">
 						<div class="devices-audio-else-text">
 							<div>
 								<p>耳灯</p>
@@ -105,7 +105,7 @@
 							<img v-if="earLight.data.on == 1" src="../../assets/images/ic_fengsu_on5.png" alt="" />
 						</div>
 					</li>
-					<li @click="devicesActionSwitch()" :class="isLine == 0 ? '' : 'lineAcitve'">
+					<li :class="isLine == 0 ? '' : 'lineAcitve'">
 						<div class="devices-audio-else-text">
 							<div>
 								<p>表情灯</p>
@@ -167,13 +167,7 @@ export default {
 	data() {
 		return {
 			lampSwitch: [], //开关
-			audioInfo: [
-				{
-					data: {
-						song: '正在加载歌曲'
-					}
-				}
-			], //歌曲信息
+			audioInfo: [], //歌曲信息
 			earLight: [], //耳灯
 			faceLight: [], //表情灯
 			volume: 0,
@@ -228,6 +222,9 @@ export default {
 						break;
 				}
 			});
+		};
+		window['deviceInfoCallback'] = resultStr => {
+			console.log("获取设备单独信息======",resultStr);
 		};
 		//设备主动上报回调信息
 		window['deviceEventCallback'] = event => {
@@ -309,7 +306,7 @@ export default {
 				var on;
 				switch (type) {
 					case 0:
-						on = self.lampSwitch.data.on == 1 ? 0 : 1;
+						on = self.lampSwitch.data.on == 1 ? 0 : 0;
 						data = { switch: { on: on, name: 'switch' } };
 						break;
 					case 1:
@@ -333,18 +330,36 @@ export default {
 						var body = {
 							from: 'DID:0',
 							to: 'UID:-1',
-							action: 427,
+							action: 627,
 							on: 1
 						};
-						var f = JSON.stringify(body);
-						console.log('f' + f);
-						data = { custom: { function: f, name: 'custom' } };
+						var json = JSON.stringify(body);
+						data = { custom: { function: json, name: 'function' } };
 					default:
 						break;
 				}
 				console.log(data);
 				self.setDeviceInfo(data);
 			}
+		},
+		//播放模式选择
+		devicesMode() {
+			let self = this;
+			self.audioMode = !self.audioMode;
+		},
+		//故事机播放模式
+		devicesModeAction(mode) {
+			let self = this;
+			var body = {
+				from: 'DID:0',
+				to: 'UID:-1',
+				action: 909,
+				playmode: mode
+			};
+			self.audioMode = !self.audioMode;
+			let json = JSON.stringify(body);
+			let data = { custom: { funciton: json, name: 'function' } };
+			self.setDeviceInfo(data);
 		},
 		//故事机音量调节
 		onVolumeChange(value) {

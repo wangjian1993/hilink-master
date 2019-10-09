@@ -36,6 +36,21 @@ export default {
 			]
 		};
 	},
+	created() {
+		if (window.hilink != undefined) {
+			let body = {
+				from: 'DID:0',
+				to: 'UID:-1',
+				action: 405,
+			};
+			let json = JSON.stringify(body);
+			data = { custom: { function: json, name: 'function' } };
+			this.setDeviceInfo(data);
+		}
+	},
+	methods:{
+		
+	},
 	components: {
 		'v-header': Header
 	}

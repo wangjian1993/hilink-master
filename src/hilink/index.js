@@ -18,7 +18,8 @@ exports.install = function(Vue) {
 	 */
 	Vue.prototype.getDevInfo = function(sid,data) {
 		let body = JSON.stringify(data);
-		window.hilink.getDevInfo("0", sid, body, "resultCallback");
+		console.log("获取设备单独信息=======",sid,body)
+		window.hilink.getDevInfo("0", sid, body, "deviceInfoCallback");
 	};
 	/** 
 	 * 发送消息给设备
@@ -30,6 +31,6 @@ exports.install = function(Vue) {
 	Vue.prototype.setDeviceInfo = function(data) {
 		let body = JSON.stringify(data);
 		console.log("设置设备数据===",body)
-		window.hilink.setDeviceInfo("0", body, "resultCallback");
+		window.hilink.setDeviceInfo("0", body, "deviceEventCallback");
 	};
 };
