@@ -7,7 +7,7 @@
 				<p>{{ title }}</p>
 			</div>
 			<div class="home-header-more">
-				<p v-if="type == 'home'" @click="helpRoute()"><img src="../assets/images/ic_yichang01.png" alt="" /></p>
+				<!-- <p v-if="type == 'home'" @click="helpRoute()"><img src="../assets/images/ic_yichang01.png" alt="" /></p> -->
 				<p v-if="type == 'home'" @click="onClickRight()"><img src="../assets/images/ic_gengduo.png" alt="" /></p>
 			</div>
 		</div>

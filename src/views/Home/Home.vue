@@ -3,13 +3,13 @@
 		<v-header :title="title" :type="headerType"></v-header>
 		<!-- 产品图 -->
 		<div class="devices-img">
-			<img src="../../assets/images/img_toutu_bule.png" alt="" />
+			<img src="../../../dist/img/img_toutu_red.0ed91eec.png" alt="" />
 			<img src="../../assets/images/logo.png" alt="" />
 		</div>
 		<!-- 故事机开关 -->
 		<div class="devices-status">
 			<div class="devices-status-text">{{ isLine == 0 ? '已关闭' : '已开启' }}</div>
-			<div class="devices-status-time" v-show="">
+			<div class="devices-status-time" :class="!devTime? 'timeAcitve' : ''">
 				<div>
 					<p>65:00</p>
 					<p>定时关机</p>
@@ -171,24 +171,85 @@ export default {
 			earLight: [], //耳灯
 			faceLight: [], //表情灯
 			volume: 0,
-			show: false,
+			devTime: false,
 			timePopup: false,
 			isLine: 0, //是否在线
 			isFold: false, //折叠展开
 			foldText: '展开更多',
 			switchText: '已关闭',
-			title: '火火兔讲故事',
+			title: '火火兔故事机',
 			headerType: 'home',
 			audioMode: false, //音乐模式
 			foldIcon: require('../../assets/images/ic_shouqi.png')
 		};
 	},
 	computed: {
-		...mapState(["devicesInfo"])
+		// ...mapState(["devicesInfo"])
 	},
 	created() {
 		if (window.hilink != undefined) {
 			this.getDevicesAll();
+		}
+	},
+	mounted() {
+		let self = this;
+		if (window.hilink != undefined) {
+			window['resultCallback'] = resultStr => {
+				console.log('全部信息=====', resultStr);
+				let data = self.praseResponseData(resultStr);
+				data.services.forEach(function(item, index) {
+					let type = item.sid;
+					console.log("type========",type)
+					switch (type) {
+						case 'switch':
+							self.lampSwitch = item || [];
+							self.isLine = item.data.on;
+							break;
+						case 'Music':
+							self.devicesPlayInfo(item);
+							self.audioInfo = item || [];
+							self.volume = item.data.volume;
+							break;
+						case 'earLight':
+							self.earLight = item || [];
+							break;
+						case 'faceLight':
+							self.faceLight = item || [];
+							break;
+						default:
+							break;
+					}
+				});
+			};
+			window['deviceInfoCallback'] = resultStr => {
+				console.log('获取设备单独信息======', resultStr);
+			};
+			//设备主动上报回调信息
+			window['deviceEventCallback'] = event => {
+				let data = self.praseResponseData(event);
+				let type = data.sid;
+				console.log('设备返回========', type);
+				console.log('设备返回数据========', data);
+				switch (type) {
+					case 'switch':
+						self.lampSwitch.data.on = data.data.on || [];
+						self.isLine = data.data.on;
+						break;
+					case 'earLight':
+						self.earLight.data.on = data.data.on || [];
+						break;
+					case 'faceLight':
+						self.faceLight.data.on = data.data.on || [];
+						break;
+					case 'Music':
+						self.devicesPlayInfo(data);
+						self.audioInfo.data = data.data || [];
+						self.volume = data.data.volume;
+						break;
+					default:
+						break;
+				}
+			};
 		}
 	},
 	methods: {
@@ -331,6 +392,17 @@ export default {
 			} else {
 				self.foldText = '展开更多';
 				self.foldIcon = require('../../assets/images/ic_shouqi.png');
+			}
+		},
+		//回调函数转换
+		praseResponseData(resData) {
+			try {
+				return JSON.parse(resData);
+			} catch (error) {
+				var dataStr = resData.replace(/:"{/g, ':{');
+				dataStr = dataStr.replace(/}",/g, '},');
+				dataStr = dataStr.replace(/\\/g, '');
+				return JSON.parse(dataStr);
 			}
 		},
 		//进入内容

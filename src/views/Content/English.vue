@@ -13,7 +13,7 @@
 							</div>
 							<p>{{ item.name }}</p>
 							<div class="song-check" v-show="setCheck">
-								<input type="radio" :id="item.id" name="item1" :value="item.id" />
+								<input type="radio" :id="item.id" name="item1" @change="changeResult(item.id, 0)" :value="item.id" />
 								<label :for="item.id"></label>
 							</div>
 						</li>
@@ -32,7 +32,7 @@
 							</div>
 							<p>{{ item.name }}</p>
 							<div class="song-check" v-show="setCheck">
-								<input type="radio" :id="item.id" name="item2" :value="item.id" />
+								<input type="radio" :id="item.id" name="item2" @change="changeResult(item.id, 1)" :value="item.id" />
 								<label :for="item.id"></label>
 							</div>
 						</li>
@@ -51,7 +51,7 @@
 							</div>
 							<p>{{ item.name }}</p>
 							<div class="song-check" v-show="setCheck">
-								<input type="radio" :id="item.id" name="item3" :value="item.id" />
+								<input type="radio" :id="item.id" name="item3" @change="changeResult(item.id, 2)" :value="item.id" />
 								<label :for="item.id"></label>
 							</div>
 						</li>
@@ -70,7 +70,7 @@
 							</div>
 							<p>{{ item.name }}</p>
 							<div class="song-check" v-show="setCheck">
-								<input type="radio" :id="item.id" name="item4" :value="item.id" />
+								<input type="radio" :id="item.id" name="item4" @change="changeResult(item.id, 3)" :value="item.id" />
 								<label :for="item.id"></label>
 							</div>
 						</li>
@@ -91,6 +91,24 @@ export default {
 		return {
 			title: '英语启蒙',
 			englishData: [],
+			musicList: {
+				'0': {
+					album: 104,
+					id: ''
+				},
+				'1': {
+					album: 105,
+					id: ''
+				},
+				'2': {
+					album: 106,
+					id: ''
+				},
+				'3': {
+					album: 107,
+					id: ''
+				}
+			},
 			setCheck: false
 		};
 	},
@@ -105,10 +123,17 @@ export default {
 				self.englishData = res.data.content;
 			});
 		},
+		changeResult(id,index){
+			let self =this;
+			self.musicList[index].id=id;
+		},
 		//设置默认歌曲
 		setEnglish() {
 			let self = this;
 			self.setCheck = !self.setCheck;
+			if (!self.setCheck) {
+				console.log(self.musicList)
+			}
 		}
 	},
 	components: {}
