@@ -17,5 +17,20 @@ export default {
 		commit
 	},data){
 		commit(types.SET_PLAYDATA,data);
+	},
+	getLocalList({
+		commit
+	},data){
+		commit(types.GET_LOCALLIST,data);
+	},
+	putLocalList({
+		commit
+	},data){
+		commit(types.PUT_LOCALLIST,data);
+	},
+	setLocalCid({
+		commit
+	},data){
+		commit(types.SET_LOCALCID,data);
 	}
 };

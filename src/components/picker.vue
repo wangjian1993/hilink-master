@@ -23,7 +23,8 @@ export default {
 	data() {
 		return {
 			// timePopup: false,
-			currentTime: '0:00'
+			currentTime: '0:00',
+			endTime:null
 		};
 	},
 	computed: {
@@ -38,14 +39,25 @@ export default {
 			this.$emit('update:timePopup', false)  //弹框隐藏，意为timePopup为false
 		},
 		timeConfirm() {
-			console.log(this.currentTime);
-			this.$emit('update:timePopup', false)  //弹框隐藏，意为timePopup为false
+			let self =this;
+			if(self.endTime == 0){
+				return false;
+			}
+			console.log("this.endTime========",self.endTime);
+			self.$emit('update:timePopup', false)  //弹框隐藏，意为timePopup为false
+			let data = { timedTask: { time: self.endTime,enable:1, name: 'timedTask' } };
+			console.log("data======",data)
+			self.setDeviceInfo(data);
 		},
 		Change(){
-			// let self =this;
-			// let time =self.currentTime.split(":");
-			// let m =time[0].replace(/\b(0+)/gi,"");
-			// self.currentTime = "2小时:00"
+			let self =this;
+			let time =self.currentTime.split(":");
+			console.log(time)
+			let m =time[0].replace(/\b(0+)/gi,"");
+			let f =time[1].replace(/\b(0+)/gi,"");
+			let str = Number((m * 60)) + Number(f);
+			console.log("self.endTime============",str)
+			self.endTime =str;
 		},
 		formatter(type, value) {
 			if (type === 'hour') {
@@ -54,14 +66,14 @@ export default {
 					return `${m}`;
 				}
 				let m =value.replace(/\b(0+)/gi,"");
-				return `${m}`;
+				return `${m}` + '小时';
 			} else if (type === 'minute') {
 				if(value == '00'){
 					let m =0;
 					return `${m}`;
 				}
 				let m =value.replace(/\b(0+)/gi,"");
-				return `${m}`;
+				return `${m}` + '分钟';
 			}
 			return value;
 		}

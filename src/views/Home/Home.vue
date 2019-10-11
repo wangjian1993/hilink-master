@@ -9,7 +9,7 @@
 		<!-- 故事机开关 -->
 		<div class="devices-status">
 			<div class="devices-status-text">{{ isLine == 0 ? '已关闭' : '已开启' }}</div>
-			<div class="devices-status-time" :class="!devTime?'timeActive':''">
+			<div class="devices-status-time" :class="!devTime ? 'timeActive' : ''">
 				<div>
 					<p>65:00</p>
 					<p>定时关机</p>
@@ -77,10 +77,14 @@
 						<div class="devices-audio-else-text">
 							<div>
 								<p>模式</p>
-								<p>列表循环</p>
+								<p>{{ playMode == 1 ? '列表循环' : '单曲循环' }}</p>
 							</div>
 						</div>
-						<div class="devices-audio-else-icon"><img src="../../assets/images/ic_liebiao.png" alt="" /></div>
+						<div class="devices-audio-else-icon">
+							<img v-if="playMode == -1" src="../../assets/images/ic_liebiao.png" alt="" />
+							<img v-if="playMode == 0" src="../../assets/images/ic_danqu_hover.png" alt="" />
+							<img v-if="playMode == 1" src="../../assets/images/ic_liebiao_hover.png" alt="" />
+						</div>
 					</li>
 					<li @click="onConfirm()" :class="isLine == 0 ? '' : 'lineAcitve'">
 						<div class="devices-audio-else-text">
@@ -119,10 +123,13 @@
 					</li>
 				</ul>
 			</div>
-			<div class="devices-audio-look" @click="devicesSwitch(6)" v-show="isFold" :class="isLine == 0 ? '' : 'lineAcitve'">
+			<div class="devices-audio-look" @click="devicesLockSwitch()" v-show="isFold" :class="isLine == 0 ? '' : 'lineAcitve'">
 				<div>
 					<p>童锁</p>
-					<div><img src="../../assets/images/ic_tongsuo_off.png" alt="" /></div>
+					<div>
+						<img v-if="lookData == 1" src="../../assets/images/ic_tongsuo_on.png" alt="" />
+						<img v-else src="../../assets/images/ic_tongsuo_off.png" alt="" />
+					</div>
 				</div>
 			</div>
 		</div>
@@ -173,9 +180,11 @@ export default {
 			volume: 0,
 			devTime: false,
 			timePopup: false,
+			lookData: 0, //童锁
 			isLine: 0, //是否在线
 			isFold: false, //折叠展开
 			foldText: '展开更多',
+			playMode: -1,
 			switchText: '已关闭',
 			title: '火火兔故事机',
 			headerType: 'home',
@@ -189,7 +198,9 @@ export default {
 	created() {
 		if (window.hilink != undefined) {
 			this.getDevicesAll();
-			// this.devicesModeAction(2);
+			setTimeout(function() {
+				this.devicesAction(405, 0);
+			}, 300);
 		}
 	},
 	mounted() {
@@ -199,7 +210,8 @@ export default {
 				let data = self.praseResponseData(resultStr);
 				data.services.forEach(function(item, index) {
 					let type = item.sid;
-					console.log("type========",type)
+					console.log('type========', type);
+					console.log('item========', item);
 					switch (type) {
 						case 'switch':
 							self.lampSwitch = item || [];
@@ -217,7 +229,11 @@ export default {
 							self.faceLight = item || [];
 							break;
 						case 'custom':
-							break;	
+							if (item.data.action == '104') {
+								self.playMode = item.data.playmode;
+							} else if (item.data.action == '637') {
+							}
+							break;
 						default:
 							break;
 					}
@@ -230,8 +246,8 @@ export default {
 			window['deviceEventCallback'] = event => {
 				let data = self.praseResponseData(event);
 				let type = data.sid;
-				console.log('设备返回========', type);
-				console.log('设备返回数据========', data);
+				// console.log('设备返回========', type);
+				// console.log('设备返回数据========', data);
 				switch (type) {
 					case 'switch':
 						self.lampSwitch.data.on = data.data.on || [];
@@ -247,6 +263,25 @@ export default {
 						self.devicesPlayInfo(data);
 						self.audioInfo.data = data.data || [];
 						self.volume = data.data.volume;
+						break;
+					case 'custom':
+						console.log('custom返回数据=================', data.data);
+						let json = self.$base64.doDecode(data.data.function);
+						let customData = JSON.parse(json);
+						console.log('josn数据=======', customData);
+						if (customData.action == '910') {
+							self.playMode = customData.playmode;
+							console.log('self.playMode===', self.playMode);
+						} else if (customData.action == '628') {
+							self.lookData = customData.on;
+							console.log('self.lookDat===', self.lookData);
+						} else if (customData.action == '406') {
+							self.devicesLocal(customData.lists[0]);
+						} else if (customData.action == '402') {
+							console.log('本地歌单================');
+							console.log('customData.songs=============', customData.songs);
+							self.devicesPutLocal(customData);
+						}
 						break;
 					default:
 						break;
@@ -268,10 +303,19 @@ export default {
 				return require('../../assets/images/swich.png');
 			}
 		},
-		//设备全部信息
-		devicesInfoAll(data) {
+		devicesLocal(data) {
 			let self = this;
-			self.getDevicesState(data);
+			self.getLocalList(data);
+		},
+		devicesLocal(data) {
+			let self = this;
+			self.getLocalList(data);
+		},
+		//本地歌曲
+		devicesPutLocal(data, id) {
+			let self = this;
+			console.log('402==========', data);
+			self.putLocalList(data);
 		},
 		//设置播放器信息
 		devicesPlayInfo(data) {
@@ -304,8 +348,18 @@ export default {
 				var on;
 				switch (type) {
 					case 0:
-						on = self.lampSwitch.data.on == 1 ? 0 : 0;
-						data = { switch: { on: on, name: 'switch' } };
+						if (self.lampSwitch.data.on == 0) {
+							this.$toast({
+								message: '请旋转火火兔的尾巴开机',
+								position: 'bottom',
+								duration: '3000',
+								className: 'toastActive'
+							});
+							return;
+						} else {
+							on = self.lampSwitch.data.on == 1 ? 0 : 0;
+							data = { switch: { on: on, name: 'switch' } };
+						}
 						break;
 					case 1:
 						on = self.earLight.data.on == 1 ? 0 : 1;
@@ -345,15 +399,40 @@ export default {
 			let self = this;
 			self.audioMode = !self.audioMode;
 		},
-		devices(action) {
+		devicesAction(action, type, on) {
 			let self = this;
+			var body;
+			if (type == 0) {
+				body = {
+					from: 'DID:0',
+					to: 'UID:-1',
+					action: action
+				};
+			} else {
+				body = {
+					from: 'DID:0',
+					to: 'UID:-1',
+					action: action,
+					on: on
+				};
+			}
+			let json = JSON.stringify(body);
+			let data = { custom: { function: json } };
+			console.log('setDeviceInfo===', data);
+			self.setDeviceInfo(data);
+		},
+		//故事机童锁开关
+		devicesLockSwitch() {
+			let self = this;
+			let on = self.lookData == 1 ? 0 : 1;
 			var body = {
 				from: 'DID:0',
 				to: 'UID:-1',
-				action:action
+				action: 627,
+				on: on
 			};
-			let json = JSON.stringify(body);
-			let data = { custom: { function: json, name: 'function' } };
+			var json = JSON.stringify(body);
+			var data = { custom: { function: json, name: 'function' } };
 			self.setDeviceInfo(data);
 		},
 		//故事机播放模式
@@ -409,13 +488,13 @@ export default {
 		},
 		//回调函数转换
 		praseResponseData(resData) {
-			try {			
+			try {
 				return JSON.parse(resData);
 			} catch (error) {
 				var dataStr = resData.replace(/:"{/g, ':{');
 				dataStr = dataStr.replace(/}",/g, '},');
 				dataStr = dataStr.replace(/\\/g, '');
-				dataStr = dataStr.replace(/\n/g, "");
+				dataStr = dataStr.replace(/\n/g, '');
 				return JSON.parse(dataStr);
 			}
 		},
@@ -435,7 +514,7 @@ export default {
 				name: url
 			});
 		},
-		...mapActions(['setPlayData'])
+		...mapActions(['setPlayData', 'getLocalList', 'putLocalList', 'setLocalCid'])
 	},
 	components: {
 		'v-picker': picker,
