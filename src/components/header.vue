@@ -17,7 +17,7 @@
 export default {
 	props: {
 		title: '',
-		type: ''
+		type: '',
 	},
 	data() {
 		return {};

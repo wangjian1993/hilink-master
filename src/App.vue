@@ -1,7 +1,8 @@
 <template>
 	<div id="app">
 		<v-header :title="title"></v-header>
-		<keep-alive><router-view></router-view></keep-alive>
+		<keep-alive><router-view v-if="$route.meta.keepAlive"></router-view></keep-alive>
+		<router-view v-if="!$route.meta.keepAlive"></router-view>
 		<v-play v-show="isPlay"></v-play>
 	</div>
 </template>
@@ -35,11 +36,11 @@ export default {
 	},
 	methods: {
 		//设置播放器信息
-		devicesInfo(data) {
-			let self = this;
-			self.getDevicesInfo(data);
-		},
-		...mapActions(['getDevicesInfo'])
+		// devicesInfo(data) {
+		// 	let self = this;
+		// 	self.getDevicesInfo(data);
+		// },
+		// ...mapActions(['getDevicesInfo'])
 	},
 	watch: {
 		$route(e) {
@@ -51,7 +52,7 @@ export default {
 				this.isPlay = false;
 				console.log('隐藏');
 			}
-		},
+		}
 	},
 	components: {
 		'v-play': Play,
