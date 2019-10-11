@@ -34,7 +34,8 @@ export default new Router({
 			name: 'english',
 			component: () => import( /* webpackChunkName: "english" */ '@/views/Content/English.vue'),
 			meta: {
-				title: "英语启蒙"
+				title: "英语启蒙",
+				keepAlive: false,
 			}
 		},
 		{ //首页

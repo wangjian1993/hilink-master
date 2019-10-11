@@ -9,7 +9,7 @@
 		<!-- 故事机开关 -->
 		<div class="devices-status">
 			<div class="devices-status-text">{{ isLine == 0 ? '已关闭' : '已开启' }}</div>
-			<div class="devices-status-time" :class="!devTime? 'timeAcitve' : ''">
+			<div class="devices-status-time" :class="!devTime?'timeActive':''">
 				<div>
 					<p>65:00</p>
 					<p>定时关机</p>
@@ -189,13 +189,13 @@ export default {
 	created() {
 		if (window.hilink != undefined) {
 			this.getDevicesAll();
+			// this.devicesModeAction(2);
 		}
 	},
 	mounted() {
 		let self = this;
 		if (window.hilink != undefined) {
 			window['resultCallback'] = resultStr => {
-				console.log('全部信息=====', resultStr);
 				let data = self.praseResponseData(resultStr);
 				data.services.forEach(function(item, index) {
 					let type = item.sid;
@@ -216,6 +216,9 @@ export default {
 						case 'faceLight':
 							self.faceLight = item || [];
 							break;
+						case 'custom':
+							console.log("item===========",item);
+							break;	
 						default:
 							break;
 					}
@@ -343,6 +346,17 @@ export default {
 			let self = this;
 			self.audioMode = !self.audioMode;
 		},
+		devices(action) {
+			let self = this;
+			var body = {
+				from: 'DID:0',
+				to: 'UID:-1',
+				action:action
+			};
+			let json = JSON.stringify(body);
+			let data = { custom: { function: json, name: 'function' } };
+			self.setDeviceInfo(data);
+		},
 		//故事机播放模式
 		devicesModeAction(mode) {
 			let self = this;
@@ -354,7 +368,7 @@ export default {
 			};
 			self.audioMode = !self.audioMode;
 			let json = JSON.stringify(body);
-			let data = { custom: { funciton: json, name: 'function' } };
+			let data = { custom: { function: json, name: 'function' } };
 			self.setDeviceInfo(data);
 		},
 		//故事机音量调节
@@ -396,12 +410,13 @@ export default {
 		},
 		//回调函数转换
 		praseResponseData(resData) {
-			try {
+			try {			
 				return JSON.parse(resData);
 			} catch (error) {
 				var dataStr = resData.replace(/:"{/g, ':{');
 				dataStr = dataStr.replace(/}",/g, '},');
 				dataStr = dataStr.replace(/\\/g, '');
+				dataStr = dataStr.replace(/\n/g, "");
 				return JSON.parse(dataStr);
 			}
 		},

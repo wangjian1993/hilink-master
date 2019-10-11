@@ -123,16 +123,25 @@ export default {
 				self.englishData = res.data.content;
 			});
 		},
-		changeResult(id,index){
+		changeResult(id, index) {
 			let self =this;
-			self.musicList[index].id=id;
+			self.musicList[index].id =id;
 		},
 		//设置默认歌曲
 		setEnglish() {
 			let self = this;
 			self.setCheck = !self.setCheck;
-			if (!self.setCheck) {
-				console.log(self.musicList)
+			if(!self.setCheck){
+				var body = {
+					from: 'DID:0',
+					to: 'UID:-1',
+					action: 637,
+					list: self.musicList
+				};
+				let json = JSON.stringify(body);
+				let data = { custom: { function: json, name: 'function' } };
+				self.setDeviceInfo(data);
+				self.musicList ={};
 			}
 		}
 	},
