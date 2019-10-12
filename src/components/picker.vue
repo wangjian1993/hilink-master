@@ -3,7 +3,8 @@
 		<div class="date-time-div">
 			<van-popup v-model="timePopup" position="bottom" :overlay="true" class="datetimeBox" :close-on-click-overlay="false">
 				<p>定时关机</p>
-				<van-datetime-picker v-model="currentTime" type="time" :min-hour="0" :max-hour="23" :show-toolbar="false" :formatter="formatter" @change="Change"/>
+				<!-- <van-datetime-picker v-model="currentTime" type="time" :min-hour="0" :max-hour="23" :show-toolbar="false" :formatter="formatter" @change="Change"/> -->
+				<van-picker show-toolbar :columns="columns" :show-toolbar="false" @change="onChange"/>
 				<div class="datetime-btn">
 					<p @click="timeCancel()">取消</p>
 					<p @click="timeConfirm()">确定</p>
@@ -24,59 +25,51 @@ export default {
 		return {
 			// timePopup: false,
 			currentTime: '0:00',
-			endTime:null
+			endTime: null,
+			columns: ['15分钟', '30分钟', '60分钟', '90分钟', '120分钟']
 		};
 	},
-	computed: {
-		
-	},
-	created() {
-		
-	},
+	computed: {},
+	created() {},
 	methods: {
 		/* 取消按钮 */
 		timeCancel() {
-			this.$emit('update:timePopup', false)  //弹框隐藏，意为timePopup为false
+			this.$emit('update:timePopup', false); //弹框隐藏，意为timePopup为false
 		},
 		timeConfirm() {
-			let self =this;
-			if(self.endTime == 0){
+			let self = this;
+			if (self.endTime == 0) {
 				return false;
 			}
-			console.log("this.endTime========",self.endTime);
-			self.$emit('update:timePopup', false)  //弹框隐藏，意为timePopup为false
-			let data = { timedTask: { time: self.endTime,enable:1, name: 'timedTask' } };
-			console.log("data======",data)
+			console.log('this.endTime========', self.endTime);
+			self.$emit('update:timePopup', false); //弹框隐藏，意为timePopup为false
+			let data = { timedTask: { time: self.endTime, enable: 1, name: 'timedTask' } };
+			console.log('data======', data);
 			self.setDeviceInfo(data);
 		},
-		Change(){
-			let self =this;
-			let time =self.currentTime.split(":");
-			console.log(time)
-			let m =time[0].replace(/\b(0+)/gi,"");
-			let f =time[1].replace(/\b(0+)/gi,"");
-			let str = Number((m * 60)) + Number(f);
-			console.log("self.endTime============",str)
-			self.endTime =str;
-		},
-		formatter(type, value) {
-			if (type === 'hour') {
-				if(value == '00'){
-					let m =0;
-					return `${m}`;
-				}
-				let m =value.replace(/\b(0+)/gi,"");
-				return `${m}` + '小时';
-			} else if (type === 'minute') {
-				if(value == '00'){
-					let m =0;
-					return `${m}`;
-				}
-				let m =value.replace(/\b(0+)/gi,"");
-				return `${m}` + '分钟';
-			}
-			return value;
+		onChange(picker, values) {
+			console.log("values",values)
+			let time =values.split("分钟");
+			this.endTime =time[0]
 		}
+		// formatter(type, value) {
+		// 	if (type === 'hour') {
+		// 		if(value == '00'){
+		// 			let m =0;
+		// 			return `${m}`;
+		// 		}
+		// 		let m =value.replace(/\b(0+)/gi,"");
+		// 		return `${m}` + '小时';
+		// 	} else if (type === 'minute') {
+		// 		if(value == '00'){
+		// 			let m =0;
+		// 			return `${m}`;
+		// 		}
+		// 		let m =value.replace(/\b(0+)/gi,"");
+		// 		return `${m}` + '分钟';
+		// 	}
+		// 	return value;
+		// }
 	}
 };
 </script>

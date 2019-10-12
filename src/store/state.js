@@ -7,7 +7,7 @@ const state = {
   localCid:null,
   localTotal:null,
   params:null,
-  
+  awaitFlag:false,
 };
 
 export default state;

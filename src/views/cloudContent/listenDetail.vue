@@ -201,9 +201,24 @@ export default {
 					body = {
 						from: 'DID:0',
 						to: 'UID:-1',
-						action: 627,
-						on: 2
+						action: 409,
+						songlistname: self.info.name,
+						songlistid: self.info.id,
+						songs: [
+							{
+								id: item.music_id || item.radioid,
+								name: item.name,
+								fmt: 'mp3',
+								url: path
+							}
+						]
 					};
+					self.$toast({
+						message: '歌曲下载添加成功',
+						position: 'bottom',
+						duration: '3000',
+						className: 'toastActive'
+					});
 					break;
 				default:
 					break;
@@ -211,7 +226,7 @@ export default {
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json, name: 'function' } };
 			console.log('data=========', data);
-			self.setDeviceInfo(data);
+			// self.setDeviceInfo(data);
 		}
 	},
 

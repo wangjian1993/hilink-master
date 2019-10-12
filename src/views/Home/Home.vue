@@ -3,7 +3,7 @@
 		<v-header :title="title" :type="headerType"></v-header>
 		<!-- 产品图 -->
 		<div class="devices-img">
-			<img src="../../../dist/img/img_toutu_red.0ed91eec.png" alt="" />
+			<img src="../../assets/images/img_toutu_red.png" alt="" />
 			<img src="../../assets/images/logo.png" alt="" />
 		</div>
 		<!-- 故事机开关 -->
@@ -66,8 +66,8 @@
 				<ul>
 					<div class="devices-audio-else-mode" v-show="audioMode">
 						<ul>
-							<li @click="devicesModeAction(1)"><p>列表循环</p></li>
-							<li @click="devicesModeAction(0)"><p>单曲循环</p></li>
+							<li @click="devicesModeAction(1)" :class="isLine == 0 ? '' : 'lineAcitve'"><p>列表循环</p></li>
+							<li @click="devicesModeAction(0)" :class="isLine == 0 ? '' : 'lineAcitve'"><p>单曲循环</p></li>
 							<!-- <li>
 								<p>随机循环</p>
 							</li> -->
@@ -198,9 +198,6 @@ export default {
 	created() {
 		if (window.hilink != undefined) {
 			this.getDevicesAll();
-			setTimeout(function() {
-				this.devicesAction(405, 0);
-			}, 300);
 		}
 	},
 	mounted() {
@@ -208,10 +205,9 @@ export default {
 		if (window.hilink != undefined) {
 			window['resultCallback'] = resultStr => {
 				let data = self.praseResponseData(resultStr);
+				self.devicesAction(405, 0);
 				data.services.forEach(function(item, index) {
 					let type = item.sid;
-					console.log('type========', type);
-					console.log('item========', item);
 					switch (type) {
 						case 'switch':
 							self.lampSwitch = item || [];
@@ -230,6 +226,7 @@ export default {
 							break;
 						case 'custom':
 							if (item.data.action == '104') {
+								localStorage.setItem("mode",item.data.playmode)
 								self.playMode = item.data.playmode;
 							} else if (item.data.action == '637') {
 							}
@@ -246,8 +243,6 @@ export default {
 			window['deviceEventCallback'] = event => {
 				let data = self.praseResponseData(event);
 				let type = data.sid;
-				// console.log('设备返回========', type);
-				// console.log('设备返回数据========', data);
 				switch (type) {
 					case 'switch':
 						self.lampSwitch.data.on = data.data.on || [];
@@ -270,14 +265,16 @@ export default {
 						let customData = JSON.parse(json);
 						console.log('josn数据=======', customData);
 						if (customData.action == '910') {
+							localStorage.setItem("mode",customData.playmode)
 							self.playMode = customData.playmode;
 							console.log('self.playMode===', self.playMode);
 						} else if (customData.action == '628') {
 							self.lookData = customData.on;
 							console.log('self.lookDat===', self.lookData);
-						} else if (customData.action == '406') {
+						} else if (customData.action == '406') {					
 							self.devicesLocal(customData.lists[0]);
 						} else if (customData.action == '402') {
+							localStorage.setItem("awaitFlag",true)
 							console.log('本地歌单================');
 							console.log('customData.songs=============', customData.songs);
 							self.devicesPutLocal(customData);
@@ -311,6 +308,10 @@ export default {
 			let self = this;
 			self.getLocalList(data);
 		},
+		awaitFlag(data){
+			let self =this;
+			self.setAwaitFlag(data)
+		},
 		//本地歌曲
 		devicesPutLocal(data, id) {
 			let self = this;
@@ -343,6 +344,15 @@ export default {
 		devicesSwitch(type) {
 			console.log('设备开关');
 			let self = this;
+			if (self.isLine == 0) {
+				this.$toast({
+					message: '请旋转火火兔的尾巴开机',
+					position: 'bottom',
+					duration: '3000',
+					className: 'toastActive'
+				});
+				return;
+			}
 			if (window.hilink != undefined) {
 				var data;
 				var on;
@@ -424,6 +434,15 @@ export default {
 		//故事机童锁开关
 		devicesLockSwitch() {
 			let self = this;
+			if (self.isLine == 0) {
+				this.$toast({
+					message: '请旋转火火兔的尾巴开机',
+					position: 'bottom',
+					duration: '3000',
+					className: 'toastActive'
+				});
+				return;
+			}
 			let on = self.lookData == 1 ? 0 : 1;
 			var body = {
 				from: 'DID:0',
@@ -438,6 +457,15 @@ export default {
 		//故事机播放模式
 		devicesModeAction(mode) {
 			let self = this;
+			if (self.isLine == 0) {
+				this.$toast({
+					message: '请旋转火火兔的尾巴开机',
+					position: 'bottom',
+					duration: '3000',
+					className: 'toastActive'
+				});
+				return;
+			}
 			var body = {
 				from: 'DID:0',
 				to: 'UID:-1',
@@ -501,6 +529,15 @@ export default {
 		//进入内容
 		contentBtn(type) {
 			var url;
+			if (self.isLine == 0 && type !=0) {
+				this.$toast({
+					message: '请旋转火火兔的尾巴开机',
+					position: 'bottom',
+					duration: '3000',
+					className: 'toastActive'
+				});
+				return;
+			}
 			if (type == 0) {
 				url = 'cloudIndex'; //火火兔内容云
 			} else if (type == 1) {
@@ -514,7 +551,7 @@ export default {
 				name: url
 			});
 		},
-		...mapActions(['setPlayData', 'getLocalList', 'putLocalList', 'setLocalCid'])
+		...mapActions(['setPlayData', 'getLocalList', 'putLocalList', 'setLocalCid','setAwaitFlag'])
 	},
 	components: {
 		'v-picker': picker,

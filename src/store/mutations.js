@@ -34,6 +34,9 @@ const mutations = {
 	[types.SET_LOCALTOTAL](state,data){
 		console.log("歌曲总数量======",data)
 		state.localTotal=data
+	},
+	[types.SET_AWAITFLAG](state,data){
+		state.awaitFlag =!state.awaitFlag;
 	}
 }
 export default mutations

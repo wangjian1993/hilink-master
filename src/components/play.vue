@@ -14,7 +14,10 @@
 				<img v-if="playData.data.play == 0" src="../assets/images/icon_device_pause.png" alt="" />
 			</p>
 			<p @click="devicesSwitch(4)"><img src="../assets/images/icon_device_next.png" alt="" /></p>
-			<p @click="devicesSwitch(2)"><img class="play-mode" src="../assets/images/icon_device_one.png" alt="" /></p>
+			<p @click="devicesModeAction()">
+				<img v-if="playmode == 1" class="play-mode" src="../assets/images/icon_device_one.png" alt="" />
+				<img v-else class="play-mode" src="../assets/images/icon_device_loop.png" alt="" />
+			</p>
 		</div>
 	</div>
 </template>
@@ -25,7 +28,12 @@ export default {
 	data() {
 		return {
 			// playData:[]
+			playmode:-1,
 		};
+	},
+	created() {
+		this.playmode =localStorage.getItem("mode");
+		console.log("this.playmode",this.playmode)
 	},
 	computed: {
 		...mapState({
@@ -74,7 +82,22 @@ export default {
 				console.log(data);
 				self.setDeviceInfo(data);
 			}
-		}
+		},
+		//故事机播放模式
+		devicesModeAction() {
+			let self = this;
+			console.log()
+			let mode =self.playmode ==1?0:1;
+			var body = {
+				from: 'DID:0',
+				to: 'UID:-1',
+				action: 909,
+				playmode: mode
+			};
+			let json = JSON.stringify(body);
+			let data = { custom: { function: json, name: 'function' } };
+			self.setDeviceInfo(data);
+		},
 	}
 };
 </script>

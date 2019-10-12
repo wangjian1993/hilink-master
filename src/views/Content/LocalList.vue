@@ -41,6 +41,7 @@ export default {
 			localList: state => state.localList,
 			localSongList: state => state.localSongList,
 			localTotal: state => state.localTotal
+			// awaitFlag: state => state.awaitFlag
 		})
 	},
 	created() {
@@ -55,17 +56,18 @@ export default {
 			// console.log('获取本地列表=============');
 			this.setDeviceInfo(data);
 		}
-
 		// console.log('获取歌曲列表===================');
 		this.onClick(0);
 	},
-	 methods: {
+	methods: {
 		onClick(id, title) {
+			let data = [];
 			this.cid = id;
 			this.cname = title;
 			this.offset = 0;
 			this.getLocalSongsList();
 			this.setLocalCidFun(id);
+			this.localList(data);
 		},
 		setLocalCidFun(data) {
 			let self = this;
@@ -73,6 +75,7 @@ export default {
 		},
 		getLocalSongsList() {
 			let self = this;
+			console.log('可以调用0000000000000==============');
 			if (self.localSongList.length == 0 && self.offset == 0) {
 				console.log('第一次请求=======');
 				let body = {
@@ -85,27 +88,37 @@ export default {
 				let json = JSON.stringify(body);
 				let data = { custom: { function: json, name: 'function' } };
 				self.setDeviceInfo(data);
-				setTimeout(function() {
-					self.offset = self.offset + 1;
+				// setTimeout(function() {
+				self.offset = self.offset + 1;
+				if (self.awaitFlag) {
+					console.log('开始调用第二次============');
 					self.getLocalSongsList();
-				}, 500);
+				}
+				// }, 500);
 			} else {
 				console.log('第二次调用==========', self.offset);
 				if (self.offset <= self.localTotal) {
-					setTimeout(function() {
-						let body = {
-							from: 'DID:0',
-							to: 'UID:-1',
-							action: 401,
-							channel: self.cid,
-							offset: self.offset * 2
-						};
-						let json = JSON.stringify(body);
-						let data = { custom: { function: json, name: 'function' } };
-						self.setDeviceInfo(data);
-						self.offset = self.offset + 1;
+					let body = {
+						from: 'DID:0',
+						to: 'UID:-1',
+						action: 401,
+						channel: self.cid,
+						offset: self.offset * 2
+					};
+					let json = JSON.stringify(body);
+					let data = { custom: { function: json, name: 'function' } };
+					console.log('第二次添加111111111=====================');
+					self.setDeviceInfo(data);
+					console.log('第二次添加2222222222=====================');
+					// self.awaitFlag(false);
+					// self.offset = self.offset + 1;
+					// console.log('self.awaitFlag', self.awaitFlag);
+					console.log('第二次添加33333333333=====================');
+					if (localStorage.getItem('awaitFlag')) {
+						console.log('可以调用==============',localStorage.getItem('awaitFlag'));			
+						localStorage.setItem()('awaitFlag', false);
 						self.getLocalSongsList();
-					}, 600);
+					}
 				}
 			}
 		},
@@ -149,7 +162,15 @@ export default {
 			let data = { custom: { function: json, name: 'function' } };
 			self.setDeviceInfo(data);
 		},
-		...mapActions(['setLocalCid'])
+		awaitFlag(data) {
+			let self = this;
+			self.setAwaitFlag(data);
+		},
+		localList(data) {
+			let self = this;
+			self.putLocalList(data);
+		},
+		...mapActions(['putLocalList', 'setAwaitFlag'])
 	},
 	components: {
 		'v-header': Header

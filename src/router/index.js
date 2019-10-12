@@ -26,7 +26,8 @@ export default new Router({
 			name: 'locallist',
 			component: () => import( /* webpackChunkName: "english" */ '@/views/Content/LocalList.vue'),
 			meta: {
-				title: "本地歌曲"
+				title: "本地歌曲",
+				keepAlive: false,
 			}
 		},
 		{ //本地内容
