@@ -198,6 +198,7 @@ export default {
 	created() {
 		if (window.hilink != undefined) {
 			this.getDevicesAll();
+			// this.devicesModeAction(2);
 		}
 	},
 	mounted() {
