@@ -16,9 +16,9 @@ exports.install = function(Vue) {
 	 *body,                //string, json格式，可选，{"characteristicName1","characteristicName2"}, 为空则获取sid里面所有的 characteristic 的值
 	 *resultCallback       //string，回调函数名称，成功或失败时，将调用传入resultStr返回结果
 	 */
-	Vue.prototype.getDevInfo = function(sid,data) {
+	Vue.prototype.getDevInfo = function(sid, data) {
 		let body = JSON.stringify(data);
-		console.log("获取设备单独信息=======",sid,body)
+		console.log("获取设备单独信息=======", sid, body)
 		window.hilink.getDevInfo("0", sid, body, "deviceInfoCallback");
 	};
 	/** 
@@ -30,7 +30,13 @@ exports.install = function(Vue) {
 	 */
 	Vue.prototype.setDeviceInfo = function(data) {
 		let body = JSON.stringify(data);
-		console.log("设置设备数据===",body)
+		// console.log("设置设备数据1111111111111111===", body)
 		window.hilink.setDeviceInfo("0", body, "deviceEventCallback");
+	};
+	//获取本地歌曲
+	Vue.prototype.setDeviceSongsInfo = function(data,deviceSongBack) {
+		let body = JSON.stringify(data);
+		// console.log("设置设备数据22222222222222222===", body)
+		window.hilink.setDeviceInfo("0", body, deviceSongBack);
 	};
 };

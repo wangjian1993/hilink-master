@@ -9,11 +9,11 @@
 						<li v-for="(item, index) in englishData[104]">
 							<div class="path-div">
 								<img :src="item.coverpath" alt="" class="path-img" />
-								<img src="img/j7/xz.png" alt="" class="path-xz" />
+								<img src="../../assets/images/xz.png" alt="" class="path-xz" v-if="item.id == englishAcitve[0][1]"/>
 							</div>
 							<p>{{ item.name }}</p>
 							<div class="song-check" v-show="setCheck">
-								<input type="radio" :id="item.id" name="item1" @change="changeResult(item.id, 0)" :value="item.id" />
+								<input type="radio" :id="item.id" name="item1" @change="changeResult(item.id, 0)" v-model="item.id" :value="item.id" />
 								<label :for="item.id"></label>
 							</div>
 						</li>
@@ -28,7 +28,7 @@
 						<li v-for="(item, index) in englishData[105]">
 							<div class="path-div">
 								<img :src="item.coverpath" alt="" class="path-img" />
-								<img src="img/j7/xz.png" alt="" class="path-xz" />
+								<img src="../../assets/images/xz.png" alt="" class="path-xz"  v-if="item.id == englishAcitve[1][1]"/>
 							</div>
 							<p>{{ item.name }}</p>
 							<div class="song-check" v-show="setCheck">
@@ -47,7 +47,7 @@
 						<li v-for="(item, index) in englishData[106]">
 							<div class="path-div">
 								<img :src="item.coverpath" alt="" class="path-img" />
-								<img src="img/j7/xz.png" alt="" class="path-xz" />
+								<img src="../../assets/images/xz.png" alt="" class="path-xz"  v-if="item.id == englishAcitve[2][1]"/>
 							</div>
 							<p>{{ item.name }}</p>
 							<div class="song-check" v-show="setCheck">
@@ -66,7 +66,7 @@
 						<li v-for="(item, index) in englishData[107]">
 							<div class="path-div">
 								<img :src="item.coverpath" alt="" class="path-img" />
-								<img src="img/j7/xz.png" alt="" class="path-xz" />
+								<img src="../../assets/images/xz.png" alt="" class="path-xz"  v-if="item.id == englishAcitve[3][1]"/>
 							</div>
 							<p>{{ item.name }}</p>
 							<div class="song-check" v-show="setCheck">
@@ -91,6 +91,7 @@ export default {
 		return {
 			title: '英语启蒙',
 			englishData: [],
+			englishAcitve:[],
 			musicList: {
 				'0': {
 					album: 104,
@@ -112,8 +113,19 @@ export default {
 			setCheck: false
 		};
 	},
-	created() {
+	async created() {
 		this.getEnglishData();
+		await this.devicesAction();
+	},
+	mounted() {
+		let str =localStorage.getItem("english");
+		let array =[];
+		let str1 =str.split(":");
+		str1.forEach(function(item,index){
+			array.push(item.split("="))
+		})
+		this.englishAcitve =array;
+		console.log(array[0][1])
 	},
 	methods: {
 		//获取歌曲资源
@@ -123,6 +135,18 @@ export default {
 				self.englishData = res.data.content;
 			});
 		},
+		//故事机播放模式
+		devicesAction() {
+			let self = this;
+			var body = {
+				from: 'DID:0',
+				to: 'UID:-1',
+				action: 641
+			};
+			let json = JSON.stringify(body);
+			let data = { custom: { function: json, name: 'function' } };
+			self.setDeviceInfo(data);
+		},
 		changeResult(id, index) {
 			let self =this;
 			self.musicList[index].id =id;
@@ -131,6 +155,7 @@ export default {
 		setEnglish() {
 			let self = this;
 			self.setCheck = !self.setCheck;
+			// self.englishAcitve =[];
 			if(!self.setCheck){
 				var body = {
 					from: 'DID:0',
@@ -180,11 +205,19 @@ export default {
 				.path-div {
 					width: 100px;
 					height: 100px;
+					position: relative;
 					.path-img {
 						width: 100%;
 						height: 100%;
 					}
-				}
+					.path-xz{
+						width: 20px;
+						height: 20px;
+						position: absolute;
+						bottom: 0px;
+						right: 0px;
+					}
+				}		
 				p {
 					color: #333333;
 					padding-top: 8px;

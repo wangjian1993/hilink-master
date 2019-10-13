@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import { _debounce } from '@/hilink/public';
 import http from '../../api/index.js';
 import Header from '@/components/header.vue';
 export default {
@@ -138,7 +139,7 @@ export default {
 		 * 2.收藏
 		 * 3.下载
 		 * */
-		devicesMusic(type, item) {
+		devicesMusic: _debounce(function(type, item) {
 			let self = this;
 			var body;
 			var path = item.path.indexOf('https:') > -1 ? item.path.replace('https', 'http') : item.path;
@@ -189,24 +190,19 @@ export default {
 								url: path
 							}
 						]
-					};
-					self.$toast({
-						message: '歌曲收藏成功',
-						position: 'bottom',
-						duration: '3000',
-						className: 'toastActive'
-					});
+					};			
 					break;
 				case 3:
+					var id =item.music_id.toString()
 					body = {
 						from: 'DID:0',
 						to: 'UID:-1',
 						action: 409,
-						songlistname: self.info.name,
+						songlistname:"最新下载",
 						songlistid: self.info.id,
 						songs: [
 							{
-								id: item.music_id || item.radioid,
+								id:id,
 								name: item.name,
 								fmt: 'mp3',
 								url: path
@@ -226,8 +222,8 @@ export default {
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json, name: 'function' } };
 			console.log('data=========', data);
-			// self.setDeviceInfo(data);
-		}
+			self.setDeviceInfo(data);
+		},300),
 	},
 
 	components: {

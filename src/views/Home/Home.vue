@@ -90,7 +90,7 @@
 						<div class="devices-audio-else-text">
 							<div>
 								<p>定时关机</p>
-								<p>列表循环</p>
+								<p></p>
 							</div>
 						</div>
 						<div class="devices-audio-else-icon"><img src="../../assets/images/ic_dingshi_off.png" alt="" /></div>
@@ -113,7 +113,7 @@
 						<div class="devices-audio-else-text">
 							<div>
 								<p>表情灯</p>
-								<p>{{ faceLight.data.on == 0 ? '已关闭' : '已开启' }}</p>
+								<p :class="faceLight.data.on == 0 ? '' : 'colorActice'">{{ faceLight.data.on == 0 ? '已关闭' : '已开启' }}</p>
 							</div>
 						</div>
 						<div class="devices-audio-else-icon" @click="devicesSwitch(2)">
@@ -166,9 +166,10 @@
 
 <script>
 // @ is an alias to /src
-import { mapActions, mapMutations, mapState } from 'vuex';
+import { mapActions, mapMutations, mapState, mapGetters } from 'vuex';
 import picker from '@/components/picker.vue';
 import Header from '@/components/header.vue';
+import { _debounce } from '@/hilink/public';
 export default {
 	name: 'home',
 	data() {
@@ -188,16 +189,21 @@ export default {
 			switchText: '已关闭',
 			title: '火火兔故事机',
 			headerType: 'home',
+			loadingFlag: true,
 			audioMode: false, //音乐模式
 			foldIcon: require('../../assets/images/ic_shouqi.png')
 		};
 	},
 	computed: {
-		// ...mapState(["devicesInfo"])
+		...mapState({
+			localSongList: state => state.localSongList
+		}),
+		// ...mapGetters(['getlocalSongList'])
 	},
 	created() {
 		if (window.hilink != undefined) {
 			this.getDevicesAll();
+			console.log("localSongList=====",this.localSongList);
 			// this.devicesModeAction(2);
 		}
 	},
@@ -206,11 +212,13 @@ export default {
 		if (window.hilink != undefined) {
 			window['resultCallback'] = resultStr => {
 				let data = self.praseResponseData(resultStr);
-				self.devicesAction(405, 0);
+				self.devicesAction(627, 1, 2);
+				console.log('全部返回===========', data);
 				data.services.forEach(function(item, index) {
 					let type = item.sid;
 					switch (type) {
 						case 'switch':
+							console.log('获取设备开关============', item.data.on);
 							self.lampSwitch = item || [];
 							self.isLine = item.data.on;
 							break;
@@ -227,7 +235,7 @@ export default {
 							break;
 						case 'custom':
 							if (item.data.action == '104') {
-								localStorage.setItem("mode",item.data.playmode)
+								localStorage.setItem('mode', item.data.playmode);
 								self.playMode = item.data.playmode;
 							} else if (item.data.action == '637') {
 							}
@@ -244,10 +252,13 @@ export default {
 			window['deviceEventCallback'] = event => {
 				let data = self.praseResponseData(event);
 				let type = data.sid;
+				console.log('放回data============', data);
 				switch (type) {
 					case 'switch':
+						console.log('关机========================');
 						self.lampSwitch.data.on = data.data.on || [];
 						self.isLine = data.data.on;
+						console.log('设备关机了===============', data.data.on);
 						break;
 					case 'earLight':
 						self.earLight.data.on = data.data.on || [];
@@ -261,24 +272,44 @@ export default {
 						self.volume = data.data.volume;
 						break;
 					case 'custom':
+						self.loadingFlag = true;
 						console.log('custom返回数据=================', data.data);
 						let json = self.$base64.doDecode(data.data.function);
 						let customData = JSON.parse(json);
 						console.log('josn数据=======', customData);
 						if (customData.action == '910') {
-							localStorage.setItem("mode",customData.playmode)
+							localStorage.setItem('mode', customData.playmode);
 							self.playMode = customData.playmode;
 							console.log('self.playMode===', self.playMode);
 						} else if (customData.action == '628') {
 							self.lookData = customData.on;
 							console.log('self.lookDat===', self.lookData);
-						} else if (customData.action == '406') {					
+						} else if (customData.action == '406') {
 							self.devicesLocal(customData.lists[0]);
-						} else if (customData.action == '402') {
-							localStorage.setItem("awaitFlag",true)
-							console.log('本地歌单================');
-							console.log('customData.songs=============', customData.songs);
-							self.devicesPutLocal(customData);
+						} else if (customData.action == '402') {						
+							var array = self.localSongList;
+							array.songs =array.songs.concat(customData.songs);
+							array.total =customData.total;
+							array.channel =customData.channel;
+							self.devicesPutLocal(array);
+						} else if (customData.action == '642') {
+							console.log('英语启蒙============', customData.albumid);
+							localStorage.setItem('english', customData.albumid);
+						} else if (customData.action == '417' && customData.ret == 0) {
+							self.$toast({
+								message: '歌曲收藏成功',
+								position: 'bottom',
+								duration: '3000',
+								className: 'toastActive'
+							});
+						} else if (customData.action == '638' && customData.ret == 0) {
+							self.$toast({
+								message: '英语启蒙设置成功',
+								position: 'bottom',
+								duration: '3000',
+								className: 'toastActive'
+							});
+							self.devicesAction(641);
 						}
 						break;
 					default:
@@ -305,18 +336,9 @@ export default {
 			let self = this;
 			self.getLocalList(data);
 		},
-		devicesLocal(data) {
-			let self = this;
-			self.getLocalList(data);
-		},
-		awaitFlag(data){
-			let self =this;
-			self.setAwaitFlag(data)
-		},
 		//本地歌曲
-		devicesPutLocal(data, id) {
+		devicesPutLocal(data) {
 			let self = this;
-			console.log('402==========', data);
 			self.putLocalList(data);
 		},
 		//设置播放器信息
@@ -342,8 +364,9 @@ export default {
 		 * 5:播放暂停
 		 * 6:童锁
 		 */
-		devicesSwitch(type) {
-			console.log('设备开关');
+		// 改变场数
+		devicesSwitch: _debounce(function(type) {
+			console.log('设备开关======', type);
 			let self = this;
 			if (self.isLine == 0) {
 				this.$toast({
@@ -357,6 +380,7 @@ export default {
 			if (window.hilink != undefined) {
 				var data;
 				var on;
+				console.log('type================', type);
 				switch (type) {
 					case 0:
 						if (self.lampSwitch.data.on == 0) {
@@ -369,26 +393,27 @@ export default {
 							return;
 						} else {
 							on = self.lampSwitch.data.on == 1 ? 0 : 0;
-							data = { switch: { on: on, name: 'switch' } };
+							data = { switch: { on: on } };
 						}
 						break;
 					case 1:
 						on = self.earLight.data.on == 1 ? 0 : 1;
-						data = { earLight: { on: on, name: 'earLight' } };
+						data = { earLight: { on: on } };
 						break;
 					case 2:
 						on = self.faceLight.data.on == 1 ? 0 : 1;
-						data = { faceLight: { on: on, name: 'faceLight' } };
+						data = { faceLight: { on: on } };
 						break;
 					case 3:
-						data = { Music: { cutSong: 0, name: 'cutSong' } };
+						data = { Music: { cutSong: 0 } };
 						break;
 					case 4:
-						data = { Music: { cutSong: 1, name: 'cutSong' } };
+						data = { Music: { cutSong: 1 } };
 						break;
 					case 5:
 						on = self.audioInfo.data.play == 1 ? 0 : 1;
-						data = { Music: { play: on, name: 'play' } };
+						data = { Music: { play: on } };
+						break;
 					case 6:
 						var body = {
 							from: 'DID:0',
@@ -397,20 +422,24 @@ export default {
 							on: 0
 						};
 						var json = JSON.stringify(body);
-						data = { custom: { function: json, name: 'function' } };
+						data = { custom: { function: json } };
+						break;
 					default:
 						break;
 				}
 				console.log(data);
 				self.setDeviceInfo(data);
 			}
-		},
+		}, 200),
+		// devicesSwitch(type) {
+
+		// },
 		//播放模式选择
 		devicesMode() {
 			let self = this;
 			self.audioMode = !self.audioMode;
 		},
-		devicesAction(action, type, on) {
+		devicesAction: _debounce(function(action, type, on) {
 			let self = this;
 			var body;
 			if (type == 0) {
@@ -431,10 +460,14 @@ export default {
 			let data = { custom: { function: json } };
 			console.log('setDeviceInfo===', data);
 			self.setDeviceInfo(data);
-		},
+		}, 300),
 		//故事机童锁开关
-		devicesLockSwitch() {
+		devicesLockSwitch: _debounce(function(mode) {
 			let self = this;
+			console.log('self.loadingFlag==============', self.loadingFlag);
+			if (!self.loadingFlag) {
+				return;
+			}
 			if (self.isLine == 0) {
 				this.$toast({
 					message: '请旋转火火兔的尾巴开机',
@@ -454,10 +487,14 @@ export default {
 			var json = JSON.stringify(body);
 			var data = { custom: { function: json, name: 'function' } };
 			self.setDeviceInfo(data);
-		},
+			self.loadingFlag = false;
+		}, 300),
 		//故事机播放模式
-		devicesModeAction(mode) {
+		devicesModeAction: _debounce(function(mode) {
 			let self = this;
+			if (!self.loadingFlag) {
+				return;
+			}
 			if (self.isLine == 0) {
 				this.$toast({
 					message: '请旋转火火兔的尾巴开机',
@@ -477,7 +514,8 @@ export default {
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json, name: 'function' } };
 			self.setDeviceInfo(data);
-		},
+			self.loadingFlag = false;
+		}, 200),
 		//故事机音量调节
 		onVolumeChange(value) {
 			let self = this;
@@ -530,7 +568,7 @@ export default {
 		//进入内容
 		contentBtn(type) {
 			var url;
-			if (self.isLine == 0 && type !=0) {
+			if (self.isLine == 0 && type != 0) {
 				this.$toast({
 					message: '请旋转火火兔的尾巴开机',
 					position: 'bottom',
@@ -544,7 +582,7 @@ export default {
 			} else if (type == 1) {
 				url = 'english'; //启蒙英语
 			} else if (type == 2) {
-				url = 'locallist';
+				url = 'localfile';
 			} else if (type == 3) {
 				url = 'locallist';
 			}
@@ -552,7 +590,7 @@ export default {
 				name: url
 			});
 		},
-		...mapActions(['setPlayData', 'getLocalList', 'putLocalList', 'setLocalCid','setAwaitFlag'])
+		...mapActions(['setPlayData', 'getLocalList', 'putLocalList'])
 	},
 	components: {
 		'v-picker': picker,

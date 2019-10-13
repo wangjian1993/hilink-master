@@ -1,5 +1,5 @@
-// export const gettersMsg = state => state.tabStates;
+// export const getLocalList = state => state.localSongList;
 
-export const gettersPlayData = (state) => {
-  return state.playData;
+export const getlocalSongList= (state) => {
+  return state.localSongList;
 }

@@ -27,15 +27,5 @@ export default {
 		commit
 	},data){
 		commit(types.PUT_LOCALLIST,data);
-	},
-	setLocalCid({
-		commit
-	},data){
-		commit(types.SET_LOCALCID,data);
-	},
-	setAwaitFlag({
-		commit
-	},data){
-		commit(types.SET_AWAITFLAG,data);
-	},
+	}
 };

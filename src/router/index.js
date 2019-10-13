@@ -30,6 +30,15 @@ export default new Router({
 				keepAlive: false,
 			}
 		},
+		{ //启蒙英语
+			path: '/localfile',
+			name: 'localfile',
+			component: () => import( /* webpackChunkName: "english" */ '@/views/Content/LocalFile.vue'),
+			meta: {
+				title: "本地歌曲列表",
+				keepAlive: false,
+			}
+		},
 		{ //本地内容
 			path: '/english',
 			name: 'english',
