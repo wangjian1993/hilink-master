@@ -273,7 +273,7 @@ export default {
 			if (!parseInt(id)) {
 				return;
 			}
-			this.$router.push({ name: 'cloudListenDetail', params: { id: id } });
+			this.$router.push({ name: 'cloudListenDetail', query: { id: id } });
 		},
 		//跳转搜索页
 		goSearch() {

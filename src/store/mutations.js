@@ -27,6 +27,9 @@ const mutations = {
 	},
 	[types.SET_MUSICDATA](state,data){
 		state.musicData =data;
-	}
+	},
+	[types.SET_PLAYMODE](state,data){
+		state.playMode =data;
+	},
 }
 export default mutations

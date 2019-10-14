@@ -92,6 +92,14 @@ export default new Router({
 				keepAlive: false,
 			}
 		},
+		{
+			path: '/cloudContent/allDown',
+			name: 'cloudAllDown',
+			component: () => import(/* webpackChunkName: "cloudListenDetail" */'@/views/cloudContent/allDown.vue'),
+			meta: {
+				keepAlive: false,
+			}
+		},
 		//火火兔云内容主播详情页面
 		{
 			path: '/cloudContent/hostDetail',

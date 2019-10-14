@@ -15,8 +15,8 @@
 			</p>
 			<p @click="devicesSwitch(4)"><img src="../assets/images/icon_device_next.png" alt="" /></p>
 			<p @click="devicesModeAction()">
-				<img v-if="playmode == 1" class="play-mode" src="../assets/images/icon_device_one.png" alt="" />
-				<img v-else class="play-mode" src="../assets/images/icon_device_loop.png" alt="" />
+				<img v-if="playMode == 0" class="play-mode" src="../assets/images/icon_device_one.png" alt="" />
+				<img v-if="playMode == 1"  class="play-mode" src="../assets/images/icon_device_loop.png" alt="" />
 			</p>
 		</div>
 	</div>
@@ -28,26 +28,21 @@ export default {
 	data() {
 		return {
 			// playData:[]
-			playmode:-1,
+			// playmode:-1,
 		};
 	},
 	created() {
-		this.playmode =localStorage.getItem("mode");
-		console.log("this.playmode",this.playmode)
+		
 	},
 	computed: {
 		...mapState({
-			playData: state => state.playData
+			playData: state => state.playData,
+			playMode:state => state.playMode
 		})
 		// ...mapGetters(['gettersPlayData'])
 	},
 	watch: {
-		// gettersPlayData(data) {
-		// 	let self =this;
-		// 	self.playData =[];
-		// 	self.playData =data;
-		// 	console.log("playData=====",self.playData.data.song)
-		// }
+		
 	},
 	methods: {
 		/*
@@ -142,8 +137,8 @@ export default {
 				height: 42px;
 			}
 			.play-mode {
-				width: 24px;
-				height: 24px;
+				width: 28px;
+				height: 22px;
 			}
 		}
 	}

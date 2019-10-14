@@ -211,9 +211,8 @@ export default {
 		let self = this;
 		if (window.hilink != undefined) {
 			window['resultCallback'] = resultStr => {
-				console.log("resultStr=======",resultStr)
-				let data = self.praseResponseData(resultStr);
-				self.devicesAction(627, 1, 2);
+				console.log('resultStr=======', resultStr);
+				let data = self.praseResponseData(resultStr);		
 				console.log('全部返回===========', data);
 				data.services.forEach(function(item, index) {
 					let type = item.sid;
@@ -236,7 +235,8 @@ export default {
 							break;
 						case 'custom':
 							if (item.data.action == '104') {
-								localStorage.setItem('mode', item.data.playmode);
+								// localStorage.setItem('mode', item.data.playmode);
+								self.$store.dispatch('setPlayMode', item.data.playmode);
 								self.playMode = item.data.playmode;
 							}
 							break;
@@ -244,13 +244,13 @@ export default {
 							break;
 					}
 				});
+				setTimeout(function() {self.devicesAction(627, 1, 2);}, 300);
 			};
 			window['deviceInfoCallback'] = resultStr => {
 				console.log('获取设备单独信息======', resultStr);
 			};
 			//设备主动上报回调信息
 			window['deviceEventCallback'] = event => {
-				console.log('返回的数据data11============', event);
 				let data = self.praseResponseData(event);
 				let type = data.sid;
 				console.log('返回的数据data============', data);
@@ -273,9 +273,12 @@ export default {
 						self.volume = data.data.volume;
 						break;
 					case 'custom':
-						let json = self.$base64.doDecode(data.data.function);
-						let customData = JSON.parse(json);
-						self.resultFunction(data.data.function);
+						let customData =data.data.function;
+						// let json = self.$base64.doDecode(data.data.function);
+						// let customData = JSON.parse(json);
+						console.log('customData====', customData);
+						self.resultFunction(customData);
+						self.loadingFlag =true;
 						break;
 					default:
 						break;
@@ -287,20 +290,22 @@ export default {
 		resultFunction(customData) {
 			var self = this;
 			let action = customData.action;
+			console.log('action========', action);
 			switch (action) {
-				case '910':
-					localStorage.setItem('mode', customData.playmode);
+				case 910:
+					self.$store.dispatch('setPlayMode', item.data.playmode);
 					self.playMode = customData.playmode;
 					console.log('self.playMode===', self.playMode);
 					break;
-				case '628':
+				case 628:
 					self.lookData = customData.on;
 					console.log('self.lookDat===', self.lookData);
 					break;
-				case '406':
+				case 406:
+					console.log('customData.lists[0]', customData.lists[0]);
 					self.devicesLocal(customData.lists[0]);
 					break;
-				case '402':
+				case 402:
 					let array = self.localSongList;
 					let data = {
 						total: 0,
@@ -317,11 +322,11 @@ export default {
 					array.channel = customData.channel;
 					self.devicesPutLocal(array);
 					break;
-				case '642':
+				case 642:
 					console.log('英语启蒙============', customData.albumid);
 					localStorage.setItem('english', customData.albumid);
 					break;
-				case '417':
+				case 417:
 					if (customData.ret == 0) {
 						self.$toast({
 							message: '歌曲收藏成功',
@@ -331,7 +336,7 @@ export default {
 						});
 					}
 					break;
-				case '638':
+				case 638:
 					if (customData.ret == 0) {
 						self.$toast({
 							message: '英语启蒙设置成功',
@@ -342,9 +347,17 @@ export default {
 						self.devicesAction(641);
 					}
 					break;
-				case '104':
-					console.log("104==========",customData);
-					self.$store.dispatch('setMusciData', customData.data);
+				case 104:
+					console.log('104==========', customData);
+					self.$store.dispatch('setMusciData', customData);
+					break;
+				case 410:
+					self.$toast({
+						message: '歌曲添加下载成功',
+						position: 'bottom',
+						duration: '3000',
+						className: 'toastActive'
+					});
 					break;
 				default:
 					break;
@@ -591,6 +604,7 @@ export default {
 			} catch (error) {
 				var dataStr = resData.replace(/:"{/g, ':{');
 				dataStr = dataStr.replace(/}",/g, '},');
+				dataStr = dataStr.replace(/}"/g, '}');
 				dataStr = dataStr.replace(/\\/g, '');
 				dataStr = dataStr.replace(/\n/g, '');
 				return JSON.parse(dataStr);
@@ -599,6 +613,7 @@ export default {
 		//进入内容
 		contentBtn(type) {
 			var url;
+			let self =this;
 			if (self.isLine == 0 && type != 0) {
 				this.$toast({
 					message: '请旋转火火兔的尾巴开机',
@@ -608,6 +623,7 @@ export default {
 				});
 				return;
 			}
+			// self.devicesAction(405, 0);
 			if (type == 0) {
 				url = 'cloudIndex'; //火火兔内容云
 			} else if (type == 1) {
@@ -615,7 +631,8 @@ export default {
 			} else if (type == 2) {
 				url = 'localfile';
 			} else if (type == 3) {
-				url = 'locallist';
+				this.$router.push({ name: 'locallist', params: { id:11, name:"我的收藏"} });
+				return;
 			}
 			this.$router.push({
 				name: url

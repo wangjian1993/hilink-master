@@ -45,7 +45,7 @@ export default {
 	watch: {
 		$route(e) {
 			this.title = e.meta.title;
-			if (e.name != 'home' && e.name != '') {
+			if (e.name != 'home' && e.name != '' && e.name != 'cloudAllDown') {
 				this.isPlay = true;
 				console.log('显示');
 			} else {

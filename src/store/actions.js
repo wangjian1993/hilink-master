@@ -31,6 +31,11 @@ export default {
 	setMusciData({
 		commit
 	},data){
-		commit(types.PUT_LOCALLIST,data);
+		commit(types.SET_MUSICDATA,data);
+	},
+	setPlayMode({
+		commit
+	},data){
+		commit(types.SET_PLAYMODE,data);
 	},
 };

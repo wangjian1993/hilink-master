@@ -7,6 +7,9 @@
 				<div class="musicName">{{ info.name }}</div>
 				<div class="musicMusic">共{{ info.musicCount }}首</div>
 			</div>
+			<div class="all-down" @click="allDownClick()">
+				<p><img src="../../assets/images/icon_download_no.png" alt=""></p>
+			</div>
 		</div>
 		<div class="musicIntro">
 			专辑介绍
@@ -68,7 +71,7 @@ export default {
 	async mounted() {
 		this.isLoaded = true;
 		await http
-			.getSpecialInfo(this.$route.params.id)
+			.getSpecialInfo(this.$route.query.id)
 			.then(res => {
 				//转换播放时间
 				res.data.content.musicList.forEach((v, i) => {
@@ -123,6 +126,13 @@ export default {
 					this.active = -1;
 				};
 			}
+		},
+		allDownClick(){
+			let id =this.$route.query.id
+			if (!parseInt(id)) {
+				return;
+			}
+			this.$router.push({ name: 'cloudAllDown', query: { id: id } });
 		},
 		//显示点播收藏
 		show(index) {

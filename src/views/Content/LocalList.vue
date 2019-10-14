@@ -10,8 +10,8 @@
 				<p class="nullBox" v-if="localSongList.songs.length == 0">暂无歌曲</p>
 				<ul>
 					<li v-for="(opt, index) in localSongList.songs">
-						<p @click="localSongPut(index)">{{ opt.name }}</p>
-						<!-- <span><img src="../../assets/images/gif.gif" alt="" /></span> -->
+						<p @click="localSongPut(index)" :class="cid == musicData.channel && index == musicData.idx?'textActive':''">{{ opt.name }}</p>
+						<span><img v-if="cid == musicData.channel && index == musicData.idx?'textActive':''" src="../../assets/images/gif.gif" alt="" /></span>
 						<span @click="songDel(opt, index)"><img src="../../assets/images/delete.png" alt="" /></span>
 					</li>
 				</ul>
@@ -73,14 +73,22 @@ export default {
 						self.devicesSwitch();
 						console.log('第一次调用=============');
 					} else {
-						if (self.beginNumber <= 8) {
+						if (self.beginNumber <= 2) {
 							console.log('第2次调用=============');
 							self.getLocalSong();
 							self.isBottom =true;					
+						}else {
+							console.log('第3次调用=============');			
+							self.isBottom =true;
+							self.getLocalSong();
 						}
 					}
 				}
 			};
+			window['delListBack']=resultStr =>{
+				let data = self.praseResponseData(resultStr);
+				console.log("删除====")
+			}
 		}
 	},
 	methods: {
@@ -102,38 +110,45 @@ export default {
 		devicesSwitch: _debounce(function() {
 			let self = this;
 			if (!self.cangetlocal) return false;
-			self.limitNumber = (self.getNumber + 1) * 10 < self.localTotal ? (self.getNumber + 1) * 10 : self.localTotal;
-			self.beginNumber = self.getNumber * 10;
+			self.limitNumber = (self.getNumber + 1) * 3 < self.localTotal ? (self.getNumber + 1) * 3 : self.localTotal;
+			self.beginNumber = self.getNumber * 3;
 			console.log('limitNumber===========', self.limitNumber);
 			console.log('beginNumber===========', self.beginNumber);
+			console.log('getNumber===========', self.getNumber);
 			self.beginNumber = 1;
 			self.getLocalSong();
 		}, 300),
 		getLocalSong: _debounce(function() {
 			let self = this;
+			console.log('limitNumber111===========', self.limitNumber);
+			console.log('beginNumber111===========', self.beginNumber);
+			console.log('getNumber11111===========', self.getNumber);
 			if (self.beginNumber >= self.limitNumber) {
 				self.cangetlocal = true;
+				// self.devicesSwitch();
 				return true;
 			}
-			self.$toast.loading({
-			  mask: true,
-			  message: '加载中...'
-			});
+			// self.$toast.loading({
+			//   mask: true,
+			//   message: '加载中...'
+			// });
 			let body = {
 				from: 'DID:0',
 				to: 'UID:-1',
 				action: 401,
 				channel: self.cid,
-				offset: self.beginNumber * 2
+				offset: self.beginNumber * 6
 			};
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json, name: 'function' } };
 			self.beginNumber = self.beginNumber + 1;
 			console.log('beginNumberbeginNumber111111===========', self.beginNumber);
 			self.setDeviceSongsInfo(data, 'songsListBack');
+			self.getNumber =self.getNumber + 1;
 		}, 400),
 		songDel(item, index) {
 			let self = this;
+			console.log(item);
 			self.$dialog
 				.confirm({
 					title: '提示',
@@ -145,13 +160,14 @@ export default {
 						to: 'UID:-1',
 						action: 423,
 						cid: self.cid,
-						url: item.res[0].url,
 						channelname: self.cname,
-						songname: item.name
+						songname: item.name,
+						sidx:index
 					};
 					let json = JSON.stringify(body);
 					let data = { custom: { function: json, name: 'function' } };
-					self.setDeviceInfo(data);
+					console.log("删除歌曲====",data)
+					self.setDeviceSongsInfo(data,'delListBack');
 				})
 				.catch(() => {
 					// on cancel
@@ -182,10 +198,12 @@ export default {
 			docH = document.body.scrollHeight || document.documentElement.scrollHeight; //文档高度
 			windowH = window.innerHeight || document.body.clientHeight || document.documentElement.clientHeight; //浏览器窗口高度
 			if (scrollH + windowH >= docH && !that.isStop) {
+				console.log("加载1111======")
 				//滚动到底部和页面没有正在执行请求网络数据的过程中的条件要同时成立才可以执行请求请求数据操作
 				if (that.isBottom && that.beginNumber <= that.limitNumber) {
-					that.isBottom=false;
+					console.log("加载2222======")
 					that.getLocalSong();
+					that.isBottom=false;
 				}
 			}
 		},
@@ -196,6 +214,7 @@ export default {
 			} catch (error) {
 				var dataStr = resData.replace(/:"{/g, ':{');
 				dataStr = dataStr.replace(/}",/g, '},');
+				dataStr = dataStr.replace(/}"/g, '}');
 				dataStr = dataStr.replace(/\\/g, '');
 				dataStr = dataStr.replace(/\n/g, '');
 				return JSON.parse(dataStr);
@@ -255,5 +274,8 @@ export default {
 			}
 		}
 	}
+}
+.local-list li p.textActive{
+	color: #ff444a;
 }
 </style>
