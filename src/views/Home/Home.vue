@@ -191,19 +191,19 @@ export default {
 			headerType: 'home',
 			loadingFlag: true,
 			audioMode: false, //音乐模式
-			foldIcon: require('../../assets/images/ic_shouqi.png')
+			foldIcon: require('../../assets/images/ic_shouqi.png'),
+			songsCid: -1
 		};
 	},
 	computed: {
 		...mapState({
 			localSongList: state => state.localSongList
-		}),
+		})
 		// ...mapGetters(['getlocalSongList'])
 	},
 	created() {
 		if (window.hilink != undefined) {
 			this.getDevicesAll();
-			console.log("localSongList=====",this.localSongList);
 			// this.devicesModeAction(2);
 		}
 	},
@@ -211,6 +211,7 @@ export default {
 		let self = this;
 		if (window.hilink != undefined) {
 			window['resultCallback'] = resultStr => {
+				console.log("resultStr=======",resultStr)
 				let data = self.praseResponseData(resultStr);
 				self.devicesAction(627, 1, 2);
 				console.log('全部返回===========', data);
@@ -237,7 +238,6 @@ export default {
 							if (item.data.action == '104') {
 								localStorage.setItem('mode', item.data.playmode);
 								self.playMode = item.data.playmode;
-							} else if (item.data.action == '637') {
 							}
 							break;
 						default:
@@ -250,9 +250,10 @@ export default {
 			};
 			//设备主动上报回调信息
 			window['deviceEventCallback'] = event => {
+				console.log('返回的数据data11============', event);
 				let data = self.praseResponseData(event);
 				let type = data.sid;
-				console.log('放回data============', data);
+				console.log('返回的数据data============', data);
 				switch (type) {
 					case 'switch':
 						console.log('关机========================');
@@ -272,45 +273,9 @@ export default {
 						self.volume = data.data.volume;
 						break;
 					case 'custom':
-						self.loadingFlag = true;
-						console.log('custom返回数据=================', data.data);
 						let json = self.$base64.doDecode(data.data.function);
 						let customData = JSON.parse(json);
-						console.log('josn数据=======', customData);
-						if (customData.action == '910') {
-							localStorage.setItem('mode', customData.playmode);
-							self.playMode = customData.playmode;
-							console.log('self.playMode===', self.playMode);
-						} else if (customData.action == '628') {
-							self.lookData = customData.on;
-							console.log('self.lookDat===', self.lookData);
-						} else if (customData.action == '406') {
-							self.devicesLocal(customData.lists[0]);
-						} else if (customData.action == '402') {						
-							var array = self.localSongList;
-							array.songs =array.songs.concat(customData.songs);
-							array.total =customData.total;
-							array.channel =customData.channel;
-							self.devicesPutLocal(array);
-						} else if (customData.action == '642') {
-							console.log('英语启蒙============', customData.albumid);
-							localStorage.setItem('english', customData.albumid);
-						} else if (customData.action == '417' && customData.ret == 0) {
-							self.$toast({
-								message: '歌曲收藏成功',
-								position: 'bottom',
-								duration: '3000',
-								className: 'toastActive'
-							});
-						} else if (customData.action == '638' && customData.ret == 0) {
-							self.$toast({
-								message: '英语启蒙设置成功',
-								position: 'bottom',
-								duration: '3000',
-								className: 'toastActive'
-							});
-							self.devicesAction(641);
-						}
+						self.resultFunction(data.data.function);
 						break;
 					default:
 						break;
@@ -319,6 +284,72 @@ export default {
 		}
 	},
 	methods: {
+		resultFunction(customData) {
+			var self = this;
+			let action = customData.action;
+			switch (action) {
+				case '910':
+					localStorage.setItem('mode', customData.playmode);
+					self.playMode = customData.playmode;
+					console.log('self.playMode===', self.playMode);
+					break;
+				case '628':
+					self.lookData = customData.on;
+					console.log('self.lookDat===', self.lookData);
+					break;
+				case '406':
+					self.devicesLocal(customData.lists[0]);
+					break;
+				case '402':
+					let array = self.localSongList;
+					let data = {
+						total: 0,
+						channel: -1,
+						songs: []
+					};
+					console.log('原始数据===========', array);
+					if (self.songsCid != array.channel) {
+						self.songsCid = array.channel;
+						this.$store.dispatch('putLocalList', data);
+					}
+					array.songs = array.songs.concat(customData.songs);
+					array.total = customData.total;
+					array.channel = customData.channel;
+					self.devicesPutLocal(array);
+					break;
+				case '642':
+					console.log('英语启蒙============', customData.albumid);
+					localStorage.setItem('english', customData.albumid);
+					break;
+				case '417':
+					if (customData.ret == 0) {
+						self.$toast({
+							message: '歌曲收藏成功',
+							position: 'bottom',
+							duration: '3000',
+							className: 'toastActive'
+						});
+					}
+					break;
+				case '638':
+					if (customData.ret == 0) {
+						self.$toast({
+							message: '英语启蒙设置成功',
+							position: 'bottom',
+							duration: '3000',
+							className: 'toastActive'
+						});
+						self.devicesAction(641);
+					}
+					break;
+				case '104':
+					console.log("104==========",customData);
+					self.$store.dispatch('setMusciData', customData.data);
+					break;
+				default:
+					break;
+			}
+		},
 		onConfirm() {
 			let self = this;
 			self.timePopup = !self.timePopup; //显示

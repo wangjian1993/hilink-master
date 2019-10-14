@@ -19,17 +19,14 @@ const mutations = {
 	[types.PUT_LOCALLIST](state, data) {
 		state.localTotal = data.total
 		let cid = localStorage.getItem("cid");
-		if (data.channel == cid) {
-			state.localSongList = data;
-		} else {
-			let obj = {
-				total: 0,
-				channel: -1,
-				songs: []
-			}
-			state.localSongList = obj;
-			state.localSongList = data;
-		}
+		// if (data.channel == cid) {
+		state.localSongList = data;
+		// } else {
+		// 	state.localSongList = data;
+		// }
+	},
+	[types.SET_MUSICDATA](state,data){
+		state.musicData =data;
 	}
 }
 export default mutations

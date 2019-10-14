@@ -9,7 +9,8 @@ const state = {
 		songs: []
 	},
 	localTotal: null,
-	params: null
+	params: null,
+	musicData:[]
 };
 
 export default state;

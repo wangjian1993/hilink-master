@@ -27,5 +27,10 @@ export default {
 		commit
 	},data){
 		commit(types.PUT_LOCALLIST,data);
-	}
+	},
+	setMusciData({
+		commit
+	},data){
+		commit(types.PUT_LOCALLIST,data);
+	},
 };
