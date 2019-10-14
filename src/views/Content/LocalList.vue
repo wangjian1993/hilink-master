@@ -70,7 +70,7 @@ export default {
 				if (data.errcode == 0) {
 					self.cangetlocal = true;
 					if (self.beginNumber == 0) {
-						self.devicesSwitch();
+						self.devicesPage();
 						console.log('第一次调用=============');
 					} else {
 						if (self.beginNumber <= 2) {
@@ -107,11 +107,11 @@ export default {
 			self.setDeviceSongsInfo(data, 'songsListBack');
 			self.loading = true;
 		},
-		devicesSwitch: _debounce(function() {
+		devicesPage: _debounce(function() {
 			let self = this;
 			if (!self.cangetlocal) return false;
-			self.limitNumber = (self.getNumber + 1) * 3 < self.localTotal ? (self.getNumber + 1) * 3 : self.localTotal;
-			self.beginNumber = self.getNumber * 3;
+			self.limitNumber = (self.getNumber + 1) * 10< self.localTotal ? (self.getNumber + 1) * 10 : self.localTotal;
+			self.beginNumber = self.getNumber * 10;
 			console.log('limitNumber===========', self.limitNumber);
 			console.log('beginNumber===========', self.beginNumber);
 			console.log('getNumber===========', self.getNumber);
@@ -202,7 +202,7 @@ export default {
 				//滚动到底部和页面没有正在执行请求网络数据的过程中的条件要同时成立才可以执行请求请求数据操作
 				if (that.isBottom && that.beginNumber <= that.limitNumber) {
 					console.log("加载2222======")
-					that.getLocalSong();
+					that.devicesPage();
 					that.isBottom=false;
 				}
 			}
