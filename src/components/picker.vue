@@ -26,7 +26,7 @@ export default {
 			// timePopup: false,
 			currentTime: '0:00',
 			endTime: 15,
-			columns: ['15分钟', '30分钟', '60分钟', '90分钟', '120分钟']
+			columns: ['关','15分钟', '30分钟', '60分钟', '90分钟', '120分钟']
 		};
 	},
 	computed: {},

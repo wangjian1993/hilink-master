@@ -66,7 +66,7 @@
 				<ul>
 					<div class="devices-audio-else-mode" v-show="audioMode">
 						<ul>
-							<li @click="devicesModeAction(1)" :class="isLine == 0 ? '' : 'lineAcitve'"><p>列表循环</p></li>
+							<li @click="devicesModeAction(1)" :class="isLine == 0 ? '' : 'lineAcitve'"><p>全部循环</p></li>
 							<li @click="devicesModeAction(0)" :class="isLine == 0 ? '' : 'lineAcitve'"><p>单曲循环</p></li>
 							<!-- <li>
 								<p>随机循环</p>
@@ -77,7 +77,7 @@
 						<div class="devices-audio-else-text">
 							<div>
 								<p>模式</p>
-								<p :class="playMode == -1 ? '' : 'colorActice'">{{ playMode == 1 ? '列表循环' : '单曲循环' }}</p>
+								<p :class="playMode == -1 ? '' : 'colorActice'">{{ playMode == 1 ? '全部循环' : '单曲循环' }}</p>
 							</div>
 						</div>
 						<div class="devices-audio-else-icon">
@@ -211,14 +211,11 @@ export default {
 		let self = this;
 		if (window.hilink != undefined) {
 			window['resultCallback'] = resultStr => {
-				console.log('resultStr=======', resultStr);
 				let data = self.praseResponseData(resultStr);
-				console.log('全部返回===========', data);
 				data.services.forEach(function(item, index) {
 					let type = item.sid;
 					switch (type) {
 						case 'switch':
-							console.log('获取设备开关============', item.data.on);
 							self.lampSwitch = item || [];
 							self.isLine = item.data.on;
 							break;
@@ -260,10 +257,8 @@ export default {
 				let type = data.sid;
 				switch (type) {
 					case 'switch':
-						console.log('关机========================');
 						self.lampSwitch.data.on = data.data.on || [];
 						self.isLine = data.data.on;
-						console.log('设备关机了===============', data.data.on);
 						break;
 					case 'earLight':
 						self.earLight.data.on = data.data.on || [];
@@ -278,7 +273,6 @@ export default {
 						break;
 					case 'custom':
 						let customData = data.data.function;
-						console.log('customData====', customData);
 						self.resultFunction(customData);
 						self.loadingFlag = true;
 						break;
@@ -297,14 +291,11 @@ export default {
 				case 910:
 					self.$store.dispatch('setPlayMode', customData.playmode);
 					self.playMode = customData.playmode;
-					console.log('self.playMode===', self.playMode);
 					break;
 				case 628:
 					self.lookData = customData.on;
-					console.log('self.lookDat===', self.lookData);
 					break;
 				case 406:
-					console.log('customData.lists[0]', customData.lists[0]);
 					self.devicesLocal(customData.lists[0]);
 					break;
 				case 402:
@@ -314,7 +305,6 @@ export default {
 						channel: -1,
 						songs: []
 					};
-					console.log('原始数据===========', array);
 					if (self.songsCid != array.channel) {
 						self.songsCid = array.channel;
 						this.$store.dispatch('putLocalList', data);
@@ -325,7 +315,6 @@ export default {
 					self.devicesPutLocal(array);
 					break;
 				case 642:
-					console.log('英语启蒙============', customData.albumid);
 					localStorage.setItem('english', customData.albumid);
 					break;
 				case 417:
@@ -350,7 +339,6 @@ export default {
 					}
 					break;
 				case 104:
-					console.log('104==========', customData);
 					self.$store.dispatch('setMusciData', customData);
 					break;
 				case 410:
@@ -423,7 +411,6 @@ export default {
 		 */
 		// 改变场数
 		devicesSwitch: _debounce(function(type) {
-			console.log('设备开关======', type);
 			let self = this;
 			if (self.isLine == 0) {
 				this.$toast({
@@ -437,7 +424,6 @@ export default {
 			if (window.hilink != undefined) {
 				var data;
 				var on;
-				console.log('type================', type);
 				switch (type) {
 					case 0:
 						if (self.lampSwitch.data.on == 0) {
@@ -515,13 +501,11 @@ export default {
 			}
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json } };
-			console.log('setDeviceInfo===', data);
 			self.setDeviceInfo(data);
 		}, 300),
 		//故事机童锁开关
 		devicesLockSwitch: _debounce(function(mode) {
 			let self = this;
-			console.log('self.loadingFlag==============', self.loadingFlag);
 			if (!self.loadingFlag) {
 				return;
 			}
@@ -644,11 +628,12 @@ export default {
 				url = 'localfile';
 			} else if (type == 3) {
 				let file = self.localList.channels;
-				console.log('self.localList========', self.localList);
+				console.log("file===",file)
 				file.forEach(function(item, index) {
-					console.log(item);
+					console.log(item.name);
 					if (item.name == '我的收藏') {
-						this.$router.push({ name: 'locallist', params: { id: item.cid, name: item.name } });
+						console.log("我的收藏");
+						self.$router.push({ name: 'locallist', params: { id: item.cid, name: item.name } });
 					}
 				});
 				return;
