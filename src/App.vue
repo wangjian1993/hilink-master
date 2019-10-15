@@ -1,7 +1,7 @@
 <template>
 	<div id="app">
 		<v-header :title="title"></v-header>
-		<router-view v-if="$route.meta.keepAlive"></router-view>
+		<keep-alive><router-view v-if="$route.meta.keepAlive"></router-view></keep-alive>
 		<router-view v-if="!$route.meta.keepAlive"></router-view>
 		<v-play v-show="isPlay"></v-play>
 	</div>

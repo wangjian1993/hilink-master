@@ -8,7 +8,6 @@
 		</div>
 		<div class="play-btn">
 			<p @click="devicesSwitch(3)"><img src="../assets/images/icon_device_pre.png" alt="" /></p>
-
 			<p @click="devicesSwitch(5)">
 				<img v-if="playData.data.play == 1" src="../assets/images/icon_device_play.png" alt="" />
 				<img v-if="playData.data.play == 0" src="../assets/images/icon_device_pause.png" alt="" />
@@ -81,8 +80,8 @@ export default {
 		//故事机播放模式
 		devicesModeAction() {
 			let self = this;
-			console.log()
-			let mode =self.playmode ==1?0:1;
+			console.log("self.playMod=======",self.playMod)
+			let mode =self.playMode ==1?0:1;
 			var body = {
 				from: 'DID:0',
 				to: 'UID:-1',

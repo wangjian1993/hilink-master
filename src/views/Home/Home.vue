@@ -197,14 +197,14 @@ export default {
 	},
 	computed: {
 		...mapState({
-			localSongList: state => state.localSongList
+			localSongList: state => state.localSongList,
+			localList: state => state.localList
 		})
 		// ...mapGetters(['getlocalSongList'])
 	},
 	created() {
 		if (window.hilink != undefined) {
 			this.getDevicesAll();
-			// this.devicesModeAction(2);
 		}
 	},
 	mounted() {
@@ -247,6 +247,9 @@ export default {
 				setTimeout(function() {
 					self.devicesAction(627, 1, 2);
 				}, 300);
+				setTimeout(function() {
+					self.devicesAction(405, 0);
+				}, 400);
 			};
 			window['deviceInfoCallback'] = resultStr => {
 				console.log('获取设备单独信息======', resultStr);
@@ -255,7 +258,6 @@ export default {
 			window['deviceEventCallback'] = event => {
 				let data = self.praseResponseData(event);
 				let type = data.sid;
-				console.log('返回的数据data============', data);
 				switch (type) {
 					case 'switch':
 						console.log('关机========================');
@@ -276,8 +278,6 @@ export default {
 						break;
 					case 'custom':
 						let customData = data.data.function;
-						// let json = self.$base64.doDecode(data.data.function);
-						// let customData = JSON.parse(json);
 						console.log('customData====', customData);
 						self.resultFunction(customData);
 						self.loadingFlag = true;
@@ -295,7 +295,7 @@ export default {
 			console.log('action========', action);
 			switch (action) {
 				case 910:
-					self.$store.dispatch('setPlayMode', item.data.playmode);
+					self.$store.dispatch('setPlayMode', customData.playmode);
 					self.playMode = customData.playmode;
 					console.log('self.playMode===', self.playMode);
 					break;
@@ -636,7 +636,6 @@ export default {
 				});
 				return;
 			}
-			// self.devicesAction(405, 0);
 			if (type == 0) {
 				url = 'cloudIndex'; //火火兔内容云
 			} else if (type == 1) {
@@ -644,7 +643,14 @@ export default {
 			} else if (type == 2) {
 				url = 'localfile';
 			} else if (type == 3) {
-				this.$router.push({ name: 'locallist', params: { id: 11, name: '我的收藏' } });
+				let file = self.localList.channels;
+				console.log('self.localList========', self.localList);
+				file.forEach(function(item, index) {
+					console.log(item);
+					if (item.name == '我的收藏') {
+						this.$router.push({ name: 'locallist', params: { id: item.cid, name: item.name } });
+					}
+				});
 				return;
 			}
 			this.$router.push({

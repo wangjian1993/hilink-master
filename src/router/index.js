@@ -62,7 +62,8 @@ export default new Router({
 			name: 'cloudIndex',
 			component: () => import('@/views/cloudContent/index.vue'),
 			meta: {
-				title: "火火兔内容云"
+				title: "火火兔内容云",
+				keepAlive: true,
 			}
 		},
 		//火火兔云内容搜索页
@@ -80,7 +81,8 @@ export default new Router({
 			name: 'cloudListen',
 			component: () => import('@/views/cloudContent/listen.vue'),
 			meta: {
-				title: "火火兔内容云"
+				title: "火火兔内容云",
+				keepAlive: true
 			}
 		},
 		//火火兔云内容听儿歌详情页

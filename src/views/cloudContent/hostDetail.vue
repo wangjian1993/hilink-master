@@ -40,7 +40,7 @@ export default {
 	async mounted() {
 		this.isLoaded = true;
 		await http
-			.getHostDetail(this.$route.params.id)
+			.getHostDetail(this.$route.query.id)
 			.then(res => {
 				this.dataList = res.data.content;
 			})
@@ -51,7 +51,7 @@ export default {
 	},
 	methods: {
 		goDetail(id) {
-			this.$router.push({ name: 'cloudListenDetail', params: { id: item } });
+			this.$router.push({ name: 'cloudListenDetail', query: { id: id } });
 		}
 	},
 	beforeRouteLeave(to, from, next) {

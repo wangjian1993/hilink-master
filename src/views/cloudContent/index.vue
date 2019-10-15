@@ -268,7 +268,7 @@ export default {
 		},
 		//跳转主播详情页
 		goHostDetail(id) {
-			this.$router.push({ name: 'cloudHostDetail', params: { id: id } });
+			this.$router.push({ name: 'cloudHostDetail', query: { id: id } });
 		},
 		//跳转详情页
 		goDetail(id) {
@@ -284,6 +284,7 @@ export default {
 		//跳转听儿歌页
 		goListen(type) {
 			this.$router.push({ name: 'cloudListen' });
+			console.log(type);
 			this.$store.state.params = type;
 		},
 		//回到顶部
