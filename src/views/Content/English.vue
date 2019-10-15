@@ -1,6 +1,9 @@
 <template>
 	<div class="app">
-		<div class="english-content">
+		<div class="loading-box" v-if="!loadingFlag">
+			<van-loading size="30px"  color="#007DFF" vertical>加载中</van-loading>
+		</div>
+		<div class="english-content" v-if="loadingFlag">
 			<div class="content-box">
 				<p class="content-title-zh">英文儿歌</p>
 				<p class="content-title-en">Children's song</p>
@@ -92,6 +95,7 @@ export default {
 			title: '英语启蒙',
 			englishData: [],
 			englishAcitve:[],
+			loadingFlag:false,
 			musicList: {
 				'0': {
 					album: 104,
@@ -133,6 +137,7 @@ export default {
 			let self = this;
 			self.$axios.getEnglishData().then(function(res) {
 				self.englishData = res.data.content;
+				self.loadingFlag=true;
 			});
 		},
 		//故事机播放模式

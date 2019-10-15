@@ -77,7 +77,7 @@
 						<div class="devices-audio-else-text">
 							<div>
 								<p>模式</p>
-								<p>{{ playMode == 1 ? '列表循环' : '单曲循环' }}</p>
+								<p :class="playMode == -1 ? '' : 'colorActice'">{{ playMode == 1 ? '列表循环' : '单曲循环' }}</p>
 							</div>
 						</div>
 						<div class="devices-audio-else-icon">
@@ -101,7 +101,7 @@
 						<div class="devices-audio-else-text">
 							<div>
 								<p>耳灯</p>
-								<p>{{ earLight.data.on == 0 ? '已关闭' : '已开启' }}</p>
+								<p :class="earLight.data.on == 0 ? '' : 'colorActice'">{{ earLight.data.on == 0 ? '已关闭' : '已开启' }}</p>
 							</div>
 						</div>
 						<div class="devices-audio-else-icon" @click="devicesSwitch(1)">
@@ -212,7 +212,7 @@ export default {
 		if (window.hilink != undefined) {
 			window['resultCallback'] = resultStr => {
 				console.log('resultStr=======', resultStr);
-				let data = self.praseResponseData(resultStr);		
+				let data = self.praseResponseData(resultStr);
 				console.log('全部返回===========', data);
 				data.services.forEach(function(item, index) {
 					let type = item.sid;
@@ -244,7 +244,9 @@ export default {
 							break;
 					}
 				});
-				setTimeout(function() {self.devicesAction(627, 1, 2);}, 300);
+				setTimeout(function() {
+					self.devicesAction(627, 1, 2);
+				}, 300);
 			};
 			window['deviceInfoCallback'] = resultStr => {
 				console.log('获取设备单独信息======', resultStr);
@@ -273,12 +275,12 @@ export default {
 						self.volume = data.data.volume;
 						break;
 					case 'custom':
-						let customData =data.data.function;
+						let customData = data.data.function;
 						// let json = self.$base64.doDecode(data.data.function);
 						// let customData = JSON.parse(json);
 						console.log('customData====', customData);
 						self.resultFunction(customData);
-						self.loadingFlag =true;
+						self.loadingFlag = true;
 						break;
 					default:
 						break;
@@ -358,6 +360,17 @@ export default {
 						duration: '3000',
 						className: 'toastActive'
 					});
+					break;
+				case 424:
+					if (customData.ret == 0) {
+						self.$toast({
+							message: '歌曲删除成功',
+							position: 'bottom',
+							duration: '3000',
+							className: 'toastActive'
+						});
+						self.devicesAction(641);
+					}
 					break;
 				default:
 					break;
@@ -613,7 +626,7 @@ export default {
 		//进入内容
 		contentBtn(type) {
 			var url;
-			let self =this;
+			let self = this;
 			if (self.isLine == 0 && type != 0) {
 				this.$toast({
 					message: '请旋转火火兔的尾巴开机',
@@ -631,7 +644,7 @@ export default {
 			} else if (type == 2) {
 				url = 'localfile';
 			} else if (type == 3) {
-				this.$router.push({ name: 'locallist', params: { id:11, name:"我的收藏"} });
+				this.$router.push({ name: 'locallist', params: { id: 11, name: '我的收藏' } });
 				return;
 			}
 			this.$router.push({

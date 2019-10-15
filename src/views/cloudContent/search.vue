@@ -82,7 +82,7 @@
     </van-tabs>
     <p class="PageBottom" v-show="isNoMore">暂无更多</p>
     <div class="loadingding center" v-show="isLoaded">
-         <van-loading size="50px" color="#81b4ff">加载中...</van-loading>
+         <van-loading size="30px" color="#007DFF" vertical>加载中...</van-loading>
     </div>
 </div>
 </template>

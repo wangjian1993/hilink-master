@@ -1,236 +1,238 @@
 <template>
 	<div class="container">
 		<!--搜索-->
-		<div class="search">
-			<div class="searchIcon center"><img src="../../assets/images/home_icon_search.png" /></div>
-			<div class="searchInput">
-				<van-cell-group><van-field class="field" v-model="serchValue" placeholder="搜索关键字" @click="goSearch" /></van-cell-group>
-			</div>
-			<div class="selectIcon center"><img src="../../assets/images/home_icon_shaixuan.png" /></div>
-		</div>
-		<!--标签-->
-		<div class="label">
-			<div class="labelCell center" @click="goListen(1)">听儿歌</div>
-			<div class="labelCell center" @click="goListen(2)">讲故事</div>
-			<div class="labelCell center" @click="goListen(3)">学英语</div>
-			<div class="labelCell center" @click="goListen(4)">赏国学</div>
-		</div>
-		<!--轮播-->
-		<div class="swiper">
-			<van-swipe :autoplay="3000" class="swipe">
-				<van-swipe-item v-for="(image, index) in swiperList" :key="index" @click="goDetail(image.link)"><img :src="image.path" /></van-swipe-item>
-			</van-swipe>
-		</div>
-		<!--精品推荐-->
-		<div class="part">
-			<div class="title">
-				<div class="titleLeft">
-					<div class="titleLeftTop">精品推荐</div>
-					<div class="titleLeftBottom">火火兔为您精选好内容</div>
+		<div class="content-box" v-if="!isLoaded">
+			<div class="search">
+				<div class="searchIcon center"><img src="../../assets/images/home_icon_search.png" /></div>
+				<div class="searchInput">
+					<van-cell-group><van-field class="field" v-model="serchValue" placeholder="搜索关键字" @click="goSearch" /></van-cell-group>
 				</div>
-				<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
+				<div class="selectIcon center"><img src="../../assets/images/home_icon_shaixuan.png" /></div>
 			</div>
-			<div class="content">
-				<div class="contentCell" v-for="(item, index) in recommendSpecialList" :key="index" @click="goDetail(item.id)">
-					<img :src="item.coverpath" />
-					<div class="text">{{ item.name }}</div>
-					<div class="text1">{{ item.description }}</div>
-					<!--absolute-->
-					<!-- <div class="pay center">付费</div> -->
-					<div class="number">
-						<img src="../../assets/images/home_icon_yinyue.png" />
-						{{ item.musicCount }}首
+			<!--标签-->
+			<div class="label">
+				<div class="labelCell center" @click="goListen(1)">听儿歌</div>
+				<div class="labelCell center" @click="goListen(2)">讲故事</div>
+				<div class="labelCell center" @click="goListen(3)">学英语</div>
+				<div class="labelCell center" @click="goListen(4)">赏国学</div>
+			</div>
+			<!--轮播-->
+			<div class="swiper">
+				<van-swipe :autoplay="3000" class="swipe">
+					<van-swipe-item v-for="(image, index) in swiperList" :key="index" @click="goDetail(image.link)"><img :src="image.path" /></van-swipe-item>
+				</van-swipe>
+			</div>
+			<!--精品推荐-->
+			<div class="part">
+				<div class="title">
+					<div class="titleLeft">
+						<div class="titleLeftTop">精品推荐</div>
+						<div class="titleLeftBottom">火火兔为您精选好内容</div>
+					</div>
+					<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
+				</div>
+				<div class="content">
+					<div class="contentCell" v-for="(item, index) in recommendSpecialList" :key="index" @click="goDetail(item.id)">
+						<img :src="item.coverpath" />
+						<div class="text">{{ item.name }}</div>
+						<div class="text1">{{ item.description }}</div>
+						<!--absolute-->
+						<!-- <div class="pay center">付费</div> -->
+						<div class="number">
+							<img src="../../assets/images/home_icon_yinyue.png" />
+							{{ item.musicCount }}首
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<!--视频推荐-->
-		<div class="part">
-			<div class="title">
-				<div class="titleLeft">
-					<div class="titleLeftTop">视频推荐</div>
-					<div class="titleLeftBottom">益智视频，精彩不断</div>
+			<!--视频推荐-->
+			<div class="part">
+				<div class="title">
+					<div class="titleLeft">
+						<div class="titleLeftTop">视频推荐</div>
+						<div class="titleLeftBottom">益智视频，精彩不断</div>
+					</div>
+					<router-link to="/cloudContent/videoList" class="titleRight"><img src="../../assets/images/home_icon_more.png" /></router-link>
 				</div>
-				<router-link to="/cloudContent/videoList" class="titleRight"><img src="../../assets/images/home_icon_more.png" /></router-link>
-			</div>
-			<div class="content">
-				<div class="contentCell" v-for="(item, index) in videoList" :key="index" v-if="index< 4" @click="goVideoDetail(item.id)">
-					<img :src="item.picurl" />
-					<div class="text">{{ item.name }}</div>
-					<div class="text1">{{ item.description }}</div>
-					<!--absolute-->
-					<!-- <div class="pay center">付费</div> -->
-					<!-- <div class="number">
-           <img src="../../assets/images/home_icon_yinyue.png"/>
-            {{item.musicCount}}首
-          </div> -->
-				</div>
-			</div>
-		</div>
-		<!--广告位-->
-		<div class="banner" @click="goVideoDetail(link)"><img class="content" :src="getVideoAdPath" /></div>
-		<!--性格养成 -->
-		<div class="part">
-			<div class="title">
-				<div class="titleLeft">
-					<div class="titleLeftTop">性格养成</div>
-					<div class="titleLeftBottom">从小养成好性格</div>
-				</div>
-				<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
-			</div>
-			<div class="content">
-				<div class="contentCell" v-for="(item, index) in getMusicXGYCList" :key="index" @click="goDetail(item.id)">
-					<img :src="item.coverpath" />
-					<div class="text">{{ item.name }}</div>
-					<div class="text1">{{ item.description }}</div>
-					<!--absolute-->
-					<!-- <div class="pay center">付费</div> -->
-					<div class="number">
-						<img src="../../assets/images/home_icon_yinyue.png" />
-						{{ item.musicCount }}首
+				<div class="content">
+					<div class="contentCell" v-for="(item, index) in videoList" :key="index" v-if="index < 4" @click="goVideoDetail(item.id)">
+						<img :src="item.picurl" />
+						<div class="text">{{ item.name }}</div>
+						<div class="text1">{{ item.description }}</div>
+						<!--absolute-->
+						<!-- <div class="pay center">付费</div> -->
+						<!-- <div class="number">
+			   <img src="../../assets/images/home_icon_yinyue.png"/>
+			    {{item.musicCount}}首
+			  </div> -->
 					</div>
 				</div>
 			</div>
-		</div>
-		<!--付费精选-->
-		<!--优选主播-->
-		<div class="part">
-			<div class="title">
-				<div class="titleLeft">
-					<div class="titleLeftTop">优选主播</div>
-					<div class="titleLeftBottom">陪孩子一起听世界</div>
+			<!--广告位-->
+			<div class="banner" @click="goVideoDetail(link)"><img class="content" :src="getVideoAdPath" /></div>
+			<!--性格养成 -->
+			<div class="part">
+				<div class="title">
+					<div class="titleLeft">
+						<div class="titleLeftTop">性格养成</div>
+						<div class="titleLeftBottom">从小养成好性格</div>
+					</div>
+					<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
 				</div>
-				<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
-			</div>
-			<div class="content1">
-				<div class="content1Cell" v-for="(item, index) in getHostFMList" :key="index" @click="goHostDetail(item.id)">
-					<div class="img"><img :src="item.pic" /></div>
-					<div class="text">
-						<div class="textName">{{ item.name }}</div>
-						<div class="introduct">{{ item.introduction }}</div>
-						<!-- <div class="hot"><div class="text">100万人气</div></div> -->
+				<div class="content">
+					<div class="contentCell" v-for="(item, index) in getMusicXGYCList" :key="index" @click="goDetail(item.id)">
+						<img :src="item.coverpath" />
+						<div class="text">{{ item.name }}</div>
+						<div class="text1">{{ item.description }}</div>
+						<!--absolute-->
+						<!-- <div class="pay center">付费</div> -->
+						<div class="number">
+							<img src="../../assets/images/home_icon_yinyue.png" />
+							{{ item.musicCount }}首
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<!--国学熏陶 -->
-		<div class="part">
-			<div class="title">
-				<div class="titleLeft">
-					<div class="titleLeftTop">国学熏陶</div>
-					<div class="titleLeftBottom">培养孩子良好品德素养</div>
+			<!--付费精选-->
+			<!--优选主播-->
+			<div class="part">
+				<div class="title">
+					<div class="titleLeft">
+						<div class="titleLeftTop">优选主播</div>
+						<div class="titleLeftBottom">陪孩子一起听世界</div>
+					</div>
+					<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
 				</div>
-				<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
-			</div>
-			<div class="content">
-				<div class="contentCell" v-for="(item, index) in getgxxtDataList" :key="index" @click="goDetail(item.id)">
-					<img :src="item.coverpath" />
-					<div class="text">{{ item.name }}</div>
-					<div class="text1">{{ item.description }}</div>
-					<!--absolute-->
-					<!-- <div class="pay center">付费</div> -->
-					<div class="number">
-						<img src="../../assets/images/home_icon_yinyue.png" />
-						{{ item.musicCount }}首
+				<div class="content1">
+					<div class="content1Cell" v-for="(item, index) in getHostFMList" :key="index" @click="goHostDetail(item.id)">
+						<div class="img"><img :src="item.pic" /></div>
+						<div class="text">
+							<div class="textName">{{ item.name }}</div>
+							<div class="introduct">{{ item.introduction }}</div>
+							<!-- <div class="hot"><div class="text">100万人气</div></div> -->
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<!--财商启蒙 -->
-		<div class="part">
-			<div class="title">
-				<div class="titleLeft">
-					<div class="titleLeftTop">财商启蒙</div>
-					<div class="titleLeftBottom">孩子的财商是这么玩出来的</div>
+			<!--国学熏陶 -->
+			<div class="part">
+				<div class="title">
+					<div class="titleLeft">
+						<div class="titleLeftTop">国学熏陶</div>
+						<div class="titleLeftBottom">培养孩子良好品德素养</div>
+					</div>
+					<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
 				</div>
-				<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
-			</div>
-			<div class="content">
-				<div class="contentCell" v-for="(item, index) in getcsqmDataList" :key="index" @click="goDetail(item.id)">
-					<img :src="item.coverpath" />
-					<div class="text">{{ item.name }}</div>
-					<div class="text1">{{ item.description }}</div>
-					<!--absolute-->
-					<!-- <div class="pay center">付费</div> -->
-					<div class="number">
-						<img src="../../assets/images/home_icon_yinyue.png" />
-						{{ item.musicCount }}首
+				<div class="content">
+					<div class="contentCell" v-for="(item, index) in getgxxtDataList" :key="index" @click="goDetail(item.id)">
+						<img :src="item.coverpath" />
+						<div class="text">{{ item.name }}</div>
+						<div class="text1">{{ item.description }}</div>
+						<!--absolute-->
+						<!-- <div class="pay center">付费</div> -->
+						<div class="number">
+							<img src="../../assets/images/home_icon_yinyue.png" />
+							{{ item.musicCount }}首
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<!--情商培养 -->
-		<div class="part">
-			<div class="title">
-				<div class="titleLeft">
-					<div class="titleLeftTop">情商培养</div>
-					<div class="titleLeftBottom">从小就做聪明人</div>
+			<!--财商启蒙 -->
+			<div class="part">
+				<div class="title">
+					<div class="titleLeft">
+						<div class="titleLeftTop">财商启蒙</div>
+						<div class="titleLeftBottom">孩子的财商是这么玩出来的</div>
+					</div>
+					<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
 				</div>
-				<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
-			</div>
-			<div class="content">
-				<div class="contentCell" v-for="(item, index) in getqspyDataList" :key="index" @click="goDetail(item.id)">
-					<img :src="item.coverpath" />
-					<div class="text">{{ item.name }}</div>
-					<div class="text1">{{ item.description }}</div>
-					<!--absolute-->
-					<!-- <div class="pay center">付费</div> -->
-					<div class="number">
-						<img src="../../assets/images/home_icon_yinyue.png" />
-						{{ item.musicCount }}首
+				<div class="content">
+					<div class="contentCell" v-for="(item, index) in getcsqmDataList" :key="index" @click="goDetail(item.id)">
+						<img :src="item.coverpath" />
+						<div class="text">{{ item.name }}</div>
+						<div class="text1">{{ item.description }}</div>
+						<!--absolute-->
+						<!-- <div class="pay center">付费</div> -->
+						<div class="number">
+							<img src="../../assets/images/home_icon_yinyue.png" />
+							{{ item.musicCount }}首
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<!--哄睡儿歌 -->
-		<div class="part">
-			<div class="title">
-				<div class="titleLeft">
-					<div class="titleLeftTop">哄睡儿歌</div>
-					<div class="titleLeftBottom">小摇床，轻轻晃，月亮伴我入梦乡</div>
+			<!--情商培养 -->
+			<div class="part">
+				<div class="title">
+					<div class="titleLeft">
+						<div class="titleLeftTop">情商培养</div>
+						<div class="titleLeftBottom">从小就做聪明人</div>
+					</div>
+					<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
 				</div>
-				<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
-			</div>
-			<div class="content">
-				<div class="contentCell" v-for="(item, index) in getSleepDataList" :key="index" @click="goDetail(item.id)">
-					<img :src="item.coverpath" />
-					<div class="text">{{ item.name }}</div>
-					<div class="text1">{{ item.description }}</div>
-					<!--absolute-->
-					<!-- <div class="pay center">付费</div> -->
-					<div class="number">
-						<img src="../../assets/images/home_icon_yinyue.png" />
-						{{ item.musicCount }}首
+				<div class="content">
+					<div class="contentCell" v-for="(item, index) in getqspyDataList" :key="index" @click="goDetail(item.id)">
+						<img :src="item.coverpath" />
+						<div class="text">{{ item.name }}</div>
+						<div class="text1">{{ item.description }}</div>
+						<!--absolute-->
+						<!-- <div class="pay center">付费</div> -->
+						<div class="number">
+							<img src="../../assets/images/home_icon_yinyue.png" />
+							{{ item.musicCount }}首
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<!--最新上架 -->
-		<div class="part" style="padding-bottom: 60px;">
-			<div class="title">
-				<div class="titleLeft">
-					<div class="titleLeftTop">最新上架</div>
-					<div class="titleLeftBottom">好多新内容，快来听听吧</div>
+			<!--哄睡儿歌 -->
+			<div class="part">
+				<div class="title">
+					<div class="titleLeft">
+						<div class="titleLeftTop">哄睡儿歌</div>
+						<div class="titleLeftBottom">小摇床，轻轻晃，月亮伴我入梦乡</div>
+					</div>
+					<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
 				</div>
-				<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
-			</div>
-			<div class="content">
-				<div class="contentCell" v-for="(item, index) in getNewSpecialsList" :key="index" @click="goDetail(item.id)">
-					<img :src="item.coverpath" />
-					<div class="text">{{ item.name }}</div>
-					<div class="text1">{{ item.description }}</div>
-					<!--absolute-->
-					<!-- <div class="pay center">付费</div> -->
-					<div class="number">
-						<img src="../../assets/images/home_icon_yinyue.png" />
-						{{ item.musicCount }}首
+				<div class="content">
+					<div class="contentCell" v-for="(item, index) in getSleepDataList" :key="index" @click="goDetail(item.id)">
+						<img :src="item.coverpath" />
+						<div class="text">{{ item.name }}</div>
+						<div class="text1">{{ item.description }}</div>
+						<!--absolute-->
+						<!-- <div class="pay center">付费</div> -->
+						<div class="number">
+							<img src="../../assets/images/home_icon_yinyue.png" />
+							{{ item.musicCount }}首
+						</div>
 					</div>
 				</div>
 			</div>
+			<!--最新上架 -->
+			<div class="part" style="padding-bottom: 60px;">
+				<div class="title">
+					<div class="titleLeft">
+						<div class="titleLeftTop">最新上架</div>
+						<div class="titleLeftBottom">好多新内容，快来听听吧</div>
+					</div>
+					<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
+				</div>
+				<div class="content">
+					<div class="contentCell" v-for="(item, index) in getNewSpecialsList" :key="index" @click="goDetail(item.id)">
+						<img :src="item.coverpath" />
+						<div class="text">{{ item.name }}</div>
+						<div class="text1">{{ item.description }}</div>
+						<!--absolute-->
+						<!-- <div class="pay center">付费</div> -->
+						<div class="number">
+							<img src="../../assets/images/home_icon_yinyue.png" />
+							{{ item.musicCount }}首
+						</div>
+					</div>
+				</div>
+			</div>
+			<p class="PageBottom" v-show="isShowNoMore">暂无更多</p>
 		</div>
-		<p class="PageBottom" v-show="isShowNoMore">暂无更多</p>
-		<div class="loadingding center" v-show="isLoaded"><van-loading size="50px" color="#81b4ff">加载中...</van-loading></div>
-		<div class="goTop" v-show="isBottom" @click="goTop"><img src="../../assets/images/top.png" /></div>
+		<div class="loadingding center" v-show="isLoaded"><van-loading size="30px" vertical color="#007DFF">加载中</van-loading></div>
+		<!-- <div class="goTop" v-show="isBottom" @click="goTop"><img src="../../assets/images/top.png" /></div> -->
 	</div>
 </template>
 

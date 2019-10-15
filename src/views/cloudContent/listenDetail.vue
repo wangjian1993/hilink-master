@@ -1,50 +1,52 @@
 <template>
 	<div class="container">
 		<v-header :title="title"></v-header>
-		<div class="musicTitle">
-			<div class="musicImgBox"><img :src="info.coverpath" class="musicImg" /></div>
-			<div>
-				<div class="musicName">{{ info.name }}</div>
-				<div class="musicMusic">共{{ info.musicCount }}首</div>
-			</div>
-			<div class="all-down" @click="allDownClick()">
-				<p><img src="../../assets/images/icon_download_no.png" alt=""></p>
-			</div>
-		</div>
-		<div class="musicIntro">
-			专辑介绍
-			<div class="">{{ info.description }}</div>
-		</div>
-		<div class="music-list">
-			<div v-for="(item, index) in musicList" :key="index">
-				<div v-bind:class="[active == index ? 'active' : '', 'musicList']">
-					<div class="left" @click="show(index)">
-						<p class="inroName">{{ item.name }}</p>
-						<p class="inroName">{{ item.timelength }}</p>
-					</div>
-					<div class="right" @click="devicesMusic(1, item)">
-						<img src="../../assets/images/icon_demand.png" />
-						<div style="color: #000000;">点播</div>
-					</div>
+		<div class="content">
+			<div class="musicTitle">
+				<div class="musicImgBox"><img :src="info.coverpath" class="musicImg" /></div>
+				<div>
+					<div class="musicName">{{ info.name }}</div>
+					<div class="musicMusic">共{{ info.musicCount }}首</div>
 				</div>
-				<div class="playOrFavor" v-if="showIndex == index && showTab">
-					<div class="playCell" @click="play(item.path, index)">
-						<img src="../../assets/images/icon_listen_pause.png" class="rightImg" v-show="active != index" />
-						<img src="../../assets/images/icon_listen_playing.png" class="rightImg" v-show="active == index" />
-						<p v-bind:class="[active == index ? 'active' : '']">试听</p>
-					</div>
-					<div class="playCell" @click="devicesMusic(2, item)">
-						<img src="../../assets/images/sc.png" />
-						<p>收藏</p>
-					</div>
-					<div class="playCell" @click="devicesMusic(3, item)">
-						<img src="../../assets/images/icon_download_1.png" />
-						<p>下载</p>
-					</div>
+				<div class="all-down" @click="allDownClick()">
+					<p><img src="../../assets/images/icon_download_no.png" alt="" /></p>
 				</div>
 			</div>
+			<div class="musicIntro">
+				专辑介绍
+				<div class="">{{ info.description }}</div>
+			</div>
+			<div class="music-list">
+				<div v-for="(item, index) in musicList" :key="index">
+					<div v-bind:class="[active == index ? 'active' : '', 'musicList']">
+						<div class="left" @click="show(index)">
+							<p class="inroName">{{ item.name }}</p>
+							<p class="inroName">{{ item.timelength }}</p>
+						</div>
+						<div class="right" @click="devicesMusic(1, item)">
+							<img src="../../assets/images/icon_demand.png" />
+							<div style="color: #000000;">点播</div>
+						</div>
+					</div>
+					<div class="playOrFavor" v-if="showIndex == index && showTab">
+						<div class="playCell" @click="play(item.path, index)">
+							<img src="../../assets/images/icon_listen_pause.png" class="rightImg" v-show="active != index" />
+							<img src="../../assets/images/icon_listen_playing.png" class="rightImg" v-show="active == index" />
+							<p v-bind:class="[active == index ? 'active' : '']">试听</p>
+						</div>
+						<div class="playCell" @click="devicesMusic(2, item)">
+							<img src="../../assets/images/sc.png" />
+							<p>收藏</p>
+						</div>
+						<div class="playCell" @click="devicesMusic(3, item)">
+							<img src="../../assets/images/icon_download_1.png" />
+							<p>下载</p>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
-		<div class="loadingding center" v-show="isLoaded"><van-loading size="50px" color="#81b4ff">加载中...</van-loading></div>
+		<div class="loadingding center" v-show="isLoaded"><van-loading size="30px" color="#007DFF" vertical>加载中</van-loading></div>
 		<p class="PageBottom">暂无更多</p>
 	</div>
 </template>
@@ -127,8 +129,8 @@ export default {
 				};
 			}
 		},
-		allDownClick(){
-			let id =this.$route.query.id
+		allDownClick() {
+			let id = this.$route.query.id;
 			if (!parseInt(id)) {
 				return;
 			}
@@ -200,19 +202,19 @@ export default {
 								url: path
 							}
 						]
-					};			
+					};
 					break;
 				case 3:
-					var id =item.music_id.toString()
+					var id = item.music_id.toString();
 					body = {
 						from: 'DID:0',
 						to: 'UID:-1',
 						action: 409,
-						songlistname:"最新下载",
+						songlistname: '最新下载',
 						songlistid: self.info.id,
 						songs: [
 							{
-								id:id,
+								id: id,
 								name: item.name,
 								fmt: 'mp3',
 								url: path
@@ -233,7 +235,7 @@ export default {
 			let data = { custom: { function: json, name: 'function' } };
 			console.log('data=========', data);
 			self.setDeviceInfo(data);
-		},300),
+		}, 300)
 	},
 
 	components: {

@@ -124,6 +124,7 @@ export default new Router({
 			name: 'cloudVideoList',
 			component: () => import('@/views/cloudContent/videoList.vue'),
 			meta: {
+				title: "视频推荐",
 				keepAlive: false
 			}
 		},

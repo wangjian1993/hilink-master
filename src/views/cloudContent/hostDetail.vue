@@ -24,7 +24,7 @@
 			</div>
 		</div>
 		<p class="PageBottom">暂无更多</p>
-		<div class="loadingding center" v-show="isLoaded"><van-loading size="50px">加载中...</van-loading></div>
+		<div class="loadingding center" v-show="isLoaded"><van-loading size="30px" color="#007DFF" vertical>加载中</van-loading></div>
 	</div>
 </template>
 
