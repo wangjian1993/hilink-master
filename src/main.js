@@ -18,16 +18,39 @@ Vue.use(hilink);
 Vue.prototype.$base64 = base64;
 //vant按需加载组件
 import {
-  Button,NavBar,Slider,Toast,DatetimePicker,Popup,Field,Swipe, SwipeItem, Tab, Tabs,Icon,Loading ,NoticeBar ,Dialog,Picker,Cell,CellGroup,CheckboxGroup,Checkbox
+	Button,
+	NavBar,
+	Slider,
+	Toast,
+	DatetimePicker,
+	Popup,
+	Field,
+	Swipe,
+	SwipeItem,
+	Tab,
+	Tabs,
+	Icon,
+	Loading,
+	NoticeBar,
+	Dialog,
+	Picker,
+	Cell,
+	CellGroup,
+	CheckboxGroup,
+	Checkbox,
+	RadioGroup,
+	Radio
 } from 'vant';
-Vue.use(Tab).use(Tabs).use(Button).use(NavBar).use(Slider).use(Toast).use(DatetimePicker).use(Popup).use(Field).use(Icon).use(Loading).use(NoticeBar).use(Dialog ).use(Picker).use(Cell).use(CellGroup).use(CheckboxGroup).use(Checkbox);
+Vue.use(Tab).use(Tabs).use(Button).use(NavBar).use(Slider).use(Toast).use(DatetimePicker).use(Popup).use(Field).use(
+	Icon).use(Loading).use(NoticeBar).use(Dialog).use(Picker).use(Cell).use(CellGroup).use(CheckboxGroup).use(Checkbox).use(
+	RadioGroup).use(Radio);
 Vue.use(Swipe).use(SwipeItem);
 Vue.use(VueVideoPlayer)
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios;
 
 new Vue({
-  router,
-  store,
-  render: h => h(App)
+	router,
+	store,
+	render: h => h(App)
 }).$mount('#app')

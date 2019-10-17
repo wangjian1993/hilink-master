@@ -39,8 +39,8 @@ export default {
 		onClickRight() {
 			//设置
 			if (window.hilink != undefined) {
-				// this.$router.push({ name: 'setting'});
-				window.hilink.jumpTo('com.huawei.smarthome.deviceSettingActivity', 'devicesInfo');
+				this.$router.push({ name: 'setting'});
+				// window.hilink.jumpTo('com.huawei.smarthome.deviceSettingActivity', 'devicesInfo');
 			}
 		},
 		// 离线帮助
