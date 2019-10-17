@@ -3,11 +3,11 @@
 		<v-header :title="title"></v-header>
 		<div class="list-content">
 			<div class="loading-box" v-if="!loading">
-				<van-loading type="spinner" vertical color="#007DFF" />
-				<!-- <van-loading size="24px" type="spinner" vertical color="#007DFF">加载中...</van-loading> -->
+				<!-- <van-loading type="spinner" vertical color="#007DFF" /> -->
+				<van-loading size="24px" type="spinner" vertical color="#007DFF">加载中</van-loading>
 			</div>
 			<div class="local-list" v-if="loading">
-				<p class="nullBox" v-if="localSongList.songs.length == 0">暂无歌曲</p>
+				<p class="nullBox" v-if="localSongList.songs.length == 0 && loading">暂无歌曲</p>
 				<ul>
 					<li v-for="(opt, index) in localSongList.songs">
 						<p @click="localSongPut(index)" :class="cid == musicData.channel && index == musicData.idx ? 'textActive' : ''">{{ opt.name }}</p>
@@ -53,8 +53,6 @@ export default {
 		this.cid = this.$route.params.id;
 		this.cname = this.$route.params.name;
 		this.title = this.$route.params.name;
-		console.log(this.cid);
-		console.log(this.cname);
 		this.getSongsTotal();
 		this.beginNumber = 0;
 		this.limitNumber = 0;
@@ -67,11 +65,13 @@ export default {
 		let self = this;
 		if (window.hilink != undefined) {
 			window['songsListBack'] = resultStr => {
+				console.log('获取文件歌曲列表', resultStr);
 				let data = self.praseResponseData(resultStr);
 				if (data.errcode == 0) {
 					self.cangetlocal = true;
 					if (self.beginNumber == 0) {
 						self.devicesPage();
+						self.loading = true;
 						console.log('第一次调用=============');
 					} else {
 						self.beginNumber = self.beginNumber + 1;
@@ -104,7 +104,7 @@ export default {
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json, name: 'function' } };
 			self.setDeviceSongsInfo(data, 'songsListBack');
-			self.loading = true;
+			// self.$store.dispatch("getSongsList", data);
 		},
 		devicesPage: _debounce(function() {
 			let self = this;
@@ -133,6 +133,7 @@ export default {
 			let data = { custom: { function: json, name: 'function' } };
 
 			console.log('beginNumberbeginNumber111111===========', self.beginNumber);
+			// self.$store.dispatch("getSongsList", data);
 			self.setDeviceSongsInfo(data, 'songsListBack');
 		}, 400),
 		songDel(item, index) {
@@ -159,6 +160,7 @@ export default {
 					let json = JSON.stringify(body);
 					let data = { custom: { function: json, name: 'function' } };
 					console.log('删除歌曲====', data);
+					// self.$store.dispatch("setDevInfo", data);
 					self.setDeviceSongsInfo(data, 'delListBack');
 				})
 				.catch(() => {
@@ -181,7 +183,7 @@ export default {
 			};
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json, name: 'function' } };
-			self.setDeviceInfo(data);
+			self.$store.dispatch('setDevInfo', data);
 		},
 		toBottom() {
 			let that = this;

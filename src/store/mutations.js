@@ -25,11 +25,162 @@ const mutations = {
 		// 	state.localSongList = data;
 		// }
 	},
-	[types.SET_MUSICDATA](state,data){
-		state.musicData =data;
+	[types.SET_MUSICDATA](state, data) {
+		state.musicData = data;
 	},
-	[types.SET_PLAYMODE](state,data){
-		state.playMode =data;
+	[types.SET_PLAYMODE](state, data) {
+		state.playMode = data;
+	},
+	[types.SETLOCALCID](state, data) {
+		state.songsCid = data;
+	},
+	[types.LOADINGFLAG](state,data){
+		state.loadingFlag =data;
+	},
+	setDevName(state,data){
+		state.devName =data;
+		console.log("state.devName==",state.devName)
+	},
+	resultData(state, resData) {
+		let type = resData;
+		state.loadingFlag =true
+		switch (type.sid) {
+			case 'switch':
+				state.lampSwitch = resData.data.on;
+				state.isLine = resData.data.on;
+				console.log("设备上报开关===", state.lampSwitch);
+				break;
+			case 'Music':
+				state.audioInfo.song = resData.data.song;
+				state.audioInfo.cutSong = resData.data.cutSong;
+				state.audioInfo.play = resData.data.play;
+				state.volume = resData.data.volume;
+				console.log("音乐上下一曲", state.audioInfo.cutSong)
+				console.log("音乐开关===", state.audioInfo.play)
+				console.log("音乐名称===", state.audioInfo.song)
+				console.log("音乐音量===", state.volume)
+				break;
+			case 'earLight':
+				state.earLight.on = resData.data.on;
+				console.log("设备耳灯", state.earLight.on)
+				break;
+			case 'faceLight':
+				state.faceLight.on = resData.data.on;
+				console.log("设备表情灯", state.faceLight.on)
+				break;
+			case "custom":
+				if (resData.data.action == '104') {
+					state.playMode = resData.data.playmode;
+					console.log("设备播放模式====", state.playMode);
+				}
+				break;
+			default:
+				break;
+		}
+		// });
+	},
+	resultFunction(state, customData) {
+		var self = this;
+		if (customData == undefined) {
+			return;
+		}
+		let action = customData.action;
+		state.loadingFlag =true
+		switch (action) {
+			case 910:
+				state.playMode = customData.playmode;
+				console.log("设置播放模式===", state.playMode)
+				break;
+			case 628:
+				state.lookData = customData.on;
+				console.log("设置童锁===", state.lookData)
+				break;
+			case 406:
+				console.log("customData.lists[0]", customData.lists[0])
+				state.localList = customData.lists[0];
+				let localListArray = state.localList.channels;
+				localListArray.forEach(function(item, i) {
+					if (item.name == "我的收藏") {
+						state.loveCid = item.cid
+					}
+				});
+				console.log("state.loveCid===", state.loveCid)
+				console.log("state.localList===", state.localList)
+				break;
+			case 402:
+				let obj = {
+					total: 0,
+					channel: -1,
+					songs: []
+				};
+				console.log("本地列表===", customData)
+				console.log("文件id==", state.songsCid);
+				let array = state.localSongList.songs
+				state.localSongList.songs = array.concat(customData.songs);
+				state.localSongList.channel = customData.channel;
+				state.localSongList.total = customData.total;
+				state.localTotal = customData.total;
+				console.log("获取本地歌曲列表===", state.localSongList)
+				break;
+			case 642:
+				let albumArray = [];
+				let str = customData.albumid;
+				let str1 = str.split(":");
+				str1.forEach(function(item, index) {
+					albumArray.push(item.split("="))
+				})
+				state.albumid = albumArray;
+				console.log("英语启蒙查询===", state.albumid)
+				break;
+			case 417:
+				if (customData.ret == 0) {
+					// this.$toast({
+					// 	message: "歌曲收藏成功",
+					// 	position: "bottom",
+					// 	duration: "3000",
+					// 	className: "toastActive"
+					// });
+				}
+				break;
+			case 638:
+				break;
+			case 104:
+				state.musicData = customData;
+				break;
+			case 410:
+				// this.$toast({
+				// 	message: "歌曲添加下载成功",
+				// 	position: "bottom",
+				// 	duration: "3000",
+				// 	className: "toastActive"
+				// });
+				break;
+			case 424:
+				if (customData.ret == 0) {
+					this.$toast({
+						message: "歌曲删除成功",
+						position: "bottom",
+						duration: "3000",
+						className: "toastActive"
+					});
+					this.devicesAction(641);
+				}
+				break;
+			case 632:
+				var tmp = Date.parse(new Date()).toString();
+				tmp = parseInt(tmp.substr(0, 10));
+				console.log("现在时间===", tmp);
+				console.log("设置时间===", customData.timestamp)
+				if (tmp < customData.timestamp) {
+					let m = (customData.timestamp - tmp) / 60;
+					state.deviceTime = parseInt(m - 480);
+				} else {
+					state.deviceTime = 0;
+				}
+				break;
+			default:
+				break;
+		}
 	},
 }
 export default mutations

@@ -3,26 +3,27 @@
 		<div class="play-img"><img src="../assets/images/Photo_player_J7.100x100.png" alt="" /></div>
 		<div class="play-text">
 			<marquee class="songstitle" direction="left" behavior="scroll" scrollamount="2" scrolldelay="0" loop="-1" width="100%" height="100%">
-				{{ playData.data.song != '' ? playData.data.song : '歌曲正在路上' }}
+				{{ audioInfo.song != '' ? audioInfo.song : '歌曲正在路上' }}
 			</marquee>
 		</div>
 		<div class="play-btn">
 			<p @click="devicesSwitch(3)"><img src="../assets/images/icon_device_pre.png" alt="" /></p>
 			<p @click="devicesSwitch(5)">
-				<img v-if="playData.data.play == 1" src="../assets/images/icon_device_play.png" alt="" />
-				<img v-if="playData.data.play == 0" src="../assets/images/icon_device_pause.png" alt="" />
+				<img v-if="audioInfo.play == 1" src="../assets/images/icon_device_play.png" alt="" />
+				<img v-if="audioInfo.play == 0" src="../assets/images/icon_device_pause.png" alt="" />
 			</p>
 			<p @click="devicesSwitch(4)"><img src="../assets/images/icon_device_next.png" alt="" /></p>
 			<p @click="devicesModeAction()">
+				<img v-if="playMode == -1" class="play-mode" src="../assets/images/icon_device_loop.png" alt="" />
 				<img v-if="playMode == 0" class="play-mode" src="../assets/images/icon_device_one.png" alt="" />
-				<img v-if="playMode == 1"  class="play-mode" src="../assets/images/icon_device_loop.png" alt="" />
+				<img v-if="playMode == 1" class="play-mode" src="../assets/images/icon_device_loop.png" alt="" />
 			</p>
 		</div>
 	</div>
 </template>
 
 <script>
-import {mapState ,mapGetters } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 export default {
 	data() {
 		return {
@@ -30,19 +31,11 @@ export default {
 			// playmode:-1,
 		};
 	},
-	created() {
-		
-	},
 	computed: {
-		...mapState({
-			playData: state => state.playData,
-			playMode:state => state.playMode
-		})
-		// ...mapGetters(['gettersPlayData'])
+		...mapState(['playMode', 'audioInfo','isLine'])
 	},
-	watch: {
-		
-	},
+	created() {},
+	watch: {},
 	methods: {
 		/*
 		 *设备开关控制
@@ -55,33 +48,39 @@ export default {
 		 * 5:播放暂停
 		 */
 		devicesSwitch(type) {
-			console.log('设备开关');
 			let self = this;
+			if (self.isLine == 0) {
+				self.$toast({
+					message: '请旋转火火兔的尾巴开机',
+					position: 'bottom',
+					duration: '3000',
+					className: 'toastActive'
+				});
+				return;
+			}
 			if (window.hilink != undefined) {
 				var data;
 				var on;
 				switch (type) {
 					case 3:
-						data = { Music: { cutSong: 0, name: 'cutSong' } };
+						data = { Music: { cutSong: 0 } };
 						break;
 					case 4:
-						data = { Music: { cutSong: 1, name: 'cutSong' } };
+						data = { Music: { cutSong: 1} };
 						break;
 					case 5:
-						on = self.playData.data.play == 1 ? 0 : 1;
+						on = self.audioInfo.play == 1 ? 0 : 1;
 						data = { Music: { play: on, name: 'play' } };
 					default:
 						break;
 				}
-				console.log(data);
-				self.setDeviceInfo(data);
+				self.$store.dispatch('setDevInfo', data);
 			}
 		},
 		//故事机播放模式
 		devicesModeAction() {
 			let self = this;
-			console.log("self.playMod=======",self.playMod)
-			let mode =self.playMode ==1?0:1;
+			let mode = self.playMode == 1 ? 0 : 1;
 			var body = {
 				from: 'DID:0',
 				to: 'UID:-1',
@@ -90,8 +89,8 @@ export default {
 			};
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json, name: 'function' } };
-			self.setDeviceInfo(data);
-		},
+			self.$store.dispatch('setDevInfo', data);
+		}
 	}
 };
 </script>

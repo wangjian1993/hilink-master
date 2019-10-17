@@ -31,6 +31,9 @@ export default {
 			window['titleVisibleCallback'] = resultStr => {
 				console.log('导航回调函数====', resultStr);
 			};
+			window['onResume'] = res => {
+				console.log('手机恢复后台');
+			};
 			//获取设备全部信息回调
 		}
 	},
@@ -45,12 +48,12 @@ export default {
 	watch: {
 		$route(e) {
 			this.title = e.meta.title;
-			if (e.name != 'home' && e.name != '' && e.name != 'cloudAllDown') {
+			if (e.name != 'home' && e.name != '' && e.name != 'cloudAllDown' && e.name != "setting") {
 				this.isPlay = true;
-				console.log('显示');
+				//console.log('显示');
 			} else {
 				this.isPlay = false;
-				console.log('隐藏');
+				//console.log('隐藏');
 			}
 		}
 	},
@@ -123,5 +126,8 @@ html {
 	margin: 0 auto;
 	overflow: auto hidden;
 	/* overflow: hidden; */
+}
+.van-overlay{
+	background-color: rgba(0,0,0,.3);
 }
 </style>

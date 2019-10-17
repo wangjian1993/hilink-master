@@ -9,12 +9,18 @@ export default new Router({
 	routes: [{ //首页
 			path: '/',
 			name: 'home',
-			component: () => import( /* webpackChunkName: "home" */ '@/views/Home/Home.vue')
+			component: () => import( /* webpackChunkName: "home" */ '@/views/Home/Home.vue'),
+			meta: {
+				keepAlive: true,
+			}
 		},
 		{ //离线帮助
-			path: '/help',
-			name: 'help',
-			component: () => import( /* webpackChunkName: "help" */ '@/views/Home/Help.vue')
+			path: '/setting',
+			name: 'setting',
+			component: () => import( /* webpackChunkName: "help" */ '@/views/Home/Setting.vue'),
+			meta: {
+				title: "设置",
+			}
 		},
 		{
 			path: '/instructions',
@@ -31,12 +37,21 @@ export default new Router({
 			}
 		},
 		{ //启蒙英语
+			path: '/locallistEn',
+			name: 'locallisEn',
+			component: () => import( /* webpackChunkName: "english" */ '@/views/Content/LocalListEn.vue'),
+			meta: {
+				title: "我的收藏",
+				keepAlive: false,
+			}
+		},
+		{ //启蒙英语
 			path: '/localfile',
 			name: 'localfile',
 			component: () => import( /* webpackChunkName: "english" */ '@/views/Content/LocalFile.vue'),
 			meta: {
 				title: "本地歌曲列表",
-				keepAlive: false,
+				keepAlive: true,
 			}
 		},
 		{ //本地内容
@@ -45,7 +60,7 @@ export default new Router({
 			component: () => import( /* webpackChunkName: "english" */ '@/views/Content/English.vue'),
 			meta: {
 				title: "英语启蒙",
-				keepAlive: false,
+				keepAlive: true,
 			}
 		},
 		{ //首页
@@ -89,7 +104,7 @@ export default new Router({
 		{
 			path: '/cloudContent/listenDetail',
 			name: 'cloudListenDetail',
-			component: () => import(/* webpackChunkName: "cloudListenDetail" */'@/views/cloudContent/listenDetail.vue'),
+			component: () => import( /* webpackChunkName: "cloudListenDetail" */ '@/views/cloudContent/listenDetail.vue'),
 			meta: {
 				keepAlive: false,
 			}
@@ -97,7 +112,7 @@ export default new Router({
 		{
 			path: '/cloudContent/allDown',
 			name: 'cloudAllDown',
-			component: () => import(/* webpackChunkName: "cloudListenDetail" */'@/views/cloudContent/allDown.vue'),
+			component: () => import( /* webpackChunkName: "cloudListenDetail" */ '@/views/cloudContent/allDown.vue'),
 			meta: {
 				keepAlive: false,
 			}
@@ -132,4 +147,3 @@ export default new Router({
 		},
 	]
 })
-

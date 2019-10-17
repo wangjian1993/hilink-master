@@ -15,5 +15,5 @@ export default new vuex.Store({
   getters,
   mutations,
   actions,
-  plugins: debug ? [createLogger()] : [] // 开发环境下显示vuex的状态修改
+  //plugins: debug ? [createLogger()] : [] // 开发环境下显示vuex的状态修改
 });

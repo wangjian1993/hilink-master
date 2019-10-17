@@ -17,7 +17,7 @@
 export default {
 	props: {
 		title: '',
-		type: '',
+		type: ''
 	},
 	data() {
 		return {};
@@ -39,6 +39,7 @@ export default {
 		onClickRight() {
 			//设置
 			if (window.hilink != undefined) {
+				// this.$router.push({ name: 'setting'});
 				window.hilink.jumpTo('com.huawei.smarthome.deviceSettingActivity', 'devicesInfo');
 			}
 		},
@@ -58,29 +59,27 @@ export default {
 	top: 0px;
 	background: #ffffff;
 	height: 80px;
-	z-index: 3000;
+	z-index: 1000;
 }
 .home-header {
 	margin-top: 24px;
 	height: 56px;
 	display: flex;
 	.home-header-back {
-		position: relative;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		width: 56px;
 		height: 100%;
 		img {
 			display: block;
 			width: 20px;
 			height: 20px;
-			position: absolute;
-			left: 18px;
-			top: 18px;
 		}
 	}
 	.home-header-title {
 		width: 218.3px;
 		height: 100%;
-		line-height: 56px;
 		overflow: hidden;
 		white-space: nowrap;
 		width: 100%;
@@ -88,7 +87,9 @@ export default {
 		p {
 			color: #000000;
 			text-align: left;
-			font-size: 24px;
+			font-size: 20px;
+			margin-left: 0px;
+			line-height: 56px;
 		}
 	}
 	.home-header-more {

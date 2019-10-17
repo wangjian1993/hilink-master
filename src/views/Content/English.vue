@@ -1,8 +1,6 @@
 <template>
 	<div class="app">
-		<div class="loading-box" v-if="!loadingFlag">
-			<van-loading size="30px"  color="#007DFF" vertical>加载中</van-loading>
-		</div>
+		<div class="loading-box" v-if="!loadingFlag"><van-loading size="30px" color="#007DFF" vertical>加载中</van-loading></div>
 		<div class="english-content" v-if="loadingFlag">
 			<div class="content-box">
 				<p class="content-title-zh">英文儿歌</p>
@@ -10,9 +8,9 @@
 				<div class="song-list">
 					<ul class="song">
 						<li v-for="(item, index) in englishData[104]">
-							<div class="path-div">
+							<div class="path-div" @click="cloudAlbum(item.id)">
 								<img :src="item.coverpath" alt="" class="path-img" />
-								<img src="../../assets/images/xz.png" alt="" class="path-xz" v-if="item.id == englishAcitve[0][1]"/>
+								<img src="../../assets/images/xz.png" alt="" class="path-xz" v-if="item.id == albumid[0][1] && !setCheck" />
 							</div>
 							<p>{{ item.name }}</p>
 							<div class="song-check" v-show="setCheck">
@@ -29,9 +27,9 @@
 				<div class="song-list">
 					<ul class="song">
 						<li v-for="(item, index) in englishData[105]">
-							<div class="path-div">
+							<div class="path-div" @click="cloudAlbum(item.id)">
 								<img :src="item.coverpath" alt="" class="path-img" />
-								<img src="../../assets/images/xz.png" alt="" class="path-xz"  v-if="item.id == englishAcitve[1][1]"/>
+								<img src="../../assets/images/xz.png" alt="" class="path-xz" v-if="item.id == albumid[1][1] && !setCheck" />
 							</div>
 							<p>{{ item.name }}</p>
 							<div class="song-check" v-show="setCheck">
@@ -48,9 +46,9 @@
 				<div class="song-list">
 					<ul class="song">
 						<li v-for="(item, index) in englishData[106]">
-							<div class="path-div">
+							<div class="path-div" @click="cloudAlbum(item.id)">
 								<img :src="item.coverpath" alt="" class="path-img" />
-								<img src="../../assets/images/xz.png" alt="" class="path-xz"  v-if="item.id == englishAcitve[2][1]"/>
+								<img src="../../assets/images/xz.png" alt="" class="path-xz" v-if="item.id == albumid[2][1] && !setCheck" />
 							</div>
 							<p>{{ item.name }}</p>
 							<div class="song-check" v-show="setCheck">
@@ -67,9 +65,9 @@
 				<div class="song-list">
 					<ul class="song">
 						<li v-for="(item, index) in englishData[107]">
-							<div class="path-div">
+							<div class="path-div" @click="cloudAlbum(item.id)">
 								<img :src="item.coverpath" alt="" class="path-img" />
-								<img src="../../assets/images/xz.png" alt="" class="path-xz"  v-if="item.id == englishAcitve[3][1]"/>
+								<img src="../../assets/images/xz.png" alt="" class="path-xz" v-if="item.id == albumid[3][1] && !setCheck" />
 							</div>
 							<p>{{ item.name }}</p>
 							<div class="song-check" v-show="setCheck">
@@ -89,13 +87,13 @@
 </template>
 
 <script>
+import { mapActions, mapMutations, mapState } from 'vuex';
 export default {
 	data() {
 		return {
 			title: '英语启蒙',
 			englishData: [],
-			englishAcitve:[],
-			loadingFlag:false,
+			loadingFlag: false,
 			musicList: {
 				'0': {
 					album: 104,
@@ -117,19 +115,12 @@ export default {
 			setCheck: false
 		};
 	},
-	async created() {
-		this.getEnglishData();
-		await this.devicesAction();
+	computed: {
+		...mapState(['albumid'])
 	},
-	mounted() {
-		let str =localStorage.getItem("english");
-		let array =[];
-		let str1 =str.split(":");
-		str1.forEach(function(item,index){
-			array.push(item.split("="))
-		})
-		this.englishAcitve =array;
-		console.log(array[0][1])
+	created() {
+		this.getEnglishData();
+		this.devicesAction();
 	},
 	methods: {
 		//获取歌曲资源
@@ -137,7 +128,7 @@ export default {
 			let self = this;
 			self.$axios.getEnglishData().then(function(res) {
 				self.englishData = res.data.content;
-				self.loadingFlag=true;
+				self.loadingFlag = true;
 			});
 		},
 		//故事机播放模式
@@ -150,18 +141,18 @@ export default {
 			};
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json, name: 'function' } };
-			self.setDeviceInfo(data);
+			self.$store.dispatch('setDevInfo', data);
 		},
 		changeResult(id, index) {
-			let self =this;
-			self.musicList[index].id =id;
+			let self = this;
+			self.musicList[index].id = id;
 		},
 		//设置默认歌曲
 		setEnglish() {
 			let self = this;
 			self.setCheck = !self.setCheck;
 			// self.englishAcitve =[];
-			if(!self.setCheck){
+			if (!self.setCheck) {
 				var body = {
 					from: 'DID:0',
 					to: 'UID:-1',
@@ -171,8 +162,20 @@ export default {
 				let json = JSON.stringify(body);
 				let data = { custom: { function: json, name: 'function' } };
 				self.setDeviceInfo(data);
-				self.musicList ={};
+				console.log("albumid",self.albumid);
+				console.log(" self.musicList", self.musicList)
+				self.musicList.for
+				self.musicList = [];		
 			}
+		},
+		cloudAlbum(id) {
+			if (!parseInt(id)) {
+				return;
+			}
+			if(this.setCheck){
+				return;
+			}
+			this.$router.push({ name: 'cloudListenDetail', query: { id: id } });
 		}
 	},
 	components: {}
@@ -215,14 +218,14 @@ export default {
 						width: 100%;
 						height: 100%;
 					}
-					.path-xz{
+					.path-xz {
 						width: 20px;
 						height: 20px;
 						position: absolute;
 						bottom: 0px;
 						right: 0px;
 					}
-				}		
+				}
 				p {
 					color: #333333;
 					padding-top: 8px;

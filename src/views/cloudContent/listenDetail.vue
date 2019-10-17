@@ -203,6 +203,12 @@ export default {
 							}
 						]
 					};
+					self.$toast({
+						message: "歌曲添加下载成功",
+						position: "bottom",
+						duration: "3000",
+						className: "toastActive"
+					});
 					break;
 				case 3:
 					var id = item.music_id.toString();
@@ -233,8 +239,7 @@ export default {
 			}
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json, name: 'function' } };
-			console.log('data=========', data);
-			self.setDeviceInfo(data);
+			self.$store.dispatch("setDevInfo", data);
 		}, 300)
 	},
 
