@@ -23,6 +23,21 @@ export default {
 		/**隐藏顶部导航 */
 		if (window.hilink != undefined) {
 			window.hilink.setTitleVisible(false, 'titleVisibleCallback');
+			window.hilink.getVersion('systemResultCallback');
+		}
+		var lang_flag;
+		var lang = navigator.language || navigator.userLanguage; //常规浏览器语言和IE浏览器
+		lang = lang.substr(0, 2); //截取lang前2位字符
+		if (lang == 'zh') {
+			lang_flag = 0;
+			console.log('中文');
+			this.lang = 'zh-CN';
+			this.$i18n.locale = this.lang; //关键语句
+		} else {
+			lang_flag = 1;
+			console.log('英语');
+			this.lang = 'en-US';
+			this.$i18n.locale = this.lang; //关键语句
 		}
 	},
 	mounted() {
@@ -33,6 +48,9 @@ export default {
 			};
 			window['onResume'] = res => {
 				console.log('手机恢复后台');
+			};
+			window['systemResultCallback'] = res => {
+				console.log('获取系统信息', res);
 			};
 			//获取设备全部信息回调
 		}
@@ -48,7 +66,7 @@ export default {
 	watch: {
 		$route(e) {
 			this.title = e.meta.title;
-			if (e.name != 'home' && e.name != '' && e.name != 'cloudAllDown' && e.name != "setting") {
+			if (e.name != 'home' && e.name != '' && e.name != 'cloudAllDown' && e.name != 'setting') {
 				this.isPlay = true;
 				//console.log('显示');
 			} else {
@@ -127,7 +145,7 @@ html {
 	overflow: auto hidden;
 	/* overflow: hidden; */
 }
-.van-overlay{
-	background-color: rgba(0,0,0,.3);
+.van-overlay {
+	background-color: rgba(0, 0, 0, 0.3);
 }
 </style>
