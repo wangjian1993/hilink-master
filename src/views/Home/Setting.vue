@@ -197,6 +197,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.van-cell{
+	padding:12px 15px;
+}
 .app {
 	margin-top: 70px;
 }

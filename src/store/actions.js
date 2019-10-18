@@ -40,8 +40,8 @@ export default {
 	},
 	setLoadingFlag({
 		commit
-	},data){
-		commit(types.LOADINGFLAG,data);
+	}, data) {
+		commit(types.LOADINGFLAG, data);
 	},
 	setLocalCid({
 		commit
@@ -93,11 +93,11 @@ export default {
 				dataStr = dataStr.replace(/\n/g, '');
 				json = JSON.parse(dataStr);
 			}
-			let info={
-				devName:json.devName,
-				roomName:json.roomName
+			let info = {
+				devName: json.devName,
+				roomName: json.roomName
 			}
-			commit("setDevName",info);
+			commit("setDevName", info);
 			json.services.forEach(function(item, index) {
 				commit("resultData", item)
 			})
@@ -126,6 +126,10 @@ export default {
 
 		window.getDeviceInfoData = (res) => {
 			console.log("获取设置设备返回数据===", res);
+		}
+
+		window.allResultCallback = res => {
+			console.log("测试多条发送", res)
 		}
 	}
 };

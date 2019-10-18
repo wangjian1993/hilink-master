@@ -97,26 +97,26 @@
 					</li>
 				</ul>
 				<ul v-show="isFold">
-					<li :class="isLine == 0 ? '' : 'lineAcitve'">
+					<li :class="isLine == 0 ? '' : 'lineAcitve'" @click="devicesSwitch(1)">
 						<div class="devices-audio-else-text">
 							<div>
 								<p>耳灯</p>
 								<p :class="earLight.on == 0 ? '' : 'colorActice'">{{ earLight.on == 0 ? '已关闭' : '已开启' }}</p>
 							</div>
 						</div>
-						<div class="devices-audio-else-icon" @click="devicesSwitch(1)">
+						<div class="devices-audio-else-icon">
 							<img v-if="earLight.on == 0" src="../../assets/images/ic_fengsu_off5.png" alt />
 							<img v-if="earLight.on == 1" src="../../assets/images/ic_fengsu_on5.png" alt />
 						</div>
 					</li>
-					<li :class="isLine == 0 ? '' : 'lineAcitve'">
+					<li :class="isLine == 0 ? '' : 'lineAcitve'" @click="devicesSwitch(2)">
 						<div class="devices-audio-else-text">
 							<div>
 								<p>表情灯</p>
 								<p :class="faceLight.on == 0 ? '' : 'colorActice'">{{ faceLight.on == 0 ? '已关闭' : '已开启' }}</p>
 							</div>
 						</div>
-						<div class="devices-audio-else-icon" @click="devicesSwitch(2)">
+						<div class="devices-audio-else-icon">
 							<img v-if="faceLight.on == 0" src="../../assets/images/ic_shuimian_off.png" alt />
 							<img v-if="faceLight.on == 1" src="../../assets/images/ic_shuimian_on.png" alt />
 						</div>
@@ -302,7 +302,7 @@ export default {
 						break;
 				}
 				self.$store.dispatch('setDevInfo', data);
-				self.$store.dispatch('setLoadingFlag',false);
+				self.$store.dispatch('setLoadingFlag', false);
 			}
 		}, 200),
 		//播放模式选择
@@ -321,7 +321,7 @@ export default {
 			var json = JSON.stringify(body);
 			var data = { custom: { function: json, name: 'function' } };
 			self.$store.dispatch('setDevInfo', data);
-			self.$store.dispatch('setLoadingFlag',false);
+			self.$store.dispatch('setLoadingFlag', false);
 		},
 		devicesMode() {
 			let self = this;
@@ -350,7 +350,7 @@ export default {
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json } };
 			self.$store.dispatch('setDevInfo', data);
-			self.$store.dispatch('setLoadingFlag',false);
+			self.$store.dispatch('setLoadingFlag', false);
 		}, 300),
 		//故事机童锁开关
 		devicesLockSwitch: _debounce(function(mode) {
@@ -377,7 +377,7 @@ export default {
 			var json = JSON.stringify(body);
 			var data = { custom: { function: json, name: 'function' } };
 			self.$store.dispatch('setDevInfo', data);
-			self.$store.dispatch('setLoadingFlag',false);
+			self.$store.dispatch('setLoadingFlag', false);
 		}, 300),
 		//故事机播放模式
 		devicesModeAction: _debounce(function(mode) {
@@ -404,14 +404,18 @@ export default {
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json, name: 'function' } };
 			self.$store.dispatch('setDevInfo', data);
-			self.$store.dispatch('setLoadingFlag',false);
+			self.$store.dispatch('setLoadingFlag', false);
 		}, 200),
 		//故事机音量调节
-		onVolumeChange(value) {
+		onVolumeChange: _debounce(function(value) {
 			let self = this;
+			if (!self.loadingFlag) {
+				return;
+			}
 			let data = { Music: { volume: value, name: 'volume' } };
 			self.$store.dispatch('setDevInfo', data);
-		},
+			self.$store.dispatch('setLoadingFlag', false);
+		}, 200),
 		/*
 		 *展开折叠
 		 */
