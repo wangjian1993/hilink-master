@@ -77,7 +77,6 @@ const mutations = {
 			default:
 				break;
 		}
-		// });
 	},
 	resultFunction(state, customData) {
 		var self = this;
@@ -113,8 +112,6 @@ const mutations = {
 					channel: -1,
 					songs: []
 				};
-				console.log("本地列表===", customData)
-				console.log("文件id==", state.songsCid);
 				let array = state.localSongList.songs
 				state.localSongList.songs = array.concat(customData.songs);
 				state.localSongList.channel = customData.channel;

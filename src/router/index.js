@@ -50,7 +50,7 @@ export default new Router({
 			name: 'localfile',
 			component: () => import( /* webpackChunkName: "english" */ '@/views/Content/LocalFile.vue'),
 			meta: {
-				title: "本地歌曲列表",
+				title: "本地内容",
 				keepAlive: true,
 			}
 		},
@@ -59,7 +59,7 @@ export default new Router({
 			name: 'english',
 			component: () => import( /* webpackChunkName: "english" */ '@/views/Content/English.vue'),
 			meta: {
-				title: "英语启蒙",
+				title: "启蒙英语",
 				keepAlive: true,
 			}
 		},

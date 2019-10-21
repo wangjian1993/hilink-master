@@ -2,19 +2,11 @@
 	<div class="container">
 		<v-header :title="title"></v-header>
 		<div class="music-list">
-			<!-- 	<div class="all-down-btn">
-				<p @click="checkAll">全选</p>
-				<p @click="toggleAll">取消</p>
-			</div> -->
-			<!-- 	<van-checkbox-group v-model="result" ref="checkboxGroup">
-			  <van-checkbox name="a">复选框 a</van-checkbox>
-			  <van-checkbox name="b">复选框 b</van-checkbox>
-			  <van-checkbox name="c">复选框 c</van-checkbox>
-			</van-checkbox-group> -->
-			<van-checkbox-group v-model="result" checked-color="#07c160" ref="checkboxGroup" max="8">
+			<van-checkbox-group v-model="result" checked-color="#07c160" ref="checkboxGroup" :max="checkboxMax">
 				<van-cell-group>
-					<van-cell v-for="(item, index) in musicList" clickable :key="item.id" :title="item.name" @click="toggle(index)">
-						<van-checkbox :name="index" :id="item.id" :url="item.path" slot="right-icon" />
+					<van-cell v-for="(item, index) in musicList" :title="item.name"  clickable
+			      :key="index"  @click="toggle(index)">
+						<van-checkbox :name="index"  ref="checkboxes" slot="right-icon" />
 					</van-cell>
 				</van-cell-group>
 			</van-checkbox-group>
@@ -41,7 +33,8 @@ export default {
 			isLoaded: false,
 			showIndex: -1,
 			showTab: true,
-			loadingFlag:true,
+			checkboxMax:8,
+			loadingFlag: true,
 			title: '批量下载'
 		};
 	},
@@ -52,22 +45,6 @@ export default {
 			.getSpecialInfo(this.$route.query.id)
 			.then(res => {
 				//转换播放时间
-				res.data.content.musicList.forEach((v, i) => {
-					if (v.timelength / 60 < 10) {
-						if (v.timelength % 60 < 10) {
-							v.timelength = '0' + parseInt(v.timelength / 60) + ':0' + (v.timelength % 60);
-						} else {
-							v.timelength = '0' + parseInt(v.timelength / 60) + ':' + (v.timelength % 60);
-						}
-					} else {
-						if (v.timelength % 60 < 10) {
-							v.timelength = parseInt(v.timelength / 60) + ':0' + (v.timelength % 60);
-						} else {
-							v.timelength = parseInt(v.timelength / 60) + ':' + (v.timelength % 60);
-						}
-					}
-				});
-
 				this.musicList = res.data.content.musicList;
 			})
 			.catch(err => {
@@ -75,65 +52,40 @@ export default {
 			});
 		this.isLoaded = false;
 		this.audio = new Audio();
-		window['songAllDown']=resultStr =>{
-			// let data = self.praseResponseData(resultStr);
-			console.log("删除====",resultStr)
-			if(resultStr.errcode == 1){
-				self.loadingFlag =true;
+		window['songAllDown'] = resultStr => {
+			let data = this.praseResponseData(resultStr);
+			if (data.errcode == 0) {
+				this.loadingFlag = true;
+				this.$toast({
+					message: '歌曲添加下载成功',
+					position: 'bottom',
+					duration: '2000',
+					className: 'toastActive'
+				});
+				this.$router.go(-1); //返回上一层
 			}
-		}
-	},
-	beforeRouteLeave(to, from, next) {
-		// 销毁组件，避免通过vue-router再次进入时，仍是上次的history缓存的状态
-		this.$destroy(true);
-		this.audio.pause();
-		next();
+		};
 	},
 	methods: {
-		//播放音乐
-		play(src, index) {
-			if (src == this.src) {
-				if (this.audio.paused) {
-					this.active = index;
-					this.audio.play();
-				} else {
-					this.audio.pause();
-					this.active = -1;
-				}
-			} else {
-				this.active = index;
-				this.audio.pause();
-				this.src = this.audio.src = src;
-				this.audio.play();
-				this.audio.onended = () => {
-					this.active = -1;
-				};
-			}
-		},
-		//显示点播收藏
-		show(index) {
-			if (this.showIndex == index) {
-				this.showTab = !this.showTab;
-				return;
-			}
-			this.showTab = true;
-			this.showIndex = index;
-		},
-		checkAll() {
-			let self = this;
-			this.$refs.checkboxGroup.toggleAll(true);
-		},
-		toggleAll() {
-			let self = this;
-			this.$refs.checkboxGroup.toggleAll();
-		},
 		toggle(index) {
-			this.$refs.checkboxes[index].toggle();
+			let self = this;
+			console.log(index)
+			self.$refs.checkboxes[index].toggle();
 		},
 		downAllList() {
 			let self = this;
 			var dataArray = [];
-			if(!self.loadingFlag){
+			console.log("self.result=====",self.result);
+			if(self.result.length == 0){
+				self.$toast({
+					message: '请选择要下载的歌曲',
+					position: 'bottom',
+					duration: '2000',
+					className: 'toastActive'
+				});
+				return;
+			}
+			if (!self.loadingFlag) {
 				return;
 			}
 			self.result.forEach(function(item, index) {
@@ -148,7 +100,7 @@ export default {
 					fmt: 'mp3',
 					url: item.path
 				};
-				songsData.push(json)
+				songsData.push(json);
 			});
 			var body = {
 				from: 'DID:0',
@@ -156,104 +108,25 @@ export default {
 				action: 409,
 				songlistname: '最新下载',
 				songlistid: self.info.id,
-				songs:songsData
+				songs: songsData
 			};
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json, name: 'function' } };
-			console.log('data=========', data);
-			self.setDeviceSongsInfo(data, 'songAllDown');		
+			self.setDeviceSongsInfo(data, 'songAllDown');
 		},
-		/**
-		 * 推送歌曲到设备
-		 * 1.点播
-		 * 2.收藏
-		 * 3.下载
-		 * */
-		devicesMusic: _debounce(function(type, item) {
-			let self = this;
-			var body;
-			var path = item.path.indexOf('https:') > -1 ? item.path.replace('https', 'http') : item.path;
-			switch (type) {
-				case 1:
-					body = {
-						from: 'DID:0',
-						to: 'UID:-1',
-						action: 203,
-						songs: [
-							{
-								id: item.music_id || item.radioid,
-								singer: '',
-								posters: '',
-								language: '国语',
-								name: item.name,
-								albumname: item.specialname,
-								albumid: item.special_id,
-								type: 5,
-								res: [
-									{
-										filesize: '',
-										lrc: '',
-										fmt: 'mp3',
-										duration: item.lengthOfTime,
-										url: path
-									}
-								]
-							}
-						]
-					};
-					self.$toast({
-						message: '歌曲点播成功',
-						position: 'bottom',
-						duration: '3000',
-						className: 'toastActive'
-					});
-					break;
-				case 2:
-					body = {
-						from: 'DID:0',
-						to: 'UID:-1',
-						action: 416,
-						songs: [
-							{
-								id: item.music_id || item.radioid,
-								name: item.name,
-								url: path
-							}
-						]
-					};
-					break;
-				case 3:
-					var id = item.music_id.toString();
-					body = {
-						from: 'DID:0',
-						to: 'UID:-1',
-						action: 409,
-						songlistname: '最新下载',
-						songlistid: self.info.id,
-						songs: [
-							{
-								id: id,
-								name: item.name,
-								fmt: 'mp3',
-								url: path
-							}
-						]
-					};
-					self.$toast({
-						message: '歌曲下载添加成功',
-						position: 'bottom',
-						duration: '3000',
-						className: 'toastActive'
-					});
-					break;
-				default:
-					break;
+		//回调函数转换
+		praseResponseData(resData) {
+			try {
+				return JSON.parse(resData);
+			} catch (error) {
+				var dataStr = resData.replace(/:"{/g, ':{');
+				dataStr = dataStr.replace(/}",/g, '},');
+				dataStr = dataStr.replace(/}"/g, '}');
+				dataStr = dataStr.replace(/\\/g, '');
+				dataStr = dataStr.replace(/\n/g, '');
+				return JSON.parse(dataStr);
 			}
-			let json = JSON.stringify(body);
-			let data = { custom: { function: json, name: 'function' } };
-			console.log('data=========', data);
-			self.setDeviceInfo(data);
-		}, 300)
+		}
 	},
 
 	components: {

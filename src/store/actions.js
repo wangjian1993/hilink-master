@@ -54,6 +54,21 @@ export default {
 			window.hilink.getDevCacheAll("0", "", "resultCallback");
 		}
 	},
+	//获取本地歌曲列表
+	getDevLocal({
+		commit
+	}, data) {
+		if (window.hilink != undefined) {
+			let body = {
+				from: 'DID:0',
+				to: 'UID:-1',
+				action: 405
+			};
+			let json = { custom: { function: body } };
+			let item = JSON.stringify(json);
+			window.hilink.setDeviceInfo("0", item, "localResult");
+		}
+	},
 	setDevInfo({
 		commit
 	}, data) {
@@ -123,9 +138,15 @@ export default {
 				commit("resultData", json)
 			}
 		}
-
+		
+		window.localResult =(res) => {
+			console.log("本地歌曲列表");
+		}
 		window.getDeviceInfoData = (res) => {
-			console.log("获取设置设备返回数据===", res);
+			let json = JSON.parse(res);
+			if(res.errcode != 0){
+				commit(types.LOADINGFLAG, true);
+			}
 		}
 
 		window.allResultCallback = res => {

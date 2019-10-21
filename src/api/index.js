@@ -27,13 +27,6 @@ export function fetch(options) {
 }
 const cloudUrl = "https://cloud.alilo.com.cn/baby/api/wx/";
 const aliloUrl = "https://www.alilo.com.cn";
-const hhtUrl = "http://device.alilo.com.cn/g9s";
-//const xckUrl = "http://ddm.wx.dandanman.com";
-//const gzh_id = "gh_7f188fff0260";
-//const app_id = "wxb82517341aa364b2";
-// const gzh_id = "gh_64691b03e66f";
-// const app_id = "wx1dacb8e1d63f3dc7";
-// const xckUrl = "http://pre.yy.dandanman.com";
 //banner轮播图
 export default {
     getBannerList() {

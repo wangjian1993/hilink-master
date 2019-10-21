@@ -154,7 +154,7 @@
 					<img src="../../assets/images/img_bendineir.png" alt />
 					<p>本地内容</p>
 				</li>
-				<li @click="contentBtn(3)">
+				<li @click="englishBtn()">
 					<img src="../../assets/images/img_wodeshoucang.png" alt />
 					<p>我的收藏</p>
 				</li>
@@ -322,6 +322,9 @@ export default {
 			var data = { custom: { function: json, name: 'function' } };
 			self.$store.dispatch('setDevInfo', data);
 			self.$store.dispatch('setLoadingFlag', false);
+			self.timer = setTimeout(function(){
+				self.$store.dispatch('getDevLocal')
+			},2000);
 		},
 		devicesMode() {
 			let self = this;
@@ -431,23 +434,19 @@ export default {
 				self.foldIcon = require('../../assets/images/ic_shouqi.png');
 			}
 		},
-		// englishBtn() {
-		// 	let self = this;
-		// 	if (self.localList.length == 0) {
-		// 		self.devicesAction(405, 0);
-		// 	}
-		// 	let data = {
-		// 		total: 0,
-		// 		channel: -1,
-		// 		songs: []
-		// 	};
-		// 	this.$store.dispatch('putLocalList', data);
-		// 	setTimeout(function() {
-		// 		self.$router.push({
-		// 			name: 'locallisEn'
-		// 		});
-		// 	}, 10);
-		// },
+		englishBtn() {
+			let self = this;
+			if (self.isLine == 0) {
+				this.$toast({
+					message: '请旋转火火兔的尾巴开机',
+					position: 'bottom',
+					duration: '3000',
+					className: 'toastActive'
+				});
+				return;
+			}
+			self.$router.push({ name: 'locallist', params: { id: self.loveCid, name:"我的收藏" } });
+		},
 		//进入内容
 		contentBtn(type) {
 			var url;

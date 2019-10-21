@@ -91,7 +91,7 @@ import { mapActions, mapMutations, mapState } from 'vuex';
 export default {
 	data() {
 		return {
-			title: '英语启蒙',
+			title: '启蒙英语',
 			englishData: [],
 			loadingFlag: false,
 			musicList: {
