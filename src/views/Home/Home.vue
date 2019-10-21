@@ -11,7 +11,15 @@
 			<div class="devices-status-text">{{ isLine == 0 ? '已关闭' : '已开启' }}</div>
 			<div class="devices-status-time" :class="deviceTime == 0 ? 'timeActive' : ''">
 				<div>
-					<p>{{ deviceTime }}分钟</p>
+					<p>
+						<van-count-down :time="deviceTime" @finish="deviceTimeFinish()">
+							<template v-slot="timeData">
+								<span class="item" v-if="timeData.hours != 0">{{ timeData.hours }}:</span>
+								<span class="item">{{ timeData.minutes }}:</span>
+								<span class="item">{{ timeData.seconds }}</span>
+							</template>
+						</van-count-down>
+					</p>
 					<p>定时关机</p>
 				</div>
 			</div>
@@ -79,15 +87,23 @@
 						</div>
 						<div class="devices-audio-else-icon">
 							<img v-if="playMode == -1" src="../../assets/images/ic_liebiao.png" alt />
-							<img v-if="playMode == 0" src="../../assets/images/ic_danqu_hover.png" alt />
-							<img v-if="playMode == 1" src="../../assets/images/ic_liebiao_hover.png" alt />
+							<img v-if="playMode == 0 && isLine != 0" src="../../assets/images/ic_danqu_hover.png" alt />
+							<img v-if="playMode == 1 && isLine != 0" src="../../assets/images/ic_liebiao_hover.png" alt />
 						</div>
 					</li>
 					<li @click="onConfirm()" :class="isLine == 0 ? '' : 'lineAcitve'">
 						<div class="devices-audio-else-text">
 							<div>
 								<p>定时关机</p>
-								<p :class="deviceTime == 0 ? '' : 'colorActice'" v-if="deviceTime != 0">{{ deviceTime }}分钟</p>
+								<p :class="deviceTime == 0 ? '' : 'colorActice'" v-if="deviceTime != 0">
+									<van-count-down :time="deviceTime">
+										<template v-slot="timeData">
+											<span class="item" v-if="timeData.hours != 0">{{ timeData.hours }}:</span>
+											<span class="item">{{ timeData.minutes }}:</span>
+											<span class="item">{{ timeData.seconds }}</span>
+										</template>
+									</van-count-down>
+								</p>
 							</div>
 						</div>
 						<div class="devices-audio-else-icon">
@@ -101,12 +117,12 @@
 						<div class="devices-audio-else-text">
 							<div>
 								<p>耳灯</p>
-								<p :class="earLight.on == 0 ? '' : 'colorActice'">{{ earLight.on == 0 ? '已关闭' : '已开启' }}</p>
+								<p :class="earLight.on == 0 && isLine == 0 ? '' : 'colorActice'">{{ earLight.on == 0 ? '已关闭' : '已开启' }}</p>
 							</div>
 						</div>
 						<div class="devices-audio-else-icon">
-							<img v-if="earLight.on == 0" src="../../assets/images/ic_fengsu_off5.png" alt />
-							<img v-if="earLight.on == 1" src="../../assets/images/ic_fengsu_on5.png" alt />
+							<img v-if="earLight.on == 0 && isLine != 0" src="../../assets/images/ic_fengsu_off5.png" alt />
+							<img v-if="earLight.on == 1 && isLine != 0" src="../../assets/images/ic_fengsu_on5.png" alt />
 						</div>
 					</li>
 					<li :class="isLine == 0 ? '' : 'lineAcitve'" @click="devicesSwitch(2)">
@@ -185,7 +201,8 @@ export default {
 			// loadingFlag: true,
 			audioMode: false, //音乐模式
 			foldIcon: require('../../assets/images/ic_shouqi.png'),
-			songsCid: -1
+			songsCid: -1,
+			time:0,
 		};
 	},
 	computed: {
@@ -202,19 +219,30 @@ export default {
 			'lookData',
 			'playMode',
 			'loveCid',
-			'deviceTime',
 			'loadingFlag'
-		])
+		]),
+		deviceTime : {
+		    get () {
+		      return this.$store.state.deviceTime
+		    },
+		    set () {
+		      this.$store.dispatch('setDeviceTime');
+		    }
+		  }
 	},
 	created() {
 		this.$store.dispatch('getDevCacheAll');
 		this.$store.dispatch('init');
 		this.getDevicesTime();
+		this.time = this.deviceTime;
 	},
 	methods: {
 		onConfirm() {
 			let self = this;
 			self.timePopup = !self.timePopup; //显示
+		},
+		deviceTimeFinish() {
+			this.deviceTime = 0;
 		},
 		//设置开关图片
 		switchIcon() {
@@ -301,6 +329,7 @@ export default {
 					default:
 						break;
 				}
+				self.audioMode = false;
 				self.$store.dispatch('setDevInfo', data);
 				self.$store.dispatch('setLoadingFlag', false);
 			}
@@ -322,9 +351,10 @@ export default {
 			var data = { custom: { function: json, name: 'function' } };
 			self.$store.dispatch('setDevInfo', data);
 			self.$store.dispatch('setLoadingFlag', false);
-			self.timer = setTimeout(function(){
-				self.$store.dispatch('getDevLocal')
-			},2000);
+			self.timer = setTimeout(function() {
+				console.log('1111111111111');
+				self.$store.dispatch('getDevLocal');
+			}, 2000);
 		},
 		devicesMode() {
 			let self = this;
@@ -350,6 +380,7 @@ export default {
 					on: on
 				};
 			}
+			self.audioMode = false;
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json } };
 			self.$store.dispatch('setDevInfo', data);
@@ -377,6 +408,7 @@ export default {
 				action: 627,
 				on: on
 			};
+			self.audioMode = false;
 			var json = JSON.stringify(body);
 			var data = { custom: { function: json, name: 'function' } };
 			self.$store.dispatch('setDevInfo', data);
@@ -415,6 +447,7 @@ export default {
 			if (!self.loadingFlag) {
 				return;
 			}
+			self.audioMode = false;
 			let data = { Music: { volume: value, name: 'volume' } };
 			self.$store.dispatch('setDevInfo', data);
 			self.$store.dispatch('setLoadingFlag', false);
@@ -425,6 +458,7 @@ export default {
 		foldClick() {
 			let self = this;
 			self.isFold = !self.isFold;
+			self.audioMode = false;
 			if (self.isFold) {
 				self.foldText = '收起';
 				self.foldIcon = require('../../assets/images/ic_zhankai.png');
@@ -445,7 +479,15 @@ export default {
 				});
 				return;
 			}
-			self.$router.push({ name: 'locallist', params: { id: self.loveCid, name:"我的收藏" } });
+			let data = {
+				total: 0,
+				channel: -1,
+				songs: []
+			};
+			this.$store.dispatch('putLocalList', data);
+			self.audioMode = false;
+			console.log('self.loveCid', self.loveCid);
+			self.$router.push({ name: 'locallist', params: { id: self.loveCid, name: '我的收藏' } });
 		},
 		//进入内容
 		contentBtn(type) {
@@ -469,6 +511,7 @@ export default {
 			} else if (type == 3) {
 				url = 'localfile';
 			}
+			self.audioMode = false;
 			this.$router.push({
 				name: url
 			});

@@ -3,17 +3,18 @@
 		<v-header :title="title"></v-header>
 		<div class="list-content">
 			<div class="loading-box" v-if="!loading">
-				<!-- <van-loading type="spinner" vertical color="#007DFF" /> -->
 				<van-loading size="24px" type="spinner" vertical color="#007DFF">加载中</van-loading>
 			</div>
 			<div class="local-list" v-if="loading">
-				<p class="nullBox" v-if="localSongList.songs.length == 0 && loading">暂无歌曲</p>
+				<!-- <p class="nullBox" v-if="localSongList.songs.length == 0 && loading">暂无歌曲</p> -->
 				<ul>
 					<li v-for="(opt, index) in localSongList.songs">
 						<p @click="localSongPut(index)" :class="cid == musicData.channel && index == musicData.idx ? 'textActive' : ''">{{ opt.name }}</p>
 						<span><img v-if="cid == musicData.channel && index == musicData.idx ? 'textActive' : ''" src="../../assets/images/gif.gif" alt="" /></span>
 						<span @click="songDel(opt, index)"><img src="../../assets/images/delete.png" alt="" /></span>
 					</li>
+					<p class="moreBtn" @click="listMore()" v-if="!isMore">点击加载更多...</p>
+					<p class="moreBtn" v-if="isMore">暂无更多</p>
 				</ul>
 			</div>
 		</div>
@@ -29,7 +30,7 @@ export default {
 			title: '',
 			active: 0,
 			cid: 0,
-			loading: false,
+			loading: null,
 			cname: null,
 			offset: 1,
 			getNumber: 0,
@@ -39,6 +40,7 @@ export default {
 			limitNumber: 0,
 			isStop: false,
 			delIndex: -1,
+			isMore:false,
 			isBottom: false
 		};
 	},
@@ -57,9 +59,9 @@ export default {
 		this.beginNumber = 0;
 		this.limitNumber = 0;
 		this.getNumber = 0;
-		window.addEventListener('scroll', () => {
-			this.toBottom();
-		});
+		// window.addEventListener('scroll', () => {
+		// 	this.toBottom();
+		// });
 	},
 	mounted() {
 		let self = this;
@@ -72,11 +74,6 @@ export default {
 					if (self.beginNumber == 0) {
 						self.devicesPage();
 						self.loading = true;
-						console.log('第一次调用=============');
-					} else {
-						self.beginNumber = self.beginNumber + 1;
-						self.isBottom = true;
-						self.getLocalSong();
 					}
 				}
 			};
@@ -104,22 +101,21 @@ export default {
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json, name: 'function' } };
 			self.setDeviceSongsInfo(data, 'songsListBack');
-			// self.$store.dispatch("getSongsList", data);
 		},
 		devicesPage: _debounce(function() {
 			let self = this;
 			if (!self.cangetlocal) return false;
-			self.limitNumber = (self.getNumber + 1) * 3 < self.localTotal ? (self.getNumber + 1) * 3 : self.localTotal;
-			self.beginNumber = self.getNumber * 3;
-			if (self.getNumber == 0) {
-				self.beginNumber = 1;
+			self.limitNumber = Math.ceil(self.localTotal / 6);
+			if(self.limitNumber <= 1){
+				self.isMore =true;
 			}
-			self.getLocalSong();
+			// self.getLocalSong();
 		}, 300),
 		getLocalSong: _debounce(function() {
 			let self = this;
 			if (self.beginNumber >= self.limitNumber) {
 				self.cangetlocal = true;
+				self.isMore =true;
 				return true;
 			}
 			let body = {
@@ -131,9 +127,7 @@ export default {
 			};
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json, name: 'function' } };
-
 			console.log('beginNumberbeginNumber111111===========', self.beginNumber);
-			// self.$store.dispatch("getSongsList", data);
 			self.setDeviceSongsInfo(data, 'songsListBack');
 		}, 400),
 		songDel(item, index) {
@@ -159,8 +153,6 @@ export default {
 					};
 					let json = JSON.stringify(body);
 					let data = { custom: { function: json, name: 'function' } };
-					console.log('删除歌曲====', data);
-					// self.$store.dispatch("setDevInfo", data);
 					self.setDeviceSongsInfo(data, 'delListBack');
 				})
 				.catch(() => {
@@ -185,25 +177,36 @@ export default {
 			let data = { custom: { function: json, name: 'function' } };
 			self.$store.dispatch('setDevInfo', data);
 		},
-		toBottom() {
+		listMore() {
 			let that = this;
-			let scrollH = document.body.scrollTop || document.documentElement.scrollTop;
-			var docH, windowH; //滚动条滚动高度
-			docH = document.body.scrollHeight || document.documentElement.scrollHeight; //文档高度
-			windowH = window.innerHeight || document.body.clientHeight || document.documentElement.clientHeight; //浏览器窗口高度
-			if (scrollH + windowH >= docH && !that.isStop) {
-				console.log('加载1111======');
-				//滚动到底部和页面没有正在执行请求网络数据的过程中的条件要同时成立才可以执行请求请求数据操作
-				if (that.isBottom && that.beginNumber <= that.limitNumber) {
-					console.log('that.beginNumber222====', that.beginNumber);
-					console.log('that.limitNumber222====', that.limitNumber);
-					console.log('加载2222======');
-					that.getNumber = that.getNumber + 1;
-					that.isBottom = false;
-					that.devicesPage();
-				}
+			if (that.cangetlocal && that.beginNumber <= that.limitNumber) {
+				console.log('加载更多=========');
+				that.beginNumber = that.beginNumber + 1;
+				that.cangetlocal = false;
+				that.getLocalSong();
+			}else {
+				that.isMore =true;
 			}
 		},
+		// toBottom() {
+		// 	let that = this;
+		// 	let scrollH = document.body.scrollTop || document.documentElement.scrollTop;
+		// 	var docH, windowH; //滚动条滚动高度
+		// 	docH = document.body.scrollHeight || document.documentElement.scrollHeight; //文档高度
+		// 	windowH = window.innerHeight || document.body.clientHeight || document.documentElement.clientHeight; //浏览器窗口高度
+		// 	if (scrollH + windowH >= docH && !that.isStop) {
+		// 		console.log('加载1111======');
+		// 		//滚动到底部和页面没有正在执行请求网络数据的过程中的条件要同时成立才可以执行请求请求数据操作
+		// 		if (that.isBottom && that.beginNumber <= that.limitNumber) {
+		// 			console.log('that.beginNumber222====', that.beginNumber);
+		// 			console.log('that.limitNumber222====', that.limitNumber);
+		// 			console.log('加载2222======');
+		// 			that.getNumber = that.getNumber + 1;
+		// 			that.isBottom = false;
+		// 			that.devicesPage();
+		// 		}
+		// 	}
+		// },
 		//回调函数转换
 		praseResponseData(resData) {
 			try {
@@ -236,6 +239,7 @@ export default {
 }
 .nullBox {
 	width: 95%;
+	margin: 0 auto;
 	text-align: center;
 	font-size: 14px;
 }
@@ -271,6 +275,12 @@ export default {
 			}
 		}
 	}
+}
+.moreBtn {
+	width: 90%;
+	margin: 10px auto;
+	text-align: center;
+	font-size: 14px;
 }
 .local-list li p.textActive {
 	color: #ff444a;

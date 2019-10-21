@@ -55,18 +55,26 @@ export default {
 		}
 	},
 	//获取本地歌曲列表
+	setDeviceTime({
+		commit
+	}, data) {
+		commit("setDeviceTimeFn",data)
+	},
+	//获取本地歌曲列表
 	getDevLocal({
 		commit
 	}, data) {
 		if (window.hilink != undefined) {
-			let body = {
+			let d = {
 				from: 'DID:0',
 				to: 'UID:-1',
 				action: 405
 			};
-			let json = { custom: { function: body } };
-			let item = JSON.stringify(json);
-			window.hilink.setDeviceInfo("0", item, "localResult");
+			let localData = JSON.stringify(d);
+			let json = { custom: { function: localData } };
+			let body = JSON.stringify(json);
+			console.log("获取本地文件夹===",body)
+			window.hilink.setDeviceInfo("0", body, "localResult");
 		}
 	},
 	setDevInfo({
@@ -140,7 +148,7 @@ export default {
 		}
 		
 		window.localResult =(res) => {
-			console.log("本地歌曲列表");
+			console.log("本地歌曲列表",res);
 		}
 		window.getDeviceInfoData = (res) => {
 			let json = JSON.parse(res);

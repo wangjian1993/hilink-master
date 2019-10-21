@@ -41,11 +41,12 @@ import {
 	CheckboxGroup,
 	Checkbox,
 	RadioGroup,
-	Radio
+	Radio,
+	CountDown 
 } from 'vant';
 Vue.use(Tab).use(Tabs).use(Button).use(NavBar).use(Slider).use(Toast).use(DatetimePicker).use(Popup).use(Field).use(
 	Icon).use(Loading).use(NoticeBar).use(Dialog).use(Picker).use(Cell).use(CellGroup).use(CheckboxGroup).use(Checkbox).use(
-	RadioGroup).use(Radio);
+	RadioGroup).use(Radio).use(CountDown);
 Vue.use(Swipe).use(SwipeItem);
 Vue.use(VueVideoPlayer)
 Vue.config.productionTip = false

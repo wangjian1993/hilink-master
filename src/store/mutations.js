@@ -41,6 +41,9 @@ const mutations = {
 		state.devName =data;
 		console.log("state.devName==",state.devName)
 	},
+	setDeviceTimeFn(state,data){
+		state.deviceTime =0;
+	},
 	resultData(state, resData) {
 		let type = resData;
 		state.loadingFlag =true
@@ -84,7 +87,8 @@ const mutations = {
 			return;
 		}
 		let action = customData.action;
-		state.loadingFlag =true
+		state.loadingFlag =true;
+		console.log("action=======",action)
 		switch (action) {
 			case 910:
 				state.playMode = customData.playmode;
@@ -103,8 +107,6 @@ const mutations = {
 						state.loveCid = item.cid
 					}
 				});
-				console.log("state.loveCid===", state.loveCid)
-				console.log("state.localList===", state.localList)
 				break;
 			case 402:
 				let obj = {
@@ -154,25 +156,25 @@ const mutations = {
 				break;
 			case 424:
 				if (customData.ret == 0) {
-					this.$toast({
-						message: "歌曲删除成功",
-						position: "bottom",
-						duration: "3000",
-						className: "toastActive"
-					});
-					this.devicesAction(641);
+					// this.$toast({
+					// 	message: "歌曲删除成功",
+					// 	position: "bottom",
+					// 	duration: "3000",
+					// 	className: "toastActive"
+					// });
+					// this.devicesAction(641);
 				}
 				break;
 			case 632:
 				var tmp = Date.parse(new Date()).toString();
 				tmp = parseInt(tmp.substr(0, 10));
-				console.log("现在时间===", tmp);
-				console.log("设置时间===", customData.timestamp)
 				if (tmp < customData.timestamp) {
-					let m = (customData.timestamp - tmp) / 60;
-					state.deviceTime = parseInt(m - 480);
+					let t =28800000;
+					let m = (customData.timestamp - tmp) * 1000;
+					state.deviceTime =m -t;
 				} else {
 					state.deviceTime = 0;
+					console.log("state.deviceTime",state.deviceTime)
 				}
 				break;
 			default:
