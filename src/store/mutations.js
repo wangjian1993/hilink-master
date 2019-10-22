@@ -46,7 +46,8 @@ const mutations = {
 	},
 	resultData(state, resData) {
 		let type = resData;
-		state.loadingFlag =true
+		state.loadingFlag =true;
+		console.log("state.loadingFlag========",state.loadingFlag)
 		switch (type.sid) {
 			case 'switch':
 				state.lampSwitch = resData.data.on;

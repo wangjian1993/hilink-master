@@ -42,11 +42,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapState({
-			localSongList: state => state.localSongList,
-			localTotal: state => state.localTotal,
-			musicData: state => state.musicData
-		})
+		...mapState(['localSongList', 'localTotal', 'musicData', 'loadingFlag'])
 	},
 	created() {
 		this.cid = this.$route.params.id;
@@ -80,6 +76,10 @@ export default {
 					let list = self.localSongList.songs;
 					console.log('self.delIndex===', self.delIndex);
 					list.splice(self.delIndex, 1);
+					console.log('list.length====', list.length);
+					if (list.length == 0) {
+						self.beginNumber = 0;
+					}
 				}
 			};
 		}
@@ -158,9 +158,10 @@ export default {
 
 			console.log(item);
 		},
-		localSongPut(index) {
+		localSongPut: _debounce(function(index) {
 			let self = this;
-			if (!self.cangetlocal) {
+			console.log('self.loadingFlag', self.loadingFlag);
+			if (!self.loadingFlag) {
 				return;
 			}
 			let body = {
@@ -173,12 +174,18 @@ export default {
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json, name: 'function' } };
 			self.$store.dispatch('setDevInfo', data);
-		},
+			self.$store.dispatch('setLoadingFlag', false);
+		}, 400),
 		listMore() {
 			let that = this;
 			if (that.cangetlocal && that.beginNumber <= that.limitNumber) {
-				console.log('加载更多=========');
-				that.beginNumber = that.beginNumber + 1;
+				console.log('加载更多=========',that.localSongList.songs);
+				let list = that.localSongList.songs;
+				if (list.length == 0) {
+					that.beginNumber = 0;
+				} else {
+					that.beginNumber = that.beginNumber + 1;
+				}
 				that.cangetlocal = false;
 				that.getLocalSong();
 			} else {

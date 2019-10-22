@@ -19,7 +19,7 @@
 			<!--轮播-->
 			<div class="swiper">
 				<van-swipe :autoplay="3000" class="swipe">
-					<van-swipe-item v-for="(image, index) in swiperList" :key="index" @click="goDetail(image.link)"><img :src="image.path" /></van-swipe-item>
+					<van-swipe-item v-for="(image, index) in swiperList" :key="index" @click="goDetail(image.link)" v-if="image.linktype ==2"><img :src="image.path" /></van-swipe-item>
 				</van-swipe>
 			</div>
 			<!--精品推荐-->

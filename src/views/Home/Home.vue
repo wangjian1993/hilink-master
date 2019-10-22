@@ -117,12 +117,12 @@
 						<div class="devices-audio-else-text">
 							<div>
 								<p>耳灯</p>
-								<p :class="earLight.on == 0 && isLine == 0 ? '' : 'colorActice'">{{ earLight.on == 0 ? '已关闭' : '已开启' }}</p>
+								<p :class="earLight.on == 0? '' : 'colorActice'">{{ earLight.on == 0 ? '已关闭' : '已开启' }}</p>
 							</div>
 						</div>
 						<div class="devices-audio-else-icon">
-							<img v-if="earLight.on == 0 && isLine != 0" src="../../assets/images/ic_fengsu_off5.png" alt />
-							<img v-if="earLight.on == 1 && isLine != 0" src="../../assets/images/ic_fengsu_on5.png" alt />
+							<img v-if="earLight.on == 0" src="../../assets/images/ic_fengsu_off5.png" alt />
+							<img v-if="earLight.on == 1" src="../../assets/images/ic_fengsu_on5.png" alt />
 						</div>
 					</li>
 					<li :class="isLine == 0 ? '' : 'lineAcitve'" @click="devicesSwitch(2)">
