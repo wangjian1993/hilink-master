@@ -13,7 +13,7 @@ import Header from '@/components/header.vue';
 export default {
 	data() {
 		return {
-			title: '本地内容列表',
+			title: '本地内容',
 			active: 0,
 			cid: 0,
 			cname: null,

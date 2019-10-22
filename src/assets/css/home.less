@@ -1,18 +1,22 @@
 @textCloro: #000;
-@normal:8px;
-@center:translate (-50%, -50%);
+@normal: 8px;
+@center: translate (-50%, -50%);
+
 .devices-img {
 	width: 100%;
 	height: 100%;
 	text-align: center;
 	margin-top: 80px;
+
 	img {
 		display: block;
+
 		&:first-child {
 			width: 252px;
 			height: 252px;
 			margin: 0 auto;
 		}
+
 		&:last-child {
 			width: 70px;
 			height: 18px;
@@ -20,6 +24,7 @@
 		}
 	}
 }
+
 .devices-status {
 	width: 328px;
 	margin: 12.8px auto 0;
@@ -27,7 +32,8 @@
 	height: 88px;
 	background: #fff;
 	border-radius: 8px;
-	box-shadow: 0 12px 24px 0 rgba(0,0,0,0.03);
+	box-shadow: 0 12px 24px 0 rgba(0, 0, 0, 0.03);
+
 	.devices-status-text {
 		flex: 3;
 		height: 88px;
@@ -37,35 +43,43 @@
 		text-align: center;
 		font-weight: 600;
 	}
+
 	.devices-status-time {
 		flex: 3;
 		height: 88px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
+
 		div {
 			text-align: center;
+
 			p {
 				color: #007dff;
+
 				&:first-child {
 					font-size: 24px;
 					font-weight: 600;
 				}
+
 				&:last-child {
 					font-size: 14px;
 				}
+
 				.item {
-				  color: #007dff;
-				  font-size: 24px;
-				  font-weight: 600;
+					color: #007dff;
+					font-size: 24px;
+					font-weight: 600;
 				}
 			}
 		}
 	}
+
 	.devices-status-btn {
 		flex: 3;
 		text-align: center;
 		position: relative;
+
 		p {
 			width: 48px;
 			height: 48px;
@@ -73,12 +87,13 @@
 			justify-content: center;
 			align-items: center;
 			border-radius: 50%;
-			background:rgba(0,0,0,.25);
+			background: rgba(0, 0, 0, .25);
 			color: #000000;
 			position: absolute;
 			top: 50%;
 			left: 50%;
 			transform: translate(-50%, -50%);
+
 			img {
 				width: 24px;
 				height: 24px;
@@ -89,48 +104,59 @@
 		}
 	}
 }
-.devices-status-time.timeActive{
+
+.devices-status-time.timeActive {
 	background: #fff;
 	opacity: 0;
 }
-.devices-status-btn p.switchAcitve{
-	background:#007DFF;
-	box-shadow: 0 4px 8px 0px rgba(0,125,255,0.25);
+
+.devices-status-btn p.switchAcitve {
+	background: #007DFF;
+	box-shadow: 0 4px 8px 0px rgba(0, 125, 255, 0.25);
 }
-.devices-audio-div{
+
+.devices-audio-div {
 	width: 328px;
 	margin: 8px auto 0;
 	background: #fff;
 	opacity: 0.38;
 	border-radius: 8px;
-	box-shadow: 0 3px 6px 0 rgba(0,0,0,0.03);
+	box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.03);
 }
-.devices-audio{
+
+.devices-audio {
 	width: 328px;
 	margin: 8px auto 0;
-	.devices-audio-contro-box{
+
+	.devices-audio-contro-box {
 		height: 136px;
 		background: #FFFFFF;
 		opacity: 0.38;
 		border-radius: 8px;
-		box-shadow: 0 3px 6px 0 rgba(0,0,0,0.03);
+		box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.03);
+
 		.devices-audio-control {
-			width:280px;
+			width: 280px;
 			height: 80px;
 			margin: 0 auto;
 			display: flex;
+
 			.devices-audio-control-text {
 				flex: 2;
 				display: flex;
 				align-items: center;
+
 				div {
 					text-align: left;
 					width: 100%;
+
 					p {
 						color: #000000;
+
 						&:first-child {
 							font-size: 16px;
 						}
+
 						&:last-child {
 							font-size: 12px;
 							color: #ababab;
@@ -138,12 +164,15 @@
 					}
 				}
 			}
+
 			.devices-audio-control-icon {
 				flex: 2;
 				display: flex;
+
 				div {
-					flex:3;
+					flex: 3;
 					position: relative;
+
 					p {
 						width: 36px;
 						height: 36px;
@@ -154,6 +183,7 @@
 						top: 50%;
 						left: 50%;
 						transform: translate(-50%, -50%);
+
 						img {
 							width: 36px;
 							height: 36px;
@@ -166,43 +196,51 @@
 			}
 		}
 	}
-	
-	.devices-audio-volume{
+
+	.devices-audio-volume {
 		width: 280px;
 		height: 56px;
 		margin: 0 auto;
 		display: flex;
-		div{
+
+		div {
 			line-height: 56px;
 			font-size: 16px;
-			&:nth-of-type(1){
+
+			&:nth-of-type(1) {
 				width: 53px;
 			}
-			&:nth-of-type(2){
+
+			&:nth-of-type(2) {
 				width: 174px;
 				display: flex;
 				justify-content: center;
 				align-items: center;
-				.van-slider{
+
+				.van-slider {
 					width: 100%;
 				}
 			}
-			&:nth-of-type(3){
+
+			&:nth-of-type(3) {
 				width: 53px;
 				text-align: right;
 			}
 		}
 	}
 }
-.devices-audio-else-controle{
+
+.devices-audio-else-controle {
 	width: 328px;
 	margin: 0 auto 0;
-	ul{
+
+	ul {
 		position: relative;
 		display: flex;
 		flex-wrap: wrap;
-		justify-content:space-between;
-		li{
+		justify-content: space-between;
+
+		li {
 			width: 160px;
 			height: 64px;
 			background: #fff;
@@ -210,125 +248,168 @@
 			border-radius: 8px;
 			margin-top: 8px;
 			display: flex;
-			box-shadow: 0 3px 4px 0px rgba(0,0,0,0.05);
-			.devices-audio-else-text{
+			box-shadow: 0 2px 4px 0px rgba(0, 0, 0, 0.05);
+
+			.devices-audio-else-text {
 				width: 88.3px;
 				height: 64px;
 				display: flex;
 				align-items: center;
-				div{
+
+				div {
 					// padding-left:24px;
-					p{
+					p {
 						text-align: left;
-						padding-left:24px;
-						&:nth-of-type(1){
+						padding-left: 24px;
+
+						&:nth-of-type(1) {
 							font-size: 16px;
 						}
-						&:nth-of-type(2){
+
+						&:nth-of-type(2) {
 							font-size: 12px;
 						}
-						.item{
+
+						.item {
 							font-size: 12px;
 							color: #007dff;
 						}
 					}
 				}
 			}
-			.devices-audio-else-icon{
+
+			.devices-audio-else-icon {
 				width: 71.7px;
 				// text-align: center;
 				display: flex;
 				justify-content: center;
 				align-items: center;
-				img{
+
+				img {
 					width: 24px;
 					height: 24px;
 				}
 			}
 		}
-		.devices-audio-else-mode{
+
+		.devices-audio-else-mode {
 			width: 160px;
 			background: #fff;
+			height: 96px;
 			position: absolute;
-			border-radius: 8px;
 			bottom: 65px;
-			box-shadow: 0 3px 4px 0px rgba(0,0,0,0.05);
+			box-shadow: 0 3px 4px 0px rgba(0, 0, 0, 0.05);
 			z-index: 2000;
-			li{
-				height: 48px;
-				line-height: 48px;
-				p{
-					font-size: 16px;
-					padding-left: 16px;
-					color: #000;
+			border-radius: 8px;
+			ul {
+				width: 100%;
+				height: 100%;
+				// border-radius: 8px;
+				// background: #000000;
+				li {
+					height: 48px;
+					line-height: 48px;
+					margin: 0;
+					border: none;
+					p {
+						font-size: 16px;
+						padding-left: 16px;
+						color: #000;
+						border: none;
+					}
+
+					&:nth-of-type(1) {
+						border-top: 1px rgba(0, 0, 0, 0.05) solid;
+						// box-shadow: 3px 0px 4px 0px rgba(0,0,0,0.05);
+					}
 				}
 			}
 		}
 	}
 }
-.devices-audio-look:extend(.devices-audio-div){
+
+.devices-audio-else-mode li.modeActive {
+	background: #cce5ff;
+	border: none;
+}
+
+.devices-audio-look:extend(.devices-audio-div) {
 	height: 64px;
-	div{
+
+	div {
 		width: 280px;
 		margin: 0 auto;
 		display: flex;
-		p{
+
+		p {
 			flex: 2;
 			height: 64px;
-			line-height:64px;
+			line-height: 64px;
 			font-size: 16px;
 			color: #000;
 		}
-		div{
+
+		div {
 			flex: 2;
-			display:flex;
+			display: flex;
 			justify-content: flex-end;
 			align-items: center;
-			img{
+
+			img {
 				width: 24px;
 				height: 24px;
 			}
 		}
 	}
 }
-.devices-fold{
+
+.devices-fold {
 	width: 100%;
 	margin: 8px auto 0;
 	height: 35px;
 	line-height: 35px;
-	div{
-		display:flex;
+
+	div {
+		display: flex;
 		justify-content: center;
 		align-items: center;
-		p{
-			color:#000000;
+
+		p {
+			color: #000000;
 			font-size: 16px;
 		}
-		img{
+
+		img {
 			width: 28px;
 			height: 25px;
 		}
 	}
 }
-.devices-content{
+
+.devices-content {
 	width: 328px;
 	margin: 24.3px auto 16.8px;
-	h3{
+
+	h3 {
 		color: #000000;
 		font-size: 18px;
 	}
-	ul{
+
+	ul {
 		display: flex;
 		flex-wrap: wrap;
-		justify-content:space-between;
-		li{
+		justify-content: space-between;
+
+		li {
 			width: 160px;
 			margin-top: 16.5px;
-			img{
+
+			img {
 				width: 160px;
 				height: 92px;
 			}
-			p{
+
+			p {
 				font-size: 14px;
 				color: #000000;
 				padding-top: 6.8px;
@@ -336,19 +417,24 @@
 		}
 	}
 }
-.devices-time{
+
+.devices-time {
 	width: 328px;
 	margin: 0 auto;
 }
-.devices-audio-contro-box.lineAcitve{
+
+.devices-audio-contro-box.lineAcitve {
 	opacity: 1;
 }
-.devices-audio-else-controle ul li.lineAcitve{
+
+.devices-audio-else-controle ul li.lineAcitve {
 	opacity: 1;
 }
-.devices-audio-look.lineAcitve{
+
+.devices-audio-look.lineAcitve {
 	opacity: 1;
 }
-.colorActice{
-	color:#007DFF;
+
+.colorActice {
+	color: #007DFF;
 }

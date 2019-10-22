@@ -3,7 +3,6 @@
 		<v-header :title="title"></v-header>
 		<div class="instructions-head"><img src="../../assets/images/shezhi_qita_banner.png" alt="" /></div>
 		<div class="list" v-for="(item, index) in list">
-			
 		</div>
 	</div>
 </template>

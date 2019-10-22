@@ -1,7 +1,7 @@
 <template>
 	<div class="date-time-input-wrap">
 		<div class="date-time-div">
-			<van-popup v-model="timePopup" position="bottom" :overlay="true" class="datetimeBox" :close-on-click-overlay="true">
+			<van-popup v-model="timePopup" position="bottom" :overlay="false" class="datetimeBox">
 				<p>定时关机</p>
 				<van-picker show-toolbar :columns="columns" :show-toolbar="false" @change="onChange" />
 				<div class="datetime-btn">

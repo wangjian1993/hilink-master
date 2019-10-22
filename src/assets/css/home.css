@@ -1,0 +1,363 @@
+@center : translate (-50%, -50%);
+.devices-img {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  margin-top: 80px;
+}
+.devices-img img {
+  display: block;
+}
+.devices-img img:first-child {
+  width: 252px;
+  height: 252px;
+  margin: 0 auto;
+}
+.devices-img img:last-child {
+  width: 70px;
+  height: 18px;
+  margin: 0 auto;
+}
+.devices-status {
+  width: 328px;
+  margin: 12.8px auto 0;
+  display: flex;
+  height: 88px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 12px 24px 0 rgba(0, 0, 0, 0.03);
+}
+.devices-status .devices-status-text {
+  flex: 3;
+  height: 88px;
+  line-height: 88px;
+  color: #000;
+  font-size: 18px;
+  text-align: center;
+  font-weight: 600;
+}
+.devices-status .devices-status-time {
+  flex: 3;
+  height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.devices-status .devices-status-time div {
+  text-align: center;
+}
+.devices-status .devices-status-time div p {
+  color: #007dff;
+}
+.devices-status .devices-status-time div p:first-child {
+  font-size: 24px;
+  font-weight: 600;
+}
+.devices-status .devices-status-time div p:last-child {
+  font-size: 14px;
+}
+.devices-status .devices-status-time div p .item {
+  color: #007dff;
+  font-size: 24px;
+  font-weight: 600;
+}
+.devices-status .devices-status-btn {
+  flex: 3;
+  text-align: center;
+  position: relative;
+}
+.devices-status .devices-status-btn p {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.25);
+  color: #000000;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.devices-status .devices-status-btn p img {
+  width: 24px;
+  height: 24px;
+  margin: 0 auto;
+  color: #000000;
+  display: block;
+}
+.devices-status-time.timeActive {
+  background: #fff;
+  opacity: 0;
+}
+.devices-status-btn p.switchAcitve {
+  background: #007DFF;
+  box-shadow: 0 4px 8px 0px rgba(0, 125, 255, 0.25);
+}
+.devices-audio-div,
+.devices-audio-look {
+  width: 328px;
+  margin: 8px auto 0;
+  background: #fff;
+  opacity: 0.38;
+  border-radius: 8px;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.03);
+}
+.devices-audio {
+  width: 328px;
+  margin: 8px auto 0;
+}
+.devices-audio .devices-audio-contro-box {
+  height: 136px;
+  background: #FFFFFF;
+  opacity: 0.38;
+  border-radius: 8px;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.03);
+}
+.devices-audio .devices-audio-contro-box .devices-audio-control {
+  width: 280px;
+  height: 80px;
+  margin: 0 auto;
+  display: flex;
+}
+.devices-audio .devices-audio-contro-box .devices-audio-control .devices-audio-control-text {
+  flex: 2;
+  display: flex;
+  align-items: center;
+}
+.devices-audio .devices-audio-contro-box .devices-audio-control .devices-audio-control-text div {
+  text-align: left;
+  width: 100%;
+}
+.devices-audio .devices-audio-contro-box .devices-audio-control .devices-audio-control-text div p {
+  color: #000000;
+}
+.devices-audio .devices-audio-contro-box .devices-audio-control .devices-audio-control-text div p:first-child {
+  font-size: 16px;
+}
+.devices-audio .devices-audio-contro-box .devices-audio-control .devices-audio-control-text div p:last-child {
+  font-size: 12px;
+  color: #ababab;
+}
+.devices-audio .devices-audio-contro-box .devices-audio-control .devices-audio-control-icon {
+  flex: 2;
+  display: flex;
+}
+.devices-audio .devices-audio-contro-box .devices-audio-control .devices-audio-control-icon div {
+  flex: 3;
+  position: relative;
+}
+.devices-audio .devices-audio-contro-box .devices-audio-control .devices-audio-control-icon div p {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.devices-audio .devices-audio-contro-box .devices-audio-control .devices-audio-control-icon div p img {
+  width: 36px;
+  height: 36px;
+  margin: 0 auto;
+  color: #000000;
+  display: block;
+}
+.devices-audio .devices-audio-volume {
+  width: 280px;
+  height: 56px;
+  margin: 0 auto;
+  display: flex;
+}
+.devices-audio .devices-audio-volume div {
+  line-height: 56px;
+  font-size: 16px;
+}
+.devices-audio .devices-audio-volume div:nth-of-type(1) {
+  width: 53px;
+}
+.devices-audio .devices-audio-volume div:nth-of-type(2) {
+  width: 174px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.devices-audio .devices-audio-volume div:nth-of-type(2) .van-slider {
+  width: 100%;
+}
+.devices-audio .devices-audio-volume div:nth-of-type(3) {
+  width: 53px;
+  text-align: right;
+}
+.devices-audio-else-controle {
+  width: 328px;
+  margin: 0 auto 0;
+}
+.devices-audio-else-controle ul {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.devices-audio-else-controle ul li {
+  width: 160px;
+  height: 64px;
+  background: #fff;
+  opacity: 0.38;
+  border-radius: 8px;
+  margin-top: 8px;
+  display: flex;
+  box-shadow: 0 2px 4px 0px rgba(0, 0, 0, 0.05);
+}
+.devices-audio-else-controle ul li .devices-audio-else-text {
+  width: 88.3px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+}
+.devices-audio-else-controle ul li .devices-audio-else-text div p {
+  text-align: left;
+  padding-left: 24px;
+}
+.devices-audio-else-controle ul li .devices-audio-else-text div p:nth-of-type(1) {
+  font-size: 16px;
+}
+.devices-audio-else-controle ul li .devices-audio-else-text div p:nth-of-type(2) {
+  font-size: 12px;
+}
+.devices-audio-else-controle ul li .devices-audio-else-text div p .item {
+  font-size: 12px;
+  color: #007dff;
+}
+.devices-audio-else-controle ul li .devices-audio-else-icon {
+  width: 71.7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.devices-audio-else-controle ul li .devices-audio-else-icon img {
+  width: 24px;
+  height: 24px;
+}
+.devices-audio-else-controle ul .devices-audio-else-mode {
+  width: 160px;
+  background: #fff;
+  height: 96px;
+  position: absolute;
+  bottom: 65px;
+  box-shadow: 0 3px 4px 0px rgba(0, 0, 0, 0.05);
+  z-index: 2000;
+  border-radius: 8px;
+}
+.devices-audio-else-controle ul .devices-audio-else-mode ul {
+  width: 100%;
+  height: 100%;
+}
+.devices-audio-else-controle ul .devices-audio-else-mode ul li {
+  height: 48px;
+  line-height: 48px;
+  margin: 0;
+  border: none;
+}
+.devices-audio-else-controle ul .devices-audio-else-mode ul li p {
+  font-size: 16px;
+  padding-left: 16px;
+  color: #000;
+  border: none;
+}
+.devices-audio-else-controle ul .devices-audio-else-mode ul li:nth-of-type(1) {
+  border-top: 1px rgba(0, 0, 0, 0.05) solid;
+}
+.devices-audio-else-mode li.modeActive {
+  background: #cce5ff;
+  border: none;
+}
+.devices-audio-look {
+  height: 64px;
+}
+.devices-audio-look div {
+  width: 280px;
+  margin: 0 auto;
+  display: flex;
+}
+.devices-audio-look div p {
+  flex: 2;
+  height: 64px;
+  line-height: 64px;
+  font-size: 16px;
+  color: #000;
+}
+.devices-audio-look div div {
+  flex: 2;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.devices-audio-look div div img {
+  width: 24px;
+  height: 24px;
+}
+.devices-fold {
+  width: 100%;
+  margin: 8px auto 0;
+  height: 35px;
+  line-height: 35px;
+}
+.devices-fold div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.devices-fold div p {
+  color: #000000;
+  font-size: 16px;
+}
+.devices-fold div img {
+  width: 28px;
+  height: 25px;
+}
+.devices-content {
+  width: 328px;
+  margin: 24.3px auto 16.8px;
+}
+.devices-content h3 {
+  color: #000000;
+  font-size: 18px;
+}
+.devices-content ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.devices-content ul li {
+  width: 160px;
+  margin-top: 16.5px;
+}
+.devices-content ul li img {
+  width: 160px;
+  height: 92px;
+}
+.devices-content ul li p {
+  font-size: 14px;
+  color: #000000;
+  padding-top: 6.8px;
+}
+.devices-time {
+  width: 328px;
+  margin: 0 auto;
+}
+.devices-audio-contro-box.lineAcitve {
+  opacity: 1;
+}
+.devices-audio-else-controle ul li.lineAcitve {
+  opacity: 1;
+}
+.devices-audio-look.lineAcitve {
+  opacity: 1;
+}
+.colorActice {
+  color: #007DFF;
+}

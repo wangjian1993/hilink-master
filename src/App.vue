@@ -148,4 +148,14 @@ html {
 .van-overlay {
 	background-color: rgba(0, 0, 0, 0.3);
 }
+.mode{
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	z-index: 1000;
+	background: rgba(0, 0, 0, 0.3);
+	top: 0;
+	left: 0;
+	box-sizing: border-box;
+}
 </style>
