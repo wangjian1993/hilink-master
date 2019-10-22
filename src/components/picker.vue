@@ -5,7 +5,7 @@
 				<p>定时关机</p>
 				<van-picker show-toolbar :columns="columns" :show-toolbar="false" @change="onChange" />
 				<div class="datetime-btn">
-					<p @click="timeCancel()">取消</p>
+					<p @click="timeCancel()" :class="deviceTime != 0 ?'cancelText':''">{{deviceTime == 0 ?'取消':'关闭定时'}}</p>
 					<p @click="timeConfirm()">确定</p>
 				</div>
 			</van-popup>
@@ -14,6 +14,7 @@
 </template>
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex';
+import { _debounce } from '@/hilink/public';
 export default {
 	props: {
 		timePopup: {
@@ -25,7 +26,7 @@ export default {
 			// timePopup:false,
 			currentTime: '0:00',
 			endTime: 0,
-			columns: ['关', '15分钟', '30分钟', '60分钟', '90分钟', '120分钟']
+			columns: ['不开启', '15分钟', '30分钟', '60分钟', '90分钟', '120分钟']
 		};
 	},
 	mounted() {
@@ -39,27 +40,37 @@ export default {
 			};
 		}
 	},
-	computed: {},
+	computed: {
+		...mapState(['loadingFlag','deviceTime'])
+	},
 	created() {},
 	methods: {
 		/* 取消按钮 */
 		timeCancel() {
-			this.$emit('update:timePopup', false); //弹框隐藏，意为timePopup为false
+			let self = this;
+			if(self.deviceTime == 0){
+				self.$emit('update:timePopup', false); //弹框隐藏，意为timePopup为false
+			}else {		
+				self.$emit('update:timePopup', false); //弹框隐藏，意为timePopup为false
+				self.delDevicesTime();
+				return false;
+			}
+			
 		},
 		timeCalculate(nub) {
 			var date = new Date();
 			//2. 获取当前分钟
 			let min = date.getMinutes();
-			console.log('min=======', min);
-			//3. 设置当前时间+5分钟：把当前分钟数+5后的值重新设置为date对象的分钟数
 			let d = date.setMinutes(min + parseInt(nub));
-			console.log('timeDate20000=====', this.timestampToTime(d));
 			let timeDate = parseInt(d.toString().slice(0, 10));
-			console.log('timeDate=====', this.timestampToTime(timeDate));
 			return timeDate;
 		},
-		timeConfirm() {
+		timeConfirm:_debounce(function(){
 			let self = this;
+			if (!self.loadingFlag) {
+				return;
+			}
+			console.log("self.endTime",self.endTime)
 			if (self.endTime == 0) {
 				self.delDevicesTime();
 				self.$emit('update:timePopup', false); //弹框隐藏，意为timePopup为false
@@ -67,7 +78,6 @@ export default {
 			}
 			self.$emit('update:timePopup', false); //弹框隐藏，意为timePopup为false
 			let time = self.timeCalculate(self.endTime);
-			console.log('timeDate2222=====', this.timestampToTime(time));
 			var body = {
 				from: 'DID:0',
 				to: 'UID:-1',
@@ -79,9 +89,9 @@ export default {
 			};
 			var json = JSON.stringify(body);
 			var data = { custom: { function: json, name: 'function' } };
-			console.log('data======', data);
 			self.setDeviceSongsInfo(data, 'deviceTimeCallBack');
-		},
+			self.$store.dispatch('setLoadingFlag', false);
+		},400),
 		//回调函数转换
 		praseResponseData(resData) {
 			try {
@@ -97,6 +107,7 @@ export default {
 		},
 		delDevicesTime() {
 			let self = this;
+			console.log("关闭定时关机==========")
 			var body = {
 				from: 'DID:0',
 				to: 'UID:-1',
@@ -106,7 +117,8 @@ export default {
 			};
 			var json = JSON.stringify(body);
 			var data = { custom: { function: json, name: 'function' } };
-			self.$store.dispatch('setDevInfo', data);
+			self.setDeviceSongsInfo(data, 'deviceTimeCallBack');
+			console.log("关闭成功=========");
 		},
 		getDevicesTime() {
 			let self = this;
@@ -168,6 +180,9 @@ export default {
 				text-align: center;
 				font-size: 16px;
 				color: #007dff;
+			}
+			.cancelText{
+				color: #FA2A2D;
 			}
 		}
 	}

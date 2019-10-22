@@ -174,6 +174,7 @@ const mutations = {
 					let m = (customData.timestamp - tmp) * 1000;
 					state.deviceTime =m -t;
 				} else {
+					console.log("关闭设备定时=============")
 					state.deviceTime = 0;
 					console.log("state.deviceTime",state.deviceTime)
 				}

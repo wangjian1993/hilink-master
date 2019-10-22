@@ -73,8 +73,8 @@ export default {
 			let localData = JSON.stringify(d);
 			let json = { custom: { function: localData } };
 			let body = JSON.stringify(json);
-			console.log("获取本地文件夹===",body)
 			window.hilink.setDeviceInfo("0", body, "localResult");
+			// window.hilink.getDevInfo("0", 'custom',body, "getResultCallback");
 		}
 	},
 	setDevInfo({
