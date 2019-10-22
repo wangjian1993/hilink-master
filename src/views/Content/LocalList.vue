@@ -2,11 +2,8 @@
 	<div class="app">
 		<v-header :title="title"></v-header>
 		<div class="list-content">
-			<div class="loading-box" v-if="!loading">
-				<van-loading size="24px" type="spinner" vertical color="#007DFF">加载中</van-loading>
-			</div>
+			<div class="loading-box" v-if="!loading"><van-loading size="24px" type="spinner" vertical color="#007DFF">加载中</van-loading></div>
 			<div class="local-list" v-if="loading">
-				<!-- <p class="nullBox" v-if="localSongList.songs.length == 0 && loading">暂无歌曲</p> -->
 				<ul>
 					<li v-for="(opt, index) in localSongList.songs">
 						<p @click="localSongPut(index)" :class="cid == musicData.channel && index == musicData.idx ? 'textActive' : ''">{{ opt.name }}</p>
@@ -40,7 +37,7 @@ export default {
 			limitNumber: 0,
 			isStop: false,
 			delIndex: -1,
-			isMore:false,
+			isMore: false,
 			isBottom: false
 		};
 	},
@@ -106,8 +103,8 @@ export default {
 			let self = this;
 			if (!self.cangetlocal) return false;
 			self.limitNumber = Math.ceil(self.localTotal / 6);
-			if(self.limitNumber <= 1){
-				self.isMore =true;
+			if (self.limitNumber <= 1) {
+				self.isMore = true;
 			}
 			// self.getLocalSong();
 		}, 300),
@@ -115,7 +112,7 @@ export default {
 			let self = this;
 			if (self.beginNumber >= self.limitNumber) {
 				self.cangetlocal = true;
-				self.isMore =true;
+				self.isMore = true;
 				return true;
 			}
 			let body = {
@@ -184,8 +181,8 @@ export default {
 				that.beginNumber = that.beginNumber + 1;
 				that.cangetlocal = false;
 				that.getLocalSong();
-			}else {
-				that.isMore =true;
+			} else {
+				that.isMore = true;
 			}
 		},
 		// toBottom() {

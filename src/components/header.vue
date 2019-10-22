@@ -63,7 +63,7 @@ export default {
 	width: 100%;
 	position: fixed;
 	top: 0px;
-	background: #ffffff;
+	background: #f7f7f7;
 	height: 80px;
 	z-index: 1000;
 }
@@ -73,14 +73,14 @@ export default {
 	display: flex;
 	.home-header-back {
 		display: flex;
-		justify-content: center;
+		// justify-content: center;
 		align-items: center;
-		width: 56px;
 		height: 100%;
+		padding-left: 16px;
 		img {
 			display: block;
-			width: 20px;
-			height: 20px;
+			width: 24px;
+			height: 24px;
 		}
 	}
 	.home-header-title {
@@ -89,6 +89,7 @@ export default {
 		overflow: hidden;
 		white-space: nowrap;
 		width: 100%;
+		padding-left: 16px;
 		text-overflow: ellipsis;
 		p {
 			color: #000000;
