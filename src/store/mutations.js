@@ -47,7 +47,6 @@ const mutations = {
 	resultData(state, resData) {
 		let type = resData;
 		state.loadingFlag =true;
-		console.log("state.loadingFlag========",state.loadingFlag)
 		switch (type.sid) {
 			case 'switch':
 				state.lampSwitch = resData.data.on;
@@ -105,7 +104,6 @@ const mutations = {
 		}
 		let action = customData.action;
 		state.loadingFlag =true;
-		console.log("action=======",action)
 		switch (action) {
 			case 910:
 				state.playMode = customData.playmode;

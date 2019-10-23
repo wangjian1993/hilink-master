@@ -1,5 +1,6 @@
 <template>
 	<div class="container">
+		<v-header :title="title"></v-header>
 		<!--搜索-->
 		<div class="content-box" v-if="!isLoaded">
 			<div class="search">
@@ -231,13 +232,14 @@
 			</div>
 			<p class="PageBottom" v-show="isShowNoMore">{{$t('m.Classics')}}暂无更多</p>
 		</div>
-		<div class="loadingding center" v-show="isLoaded"><van-loading size="30px" vertical color="#007DFF">{{$t('m.Classics')}}加载中</van-loading></div>
+		<div class="loadingding center" v-show="isLoaded"><van-loading size="30px" vertical color="#007DFF">加载中</van-loading></div>
 		<!-- <div class="goTop" v-show="isBottom" @click="goTop"><img src="../../assets/images/top.png" /></div> -->
 	</div>
 </template>
 
 <script>
 import http from '../../api/index.js';
+import Header from '@/components/header.vue';
 export default {
 	data() {
 		return {
@@ -258,7 +260,8 @@ export default {
 			page: 0,
 			isShowNoMore: false,
 			isBottom: false,
-			search:''
+			search:'',
+			title:this.$t('m.AliloCloud')
 		};
 	},
 	created() {},
@@ -445,7 +448,9 @@ export default {
 			}
 		};
 	},
-	components: {}
+	components: {
+		'v-header': Header
+	}
 };
 </script>
 

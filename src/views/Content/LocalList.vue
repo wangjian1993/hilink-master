@@ -179,7 +179,7 @@ export default {
 		listMore() {
 			let that = this;
 			if (that.cangetlocal && that.beginNumber <= that.limitNumber) {
-				console.log('加载更多=========',that.localSongList.songs);
+				console.log('加载更多=========', that.localSongList.songs);
 				let list = that.localSongList.songs;
 				if (list.length == 0) {
 					that.beginNumber = 0;
@@ -262,6 +262,9 @@ export default {
 			font-size: 14px;
 			color: #000000;
 			line-height: 50px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
 		}
 		span {
 			display: block;

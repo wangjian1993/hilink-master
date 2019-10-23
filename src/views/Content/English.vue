@@ -1,5 +1,6 @@
 <template>
 	<div class="app">
+		<v-header :title="title"></v-header>
 		<div class="loading-box" v-if="!loadingFlag"><van-loading size="30px" color="#007DFF" vertical>加载中</van-loading></div>
 		<div class="english-content" v-if="loadingFlag">
 			<div class="content-box">
@@ -88,10 +89,10 @@
 
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex';
+import Header from '@/components/header.vue';
 export default {
 	data() {
 		return {
-			title: this.$t('m.Learning'),
 			englishData: [],
 			loadingFlag: false,
 			musicList: {
@@ -112,7 +113,8 @@ export default {
 					id: ''
 				}
 			},
-			setCheck: false
+			setCheck: false,
+			title:this.$t('m.Learning')
 		};
 	},
 	computed: {
@@ -178,7 +180,9 @@ export default {
 			this.$router.push({ name: 'cloudListenDetail', query: { id: id } });
 		}
 	},
-	components: {}
+	components: {
+		'v-header': Header
+	}
 };
 </script>
 

@@ -16,7 +16,8 @@ export default {
 			isPlay: false,
 			transitionName: null,
 			path: '',
-			title: '火火兔故事机'
+			type:'AliloCloud',
+			title:this.$t('m.AliloCloud')
 		};
 	},
 	created() {
@@ -50,7 +51,7 @@ export default {
 				console.log('手机恢复后台');
 			};
 			window['systemResultCallback'] = res => {
-				console.log('获取系统信息', res);
+				console.log('获取系统信息');
 			};
 			//获取设备全部信息回调
 		}
@@ -148,12 +149,22 @@ html {
 .van-overlay {
 	background-color: rgba(0, 0, 0, 0.3);
 }
-.mode{
+.popup{
 	width: 100%;
 	height: 100%;
 	position: fixed;
 	z-index: 1000;
 	background: rgba(0, 0, 0, 0.3);
+	top: 0;
+	left: 0;
+	box-sizing: border-box;
+}
+.popup1{
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	z-index: 1000;
+	background: rgba(0, 0, 0, 0);
 	top: 0;
 	left: 0;
 	box-sizing: border-box;

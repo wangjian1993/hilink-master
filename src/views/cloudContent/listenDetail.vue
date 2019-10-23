@@ -204,7 +204,7 @@ export default {
 						]
 					};
 					self.$toast({
-						message: "歌曲添加下载成功",
+						message: "歌曲添加收藏成功",
 						position: "bottom",
 						duration: "3000",
 						className: "toastActive"

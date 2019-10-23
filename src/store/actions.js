@@ -78,7 +78,7 @@ export default {
 			let localData = JSON.stringify(d);
 			let json = { custom: { function: localData } };
 			let body = JSON.stringify(json);
-			window.hilink.setDeviceInfo("0", body, "localResult");
+			window.hilink.setDeviceInfoWithoutCallback("0", body);
 			// window.hilink.getDevInfo("0", 'custom',body, "getResultCallback");
 		}
 	},
@@ -87,7 +87,7 @@ export default {
 	}, data) {
 		if (window.hilink != undefined) {
 			let body = JSON.stringify(data);
-			window.hilink.setDeviceInfo("0", body, "getDeviceInfoData");
+			window.hilink.setDeviceInfoWithoutCallback("0", body);
 		}
 	},
 	delSongsList({
@@ -95,7 +95,7 @@ export default {
 	}, data) {
 		if (window.hilink != undefined) {
 			let body = JSON.stringify(data);
-			window.hilink.setDeviceInfo("0", body, "songsListBack");
+			window.hilink.setDeviceInfoWithoutCallback("0", body);
 		}
 	},
 	getSongsList({
@@ -103,7 +103,7 @@ export default {
 	}, data) {
 		if (window.hilink != undefined) {
 			let body = JSON.stringify(data);
-			window.hilink.setDeviceInfo("0", body, "delListBack");
+			window.hilink.setDeviceInfoWithoutCallback("0", body);
 		}
 	},
 	init({

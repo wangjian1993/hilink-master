@@ -1,5 +1,5 @@
 export const m = {
-	switchOpen: 'Open', //网易云音乐
+	HomeTitel:'Alilo story machine',
 	on:'On',
 	off:'Off',
 	timer:'Timer',

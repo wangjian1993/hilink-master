@@ -1,5 +1,6 @@
 <template>
 	<div class="container">
+		<v-header :title="title"></v-header>
 		<van-tabs v-model="active" color="#81b4ff" @click="refresh" class="tabs">
 			<van-tab title="0">
 				<div slot="title" class="tab">
@@ -39,6 +40,7 @@
 
 <script>
 import http from '../../api/index.js';
+import Header from '@/components/header.vue';
 export default {
 	data() {
 		return {
@@ -49,7 +51,8 @@ export default {
 			isLoaded: false,
 			page: 0,
 			isShowNoMore: false,
-			params: null
+			params: null,
+			title:this.$t('m.AliloCloud')
 		};
 	},
 	activated() {
@@ -121,6 +124,9 @@ export default {
 		goDetail(item) {
 			this.$router.push({ name: 'cloudListenDetail', query: { id: item } });
 		}
+	},
+	components: {
+		'v-header': Header
 	}
 };
 </script>
