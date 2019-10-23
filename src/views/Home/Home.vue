@@ -1,591 +1,556 @@
 <template>
-  <div class="home">
-    <v-header :title="title" :type="headerType"></v-header>
-    <!-- 产品图 -->
-    <div class="devices-img">
-      <img src="../../assets/images/img_toutu_red.png" alt />
-      <img src="../../assets/images/logo.png" alt />
-    </div>
-    <!-- 故事机开关 -->
-    <div class="devices-status">
-      <div class="devices-status-text">{{ isLine == 0 ? '已关闭' : '已启用' }}</div>
-      <div class="devices-status-time" :class="deviceTime == 0 ? 'timeActive' : ''">
-        <div>
-          <p>
-            <van-count-down :time="deviceTime" @finish="deviceTimeFinish()">
-              <template v-slot="timeData">
-                <span class="item" v-if="timeData.hours != 0">{{ timeData.hours }}:</span>
-                <span class="item">{{ timeData.minutes }}:</span>
-                <span class="item">{{ timeData.seconds }}</span>
-              </template>
-            </van-count-down>
-          </p>
-          <p>定时关机</p>
-        </div>
-      </div>
-      <div class="devices-status-btn" @click="devicesSwitch(0)">
-        <p :class="isLine == 1 ? 'switchAcitve' : ''">
-          <img :src="switchIcon()" alt />
-        </p>
-      </div>
-    </div>
-    <div class="devices-audio" style="background: #F7F7F7;">
-      <!-- 歌曲控制 -->
-      <div class="devices-audio-contro-box" :class="isLine == 0 ? '' : 'lineAcitve'">
-        <div class="devices-audio-control">
-          <div class="devices-audio-control-text">
-            <div>
-              <p>
-                <marquee
-                  class="songstitle"
-                  direction="left"
-                  behavior="scroll"
-                  scrollamount="2"
-                  scrolldelay="0"
-                  loop="-1"
-                  width="100%"
-                  height="100%"
-                >{{ audioInfo.song != '' ? audioInfo.song : '歌曲正在路上' }}</marquee>
-                <!-- <van-notice-bar
+	<div class="home">
+		<v-header :title="title" :type="headerType"></v-header>
+		<!-- 产品图 -->
+		<div class="devices-img">
+			<img src="../../assets/images/img_toutu_red.png" alt />
+			<img src="../../assets/images/logo.png" alt />
+		</div>
+		<!-- 故事机开关 -->
+		<div class="devices-status">
+			<div class="devices-status-text">{{ isLine == 0 ? $t('m.off') : $t('m.on') }}</div>
+			<div class="devices-status-time" :class="deviceTime == 0 ? 'timeActive' : ''">
+				<div>
+					<p>
+						<van-count-down :time="deviceTime" @finish="deviceTimeFinish()">
+							<template v-slot="timeData">
+								<span class="item" v-if="timeData.hours != 0">{{ timeData.hours }}:</span>
+								<span class="item">{{ timeData.minutes }}:</span>
+								<span class="item">{{ timeData.seconds }}</span>
+							</template>
+						</van-count-down>
+					</p>
+					<p>{{ $t('m.timer') }}</p>
+				</div>
+			</div>
+			<div class="devices-status-btn" @click="devicesSwitch(0)">
+				<p :class="isLine == 1 ? 'switchAcitve' : ''"><img :src="switchIcon()" alt /></p>
+			</div>
+		</div>
+		<div class="devices-audio" style="background: #F7F7F7;">
+			<!-- 歌曲控制 -->
+			<div class="devices-audio-contro-box" :class="isLine == 0 ? '' : 'lineAcitve'">
+				<div class="devices-audio-control">
+					<div class="devices-audio-control-text">
+						<div>
+							<p>
+								<marquee
+									class="songstitle"
+									direction="left"
+									behavior="scroll"
+									scrollamount="2"
+									scrolldelay="0"
+									loop="-1"
+									width="100%"
+									height="100%"
+									style="font-size: 14px;"
+								>
+									{{ audioInfo.song != '' ? audioInfo.song : $t('m.Loading') }}
+								</marquee>
+								<!-- <van-notice-bar
 									color="#000"
 									:speed="noticeValue"
 									background="#fff"
 									:text="audioInfo.song != '' ? audioInfo.song : '歌曲正在路上'"
 									style="padding: 0;"
                 />-->
-              </p>
-              <p></p>
-            </div>
-          </div>
-          <div class="devices-audio-control-icon">
-            <div>
-              <p @click="devicesSwitch(3)">
-                <img src="../../assets/images/ic_last.png" alt />
-              </p>
-            </div>
-            <div>
-              <p @click="devicesSwitch(5)">
-                <img v-if="audioInfo.play == 1" src="../../assets/images/ic_playing.png" alt />
-                <img v-if="audioInfo.play == 0" src="../../assets/images/ic_stop.png" alt />
-              </p>
-            </div>
-            <div>
-              <p @click="devicesSwitch(4)">
-                <img src="../../assets/images/ic_next.png" alt />
-              </p>
-            </div>
-          </div>
-        </div>
-        <!-- 音量 -->
-        <div class="devices-audio-volume">
-          <div>
-            <p>音量</p>
-          </div>
-          <div>
-            <van-slider
-              v-model="$store.state.volume"
-              bar-height="2px"
-              @change="onVolumeChange"
-              active-color="#007DFF"
-            />
-          </div>
-          <div>
-            <span>{{ volume }}%</span>
-          </div>
-        </div>
-      </div>
-      <!-- 其他控制 -->
-      <div class="devices-audio-else-controle">
-        <ul>
-          <div class="devices-audio-else-mode" v-show="audioMode">
-            <ul>
-              <li
-                @click="devicesModeAction(1)"
-                :class="[isLine == 0 ? '' : 'lineAcitve',playMode == 1?'modeActive':'']"
-              >
-                <p>全部循环</p>
-              </li>
-              <li
-                @click="devicesModeAction(0)"
-                :class="[isLine == 0 ? '' : 'lineAcitve',playMode == 0?'modeActive':'']"
-              >
-                <p>单曲循环</p>
-              </li>
-            </ul>
-          </div>
-          <li @click="devicesMode()" :class="isLine == 0 ? '' : 'lineAcitve'">
-            <div class="devices-audio-else-text">
-              <div>
-                <p>模式</p>
-                <p :class="isLine == 0 ? '' : 'colorActice'">{{ playMode == 1 ? '全部循环' : '单曲循环' }}</p>
-              </div>
-            </div>
-            <div class="devices-audio-else-icon">
-              <img v-if="playMode == -1" src="../../assets/images/ic_liebiao.png" alt />
-              <img
-                v-if="playMode == 0 && isLine != 0"
-                src="../../assets/images/ic_danqu_hover.png"
-                alt
-              />
-              <img
-                v-if="playMode == 1 && isLine != 0"
-                src="../../assets/images/ic_liebiao_hover.png"
-                alt
-              />
-            </div>
-          </li>
-          <li @click="onConfirm()" :class="isLine == 0 ? '' : 'lineAcitve'">
-            <div class="devices-audio-else-text">
-              <div>
-                <p>定时关机</p>
-                <p :class="deviceTime == 0 ? '' : 'colorActice'" v-if="deviceTime != 0">
-                  <van-count-down :time="deviceTime">
-                    <template v-slot="timeData">
-                      <span class="item" v-if="timeData.hours != 0">{{ timeData.hours }}:</span>
-                      <span class="item">{{ timeData.minutes }}:</span>
-                      <span class="item">{{ timeData.seconds }}</span>
-                    </template>
-                  </van-count-down>
-                </p>
-              </div>
-            </div>
-            <div class="devices-audio-else-icon">
-              <img v-if="deviceTime == 0" src="../../assets/images/ic_dingshi_off.png" alt />
-              <img v-else src="../../assets/images/ic_dingshi_on.png" alt />
-            </div>
-          </li>
-        </ul>
-        <ul v-show="isFold">
-          <li :class="isLine == 0 ? '' : 'lineAcitve'" @click="devicesSwitch(1)">
-            <div class="devices-audio-else-text">
-              <div>
-                <p>耳灯</p>
-                <p
-                  :class="earLight.on == 0? '' : 'colorActice'"
-                >{{ earLight.on == 0 ? '已关闭' : '已启用' }}</p>
-              </div>
-            </div>
-            <div class="devices-audio-else-icon">
-              <img v-if="earLight.on == 0" src="../../assets/images/ic_fengsu_off5.png" alt />
-              <img v-if="earLight.on == 1" src="../../assets/images/ic_fengsu_on5.png" alt />
-            </div>
-          </li>
-          <li :class="isLine == 0 ? '' : 'lineAcitve'" @click="devicesSwitch(2)">
-            <div class="devices-audio-else-text">
-              <div>
-                <p>表情灯</p>
-                <p
-                  :class="faceLight.on == 0 ? '' : 'colorActice'"
-                >{{ faceLight.on == 0 ? '已关闭' : '已启用' }}</p>
-              </div>
-            </div>
-            <div class="devices-audio-else-icon">
-              <img v-if="faceLight.on == 0" src="../../assets/images/ic_shuimian_off.png" alt />
-              <img v-if="faceLight.on == 1" src="../../assets/images/ic_shuimian_on.png" alt />
-            </div>
-          </li>
-        </ul>
-      </div>
-      <div
-        class="devices-audio-look"
-        @click="devicesLockSwitch()"
-        v-show="isFold"
-        :class="isLine == 0 ? '' : 'lineAcitve'"
-      >
-        <div>
-          <p>童锁</p>
-          <div>
-            <img v-if="lookData == 1" src="../../assets/images/ic_tongsuo_on.png" alt />
-            <img v-if="lookData == 0" src="../../assets/images/ic_tongsuo_off.png" alt />
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="devices-fold">
-      <div @click="foldClick()">
-        <p>{{ foldText }}</p>
-        <img :src="foldIcon" alt />
-      </div>
-    </div>
-    <div class="devices-content">
-      <h3>内容推荐</h3>
-      <ul>
-        <li @click="contentBtn(0)">
-          <img src="../../assets/images/img_huohuotuneirongyun.png" alt />
-          <p>火火兔内容云</p>
-        </li>
-        <li @click="contentBtn(1)">
-          <img src="../../assets/images/img_qimengjiaoyu.png" alt />
-          <p>启蒙英语</p>
-        </li>
-        <li @click="contentBtn(2)">
-          <img src="../../assets/images/img_bendineir.png" alt />
-          <p>本地内容</p>
-        </li>
-        <li @click="englishBtn()">
-          <img src="../../assets/images/img_wodeshoucang.png" alt />
-          <p>我的收藏</p>
-        </li>
-      </ul>
-    </div>
-    <div class="mode" v-if="timePopup" @click="popupClick()"></div>
-    <v-picker :timePopup.sync="timePopup"></v-picker>
-  </div>
+							</p>
+							<p></p>
+						</div>
+					</div>
+					<div class="devices-audio-control-icon">
+						<div>
+							<p @click="devicesSwitch(3)"><img src="../../assets/images/ic_last.png" alt /></p>
+						</div>
+						<div>
+							<p @click="devicesSwitch(5)">
+								<img v-if="audioInfo.play == 1" src="../../assets/images/ic_playing.png" alt />
+								<img v-if="audioInfo.play == 0" src="../../assets/images/ic_stop.png" alt />
+							</p>
+						</div>
+						<div>
+							<p @click="devicesSwitch(4)"><img src="../../assets/images/ic_next.png" alt /></p>
+						</div>
+					</div>
+				</div>
+				<!-- 音量 -->
+				<div class="devices-audio-volume">
+					<div>
+						<p>{{ $t('m.Volume') }}</p>
+					</div>
+					<div><van-slider v-model="$store.state.volume" bar-height="2px" @change="onVolumeChange" active-color="#007DFF" /></div>
+					<div>
+						<span>{{ volume }}%</span>
+					</div>
+				</div>
+			</div>
+			<!-- 其他控制 -->
+			<div class="devices-audio-else-controle">
+				<ul>
+					<div class="devices-audio-else-mode" v-show="audioMode">
+						<ul>
+							<li @click="devicesModeAction(1)" :class="[isLine == 0 ? '' : 'lineAcitve', playMode == 1 ? 'modeActive' : '']">
+								<p>{{ $t('m.Loopp') }}</p>
+							</li>
+							<li @click="devicesModeAction(0)" :class="[isLine == 0 ? '' : 'lineAcitve', playMode == 0 ? 'modeActive' : '']">
+								<p>{{ $t('m.Loops') }}</p>
+							</li>
+						</ul>
+					</div>
+					<li @click="devicesMode()" :class="isLine == 0 ? '' : 'lineAcitve'">
+						<div class="devices-audio-else-text">
+							<div>
+								<p>{{ $t('m.Mode') }}</p>
+								<p :class="isLine == 0 ? '' : 'colorActice'">{{ playMode == 1 ? $t('m.Loopp') : $t('m.Loops') }}</p>
+							</div>
+						</div>
+						<div class="devices-audio-else-icon">
+							<img v-if="playMode == -1" src="../../assets/images/ic_liebiao.png" alt />
+							<img v-if="playMode == 0 && isLine != 0" src="../../assets/images/ic_danqu_hover.png" alt />
+							<img v-if="playMode == 1 && isLine != 0" src="../../assets/images/ic_liebiao_hover.png" alt />
+						</div>
+					</li>
+					<li @click="onConfirm()" :class="isLine == 0 ? '' : 'lineAcitve'">
+						<div class="devices-audio-else-text">
+							<div>
+								<p>{{ $t('m.timer') }}</p>
+								<p :class="deviceTime == 0 ? '' : 'colorActice'" v-if="deviceTime != 0">
+									<van-count-down :time="deviceTime">
+										<template v-slot="timeData">
+											<span class="item" v-if="timeData.hours != 0">{{ timeData.hours }}:</span>
+											<span class="item">{{ timeData.minutes }}:</span>
+											<span class="item">{{ timeData.seconds }}</span>
+										</template>
+									</van-count-down>
+								</p>
+							</div>
+						</div>
+						<div class="devices-audio-else-icon">
+							<img v-if="deviceTime == 0" src="../../assets/images/ic_dingshi_off.png" alt />
+							<img v-else src="../../assets/images/ic_dingshi_on.png" alt />
+						</div>
+					</li>
+				</ul>
+				<ul v-show="isFold">
+					<li :class="isLine == 0 ? '' : 'lineAcitve'" @click="devicesSwitch(1)">
+						<div class="devices-audio-else-text">
+							<div>
+								<p>{{ $t('m.Earlight') }}</p>
+								<p :class="earLight.on == 0 ? '' : 'colorActice'">{{ earLight.on == 0 ? $t('m.off') : $t('m.on') }}</p>
+							</div>
+						</div>
+						<div class="devices-audio-else-icon">
+							<img v-if="earLight.on == 0" src="../../assets/images/ic_fengsu_off5.png" alt />
+							<img v-if="earLight.on == 1" src="../../assets/images/ic_fengsu_on5.png" alt />
+						</div>
+					</li>
+					<li :class="isLine == 0 ? '' : 'lineAcitve'" @click="devicesSwitch(2)">
+						<div class="devices-audio-else-text">
+							<div>
+								<p>{{ $t('m.Facelight') }}</p>
+								<p :class="faceLight.on == 0 ? '' : 'colorActice'">{{ faceLight.on == 0 ? $t('m.off') : $t('m.on') }}</p>
+							</div>
+						</div>
+						<div class="devices-audio-else-icon">
+							<img v-if="faceLight.on == 0" src="../../assets/images/ic_shuimian_off.png" alt />
+							<img v-if="faceLight.on == 1" src="../../assets/images/ic_shuimian_on.png" alt />
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="devices-audio-look" @click="devicesLockSwitch()" v-show="isFold" :class="isLine == 0 ? '' : 'lineAcitve'">
+				<div>
+					<p>{{ $t('m.Childlock') }}</p>
+					<div>
+						<img v-if="lookData == 1" src="../../assets/images/ic_tongsuo_on.png" alt />
+						<img v-if="lookData == 0" src="../../assets/images/ic_tongsuo_off.png" alt />
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="devices-fold">
+			<div @click="foldClick()">
+				<p>{{ foldText }}</p>
+				<img :src="foldIcon" alt />
+			</div>
+		</div>
+		<div class="devices-content">
+			<h3>{{ $t('m.Recommendations') }}</h3>
+			<ul>
+				<li @click="contentBtn(0)">
+					<img src="../../assets/images/img_huohuotuneirongyun.png" alt />
+					<p>{{ $t('m.AliloCloud') }}</p>
+				</li>
+				<li @click="contentBtn(1)">
+					<img src="../../assets/images/img_qimengjiaoyu.png" alt />
+					<p>{{ $t('m.Learning') }}</p>
+				</li>
+				<li @click="contentBtn(2)">
+					<img src="../../assets/images/img_bendineir.png" alt />
+					<p>{{ $t('m.Local') }}</p>
+				</li>
+				<li @click="englishBtn()">
+					<img src="../../assets/images/img_wodeshoucang.png" alt />
+					<p>{{ $t('m.Favorites') }}</p>
+				</li>
+			</ul>
+		</div>
+		<div class="mode" v-if="timePopup" @click="popupClick()"></div>
+		<v-picker :timePopup.sync="timePopup"></v-picker>
+	</div>
 </template>
 
 <script>
 // @ is an alias to /src
-import { mapActions, mapMutations, mapState, mapGetters } from "vuex";
-import picker from "@/components/picker.vue";
-import Header from "@/components/header.vue";
-import { _debounce } from "@/hilink/public";
+import { mapActions, mapMutations, mapState, mapGetters } from 'vuex';
+import picker from '@/components/picker.vue';
+import Header from '@/components/header.vue';
+import { _debounce } from '@/hilink/public';
 export default {
-  name: "home",
-  data() {
-    return {
-      devTime: false,
-      timePopup: false,
-      noticeValue: 30,
-      isFold: false, //折叠展开
-      foldText: "展开更多",
-      switchText: "已关闭",
-      title: "火火兔故事机",
-      headerType: "home",
-      // loadingFlag: true,
-      audioMode: false, //音乐模式
-      foldIcon: require("../../assets/images/ic_shouqi.png"),
-      songsCid: -1,
-      time: 0
-    };
-  },
-  computed: {
-    ...mapState([
-      "localSongList",
-      "localList",
-      "resultStrAll",
-      "lampSwitch",
-      "volume",
-      "earLight",
-      "faceLight",
-      "isLine",
-      "audioInfo",
-      "lookData",
-      "playMode",
-      "loveCid",
-      "loadingFlag"
-    ]),
-    deviceTime: {
-      get() {
-        return this.$store.state.deviceTime;
-      },
-      set() {
-        this.$store.dispatch("setDeviceTime");
-      }
-    }
-  },
-  created() {
-    this.$store.dispatch("getDevCacheAll");
-    this.$store.dispatch("init");
-    this.getDevicesTime();
-    this.time = this.deviceTime;
-  },
-  methods: {
-    onConfirm() {
-      let self = this;
-      console.log("定时关机==", self.timePopup);
-      self.timePopup = !self.timePopup; //显示
-    },
-    popupClick() {
-      let self = this;
-      self.timePopup = false; //显示
-      console.log("self.ti");
-    },
-    deviceTimeFinish() {
-      this.deviceTime = 0;
-    },
-    //设置开关图片
-    switchIcon() {
-      let self = this;
-      if (self.isLine == 1) {
-        return require("../../assets/images/ic_power_on.png");
-      } else {
-        return require("../../assets/images/swich.png");
-      }
-    },
-    /*
-     *设备开关控制
-     * type:   开挂那类型
-     * 0:关机
-     * 1:耳灯
-     * 2:表情灯
-     * 3:上一曲
-     * 4:下一曲
-     * 5:播放暂停
-     * 6:童锁
-     */
-    // 改变场数
-    devicesSwitch: _debounce(function(type) {
-      let self = this;
-      if (self.isLine == 0) {
-        this.$toast({
-          message: "请旋转火火兔的尾巴开机",
-          position: "bottom",
-          duration: "3000",
-          className: "toastActive"
-        });
-        return;
-      }
-      if (window.hilink != undefined) {
-        var data;
-        var on;
-        if (!self.loadingFlag) {
-          return;
-        }
-        switch (type) {
-          case 0:
-            if (self.lampSwitch.on == 0) {
-              this.$toast({
-                message: "请旋转火火兔的尾巴开机",
-                position: "bottom",
-                duration: "3000",
-                className: "toastActive"
-              });
-              return;
-            } else {
-              on = self.lampSwitch.on == 1 ? 0 : 0;
-              data = { switch: { on: on } };
-            }
-            break;
-          case 1:
-            on = self.earLight.on == 1 ? 0 : 1;
-            data = { earLight: { on: on } };
-            break;
-          case 2:
-            console.log("表情灯设置===", self.faceLight.on);
-            on = self.faceLight.on == 1 ? 0 : 1;
-            data = { faceLight: { on: on } };
-            break;
-          case 3:
-            data = { Music: { cutSong: 0 } };
-            break;
-          case 4:
-            data = { Music: { cutSong: 1 } };
-            break;
-          case 5:
-            on = self.audioInfo.play == 1 ? 0 : 1;
-            data = { Music: { play: on } };
-            break;
-          case 6:
-            var body = {
-              from: "DID:0",
-              to: "UID:-1",
-              action: 627,
-              on: 0
-            };
-            var json = JSON.stringify(body);
-            data = { custom: { function: json } };
-            break;
-          default:
-            break;
-        }
-        self.audioMode = false;
-        self.$store.dispatch("setDevInfo", data);
-        self.$store.dispatch("setLoadingFlag", false);
-      }
-    }, 200),
-    //播放模式选择
-    getDevicesTime() {
-      let self = this;
-      if (!self.loadingFlag) {
-        return;
-      }
-      var body = {
-        from: "DID:0",
-        to: "UID:-1",
-        action: 631,
-        type: 4,
-        doaction: "query"
-      };
-      var json = JSON.stringify(body);
-      var data = { custom: { function: json, name: "function" } };
-      self.$store.dispatch("setDevInfo", data);
-      self.$store.dispatch("setLoadingFlag", false);
-      self.timer = setTimeout(function() {
-        console.log("1111111111111");
-        self.$store.dispatch("getDevLocal");
-      }, 2000);
-    },
-    devicesMode() {
-      let self = this;
-      self.audioMode = !self.audioMode;
-      console.log("播放模式==", self.audioMode);
-    },
-    devicesAction: _debounce(function(action, type, on) {
-      let self = this;
-      if (!self.loadingFlag) {
-        return;
-      }
-      var body;
-      if (type == 0) {
-        body = {
-          from: "DID:0",
-          to: "UID:-1",
-          action: action
-        };
-      } else {
-        body = {
-          from: "DID:0",
-          to: "UID:-1",
-          action: action,
-          on: on
-        };
-      }
-      self.audioMode = false;
-      let json = JSON.stringify(body);
-      let data = { custom: { function: json } };
-      self.$store.dispatch("setDevInfo", data);
-      self.$store.dispatch("setLoadingFlag", false);
-    }, 300),
-    //故事机童锁开关
-    devicesLockSwitch: _debounce(function(mode) {
-      let self = this;
-      if (!self.loadingFlag) {
-        return;
-      }
-      if (self.isLine == 0) {
-        this.$toast({
-          message: "请旋转火火兔的尾巴开机",
-          position: "bottom",
-          duration: "3000",
-          className: "toastActive"
-        });
-        return;
-      }
-      let on = self.lookData == 1 ? 0 : 1;
-      var body = {
-        from: "DID:0",
-        to: "UID:-1",
-        action: 627,
-        on: on
-      };
-      self.audioMode = false;
-      var json = JSON.stringify(body);
-      var data = { custom: { function: json, name: "function" } };
-      self.$store.dispatch("setDevInfo", data);
-      self.$store.dispatch("setLoadingFlag", false);
-    }, 300),
-    //故事机播放模式
-    devicesModeAction: _debounce(function(mode) {
-      let self = this;
-      if (self.isLine == 0) {
-        this.$toast({
-          message: "请旋转火火兔的尾巴开机",
-          position: "bottom",
-          duration: "3000",
-          className: "toastActive"
-        });
-        return;
-      }
-      if (!self.loadingFlag) {
-        return;
-      }
-      var body = {
-        from: "DID:0",
-        to: "UID:-1",
-        action: 909,
-        playmode: mode
-      };
-      self.audioMode = !self.audioMode;
-      let json = JSON.stringify(body);
-      let data = { custom: { function: json, name: "function" } };
-      self.$store.dispatch("setDevInfo", data);
-      self.$store.dispatch("setLoadingFlag", false);
-    }, 200),
-    //故事机音量调节
-    onVolumeChange: _debounce(function(value) {
-      let self = this;
-      if (!self.loadingFlag) {
-        return;
-      }
-      self.audioMode = false;
-      let data = { Music: { volume: value } };
-      self.$store.dispatch("setDevInfo", data);
-      self.$store.dispatch("setLoadingFlag", false);
-    }, 200),
-    /*
-     *展开折叠
-     */
-    foldClick() {
-      let self = this;
-      self.isFold = !self.isFold;
-      self.audioMode = false;
-      if (self.isFold) {
-        self.foldText = "收起";
-        self.foldIcon = require("../../assets/images/ic_zhankai.png");
-      } else {
-        self.foldText = "展开更多";
-        self.devicesAction(627, 1, 2);
-        self.foldIcon = require("../../assets/images/ic_shouqi.png");
-      }
-    },
-    englishBtn() {
-      let self = this;
-      if (self.isLine == 0) {
-        this.$toast({
-          message: "请旋转火火兔的尾巴开机",
-          position: "bottom",
-          duration: "3000",
-          className: "toastActive"
-        });
-        return;
-      }
-      let data = {
-        total: 0,
-        channel: -1,
-        songs: []
-      };
-      this.$store.dispatch("putLocalList", data);
-      self.audioMode = false;
-      console.log("self.loveCid", self.loveCid);
-      self.$router.push({
-        name: "locallist",
-        params: { id: self.loveCid, name: "我的收藏" }
-      });
-    },
-    //进入内容
-    contentBtn(type) {
-      var url;
-      let self = this;
-      if (self.isLine == 0 && type != 0) {
-        this.$toast({
-          message: "请旋转火火兔的尾巴开机",
-          position: "bottom",
-          duration: "3000",
-          className: "toastActive"
-        });
-        return;
-      }
-      if (type == 0) {
-        url = "cloudIndex"; //火火兔内容云
-      } else if (type == 1) {
-        url = "english"; //启蒙英语
-      } else if (type == 2) {
-        url = "localfile";
-      } else if (type == 3) {
-        url = "localfile";
-      }
-      self.audioMode = false;
-      this.$router.push({
-        name: url
-      });
-    }
-  },
-  components: {
-    "v-picker": picker,
-    "v-header": Header
-  }
+	name: 'home',
+	data() {
+		return {
+			devTime: false,
+			timePopup: false,
+			noticeValue: 30,
+			isFold: false, //折叠展开
+			foldText: this.$t('m.Unfold'),
+			title: '火火兔故事机',
+			headerType: 'home',
+			// loadingFlag: true,
+			audioMode: false, //音乐模式
+			foldIcon: require('../../assets/images/ic_shouqi.png'),
+			songsCid: -1,
+			time: 0
+		};
+	},
+	computed: {
+		...mapState([
+			'localSongList',
+			'localList',
+			'resultStrAll',
+			'lampSwitch',
+			'volume',
+			'earLight',
+			'faceLight',
+			'isLine',
+			'audioInfo',
+			'lookData',
+			'playMode',
+			'loveCid',
+			'loadingFlag'
+		]),
+		deviceTime: {
+			get() {
+				return this.$store.state.deviceTime;
+			},
+			set() {
+				this.$store.dispatch('setDeviceTime');
+			}
+		}
+	},
+	created() {
+		this.$store.dispatch('getDevCacheAll');
+		this.$store.dispatch('init');
+		this.$store.dispatch('getDeviceAll');
+		this.getDevicesTime();
+	},
+	methods: {
+		onConfirm() {
+			let self = this;
+			console.log('定时关机==', self.timePopup);
+			self.timePopup = !self.timePopup; //显示
+		},
+		popupClick() {
+			let self = this;
+			self.timePopup = false; //显示
+			console.log('self.ti');
+		},
+		deviceTimeFinish() {
+			this.deviceTime = 0;
+		},
+		//设置开关图片
+		switchIcon() {
+			let self = this;
+			if (self.isLine == 1) {
+				return require('../../assets/images/ic_power_on.png');
+			} else {
+				return require('../../assets/images/swich.png');
+			}
+		},
+		/*
+		 *设备开关控制
+		 * type:   开挂那类型
+		 * 0:关机
+		 * 1:耳灯
+		 * 2:表情灯
+		 * 3:上一曲
+		 * 4:下一曲
+		 * 5:播放暂停
+		 * 6:童锁
+		 */
+		// 改变场数
+		devicesSwitch: _debounce(function(type) {
+			let self = this;
+			if (self.isLine == 0) {
+				this.$toast({
+					message: this.$t('m.Twist'),
+					position: 'bottom',
+					duration: '3000',
+					className: 'toastActive'
+				});
+				return;
+			}
+			if (window.hilink != undefined) {
+				var data;
+				var on;
+				if (!self.loadingFlag) {
+					return;
+				}
+				switch (type) {
+					case 0:
+						if (self.lampSwitch.on == 0) {
+							this.$toast({
+								message: this.$t('m.Twist'),
+								position: 'bottom',
+								duration: '3000',
+								className: 'toastActive'
+							});
+							return;
+						} else {
+							on = self.lampSwitch.on == 1 ? 0 : 0;
+							data = { switch: { on: on } };
+						}
+						break;
+					case 1:
+						on = self.earLight.on == 1 ? 0 : 1;
+						data = { earLight: { on: on } };
+						break;
+					case 2:
+						console.log('表情灯设置===', self.faceLight.on);
+						on = self.faceLight.on == 1 ? 0 : 1;
+						data = { faceLight: { on: on } };
+						break;
+					case 3:
+						data = { Music: { cutSong: 0 } };
+						break;
+					case 4:
+						data = { Music: { cutSong: 1 } };
+						break;
+					case 5:
+						on = self.audioInfo.play == 1 ? 0 : 1;
+						data = { Music: { play: on } };
+						break;
+					case 6:
+						var body = {
+							from: 'DID:0',
+							to: 'UID:-1',
+							action: 627,
+							on: 0
+						};
+						var json = JSON.stringify(body);
+						data = { custom: { function: json } };
+						break;
+					default:
+						break;
+				}
+				self.audioMode = false;
+				self.$store.dispatch('setDevInfo', data);
+				self.$store.dispatch('setLoadingFlag', false);
+			}
+		}, 200),
+		//播放模式选择
+		getDevicesTime() {
+			let self = this;
+			if (!self.loadingFlag) {
+				return;
+			}
+			var body = {
+				from: 'DID:0',
+				to: 'UID:-1',
+				action: 631,
+				type: 4,
+				doaction: 'query'
+			};
+			var json = JSON.stringify(body);
+			var data = { custom: { function: json, name: 'function' } };
+			self.$store.dispatch('setDevInfo', data);
+			self.$store.dispatch('setLoadingFlag', false);
+			let time =setTimeout(function() {
+				self.$store.dispatch('getDevLocal');
+			}, 2000);
+		},
+		devicesMode() {
+			let self = this;
+			self.audioMode = !self.audioMode;
+			console.log('播放模式==', self.audioMode);
+		},
+		devicesAction: _debounce(function(action, type, on) {
+			let self = this;
+			if (!self.loadingFlag) {
+				return;
+			}
+			var body;
+			if (type == 0) {
+				body = {
+					from: 'DID:0',
+					to: 'UID:-1',
+					action: action
+				};
+			} else {
+				body = {
+					from: 'DID:0',
+					to: 'UID:-1',
+					action: action,
+					on: on
+				};
+			}
+			self.audioMode = false;
+			let json = JSON.stringify(body);
+			let data = { custom: { function: json } };
+			self.$store.dispatch('setDevInfo', data);
+			self.$store.dispatch('setLoadingFlag', false);
+		}, 300),
+		//故事机童锁开关
+		devicesLockSwitch: _debounce(function(mode) {
+			let self = this;
+			if (!self.loadingFlag) {
+				return;
+			}
+			if (self.isLine == 0) {
+				this.$toast({
+					message: this.$t('m.Twist'),
+					position: 'bottom',
+					duration: '3000',
+					className: 'toastActive'
+				});
+				return;
+			}
+			let on = self.lookData == 1 ? 0 : 1;
+			var body = {
+				from: 'DID:0',
+				to: 'UID:-1',
+				action: 627,
+				on: on
+			};
+			self.audioMode = false;
+			var json = JSON.stringify(body);
+			var data = { custom: { function: json, name: 'function' } };
+			self.$store.dispatch('setDevInfo', data);
+			self.$store.dispatch('setLoadingFlag', false);
+		}, 300),
+		//故事机播放模式
+		devicesModeAction: _debounce(function(mode) {
+			let self = this;
+			if (self.isLine == 0) {
+				this.$toast({
+					message: this.$t('m.Twist'),
+					position: 'bottom',
+					duration: '3000',
+					className: 'toastActive'
+				});
+				return;
+			}
+			if (!self.loadingFlag) {
+				return;
+			}
+			var body = {
+				from: 'DID:0',
+				to: 'UID:-1',
+				action: 909,
+				playmode: mode
+			};
+			self.audioMode = !self.audioMode;
+			let json = JSON.stringify(body);
+			let data = { custom: { function: json, name: 'function' } };
+			self.$store.dispatch('setDevInfo', data);
+			self.$store.dispatch('setLoadingFlag', false);
+		}, 200),
+		//故事机音量调节
+		onVolumeChange: _debounce(function(value) {
+			let self = this;
+			if (!self.loadingFlag) {
+				return;
+			}
+			self.audioMode = false;
+			let data = { Music: { volume: value } };
+			self.$store.dispatch('setDevInfo', data);
+			self.$store.dispatch('setLoadingFlag', false);
+		}, 200),
+		/*
+		 *展开折叠
+		 */
+		foldClick() {
+			let self = this;
+			self.isFold = !self.isFold;
+			self.audioMode = false;
+			if (self.isFold) {
+				self.foldText = this.$t('m.PackUp');
+				self.foldIcon = require('../../assets/images/ic_zhankai.png');
+			} else {
+				self.foldText = this.$t('m.Unfold');
+				self.devicesAction(627, 1, 2);
+				self.foldIcon = require('../../assets/images/ic_shouqi.png');
+			}
+		},
+		englishBtn() {
+			let self = this;
+			if (self.isLine == 0) {
+				this.$toast({
+					message: this.$t('m.Twist'),
+					position: 'bottom',
+					duration: '3000',
+					className: 'toastActive'
+				});
+				return;
+			}
+			let data = {
+				total: 0,
+				channel: -1,
+				songs: []
+			};
+			this.$store.dispatch('putLocalList', data);
+			self.audioMode = false;
+			console.log('self.loveCid', self.loveCid);
+			self.$router.push({
+				name: 'locallist',
+				params: { id: self.loveCid, name: '我的收藏' }
+			});
+		},
+		//进入内容
+		contentBtn(type) {
+			var url;
+			let self = this;
+			if (self.isLine == 0 && type != 0) {
+				this.$toast({
+					message: this.$t('m.Twist'),
+					position: 'bottom',
+					duration: '3000',
+					className: 'toastActive'
+				});
+				return;
+			}
+			if (type == 0) {
+				url = 'cloudIndex'; //火火兔内容云
+			} else if (type == 1) {
+				url = 'english'; //启蒙英语
+			} else if (type == 2) {
+				url = 'localfile';
+			} else if (type == 3) {
+				url = 'localfile';
+			}
+			self.audioMode = false;
+			this.$router.push({
+				name: url
+			});
+		}
+	},
+	components: {
+		'v-picker': picker,
+		'v-header': Header
+	}
 };
 </script>
 <style lang="less" scoped>
-@import "../../assets/css/home.less";
+@import '../../assets/css/home.less';
 </style>

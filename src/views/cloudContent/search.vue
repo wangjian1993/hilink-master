@@ -8,7 +8,7 @@
             </div>
             <div class="searchInput">
                 <van-cell-group >
-                <van-field class="field" v-model="serchValue" placeholder="搜索专辑、单曲" @change="SearchResult" />
+                <van-field class="field" v-model="serchValue" :placeholder="$t('m.Search')" @change="SearchResult" />
                 </van-cell-group>
             </div>
         </div>
@@ -17,7 +17,7 @@
    <!--热门搜索-->
    
     <div class="hotSearch" v-if="!isShowResult">
-        <div class="hotKey">热门搜索</div>
+        <div class="hotKey">{{$t('m.Topsearches')}}</div>
         <div class="hotSearchList">
             <div class="hotSearchCell" @click="hotSearch('爸爸')">爸爸</div>
             <div class="hotSearchCell" @click="hotSearch('妈妈')">妈妈</div>
@@ -175,7 +175,7 @@ import http from '../../api/index.js'
        },
        //进入详情页
        goDetail(item){
-         this.$router.push({name:'cloudListenDetail',params:{id:item}})
+         this.$router.push({name:'cloudListenDetail',query:{id:item}})
         },
        //热门搜索
        hotSearch(val){

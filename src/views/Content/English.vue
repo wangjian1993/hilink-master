@@ -3,7 +3,7 @@
 		<div class="loading-box" v-if="!loadingFlag"><van-loading size="30px" color="#007DFF" vertical>加载中</van-loading></div>
 		<div class="english-content" v-if="loadingFlag">
 			<div class="content-box">
-				<p class="content-title-zh">英文儿歌</p>
+				<p class="content-title-zh">{{$t('m.Englishs')}}</p>
 				<p class="content-title-en">Children's song</p>
 				<div class="song-list">
 					<ul class="song">
@@ -22,7 +22,7 @@
 				</div>
 			</div>
 			<div class="content-box">
-				<p class="content-title-zh">英文绘本</p>
+				<p class="content-title-zh">{{$t('m.picture')}}</p>
 				<p class="content-title-en">Picture Book</p>
 				<div class="song-list">
 					<ul class="song">
@@ -41,7 +41,7 @@
 				</div>
 			</div>
 			<div class="content-box">
-				<p class="content-title-zh">原声动画</p>
+				<p class="content-title-zh">{{$t('m.Cartoons')}}</p>
 				<p class="content-title-en">Cartoon</p>
 				<div class="song-list">
 					<ul class="song">
@@ -60,7 +60,7 @@
 				</div>
 			</div>
 			<div class="content-box">
-				<p class="content-title-zh">自然拼读</p>
+				<p class="content-title-zh">{{$t('m.Phonetics')}}</p>
 				<p class="content-title-en">Phonics</p>
 				<div class="song-list">
 					<ul class="song">
@@ -79,8 +79,8 @@
 				</div>
 			</div>
 			<div class="english-btn">
-				<div @click="setEnglish()" :class="setCheck ? 'englishActive' : ''">{{ setCheck ? '保存' : '设置' }}</div>
-				<p>设置英语点播内容，点击机器人上英语键(图标)播放</p>
+				<div @click="setEnglish()" :class="setCheck ? 'englishActive' : ''">{{ setCheck ?  $t('m.Save') : $t('m.Settings') }}</div>
+				<p>{{$t('m.Select')}}</p>
 			</div>
 		</div>
 	</div>
@@ -91,7 +91,7 @@ import { mapActions, mapMutations, mapState } from 'vuex';
 export default {
 	data() {
 		return {
-			title: '启蒙英语',
+			title: this.$t('m.Learning'),
 			englishData: [],
 			loadingFlag: false,
 			musicList: {

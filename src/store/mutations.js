@@ -82,6 +82,22 @@ const mutations = {
 				break;
 		}
 	},
+	getDeviceResult(state,data){
+		console.log("data=======",data);
+		if(data.action == 104){
+			var tmp = Date.parse(new Date()).toString();
+			tmp = parseInt(tmp.substr(0, 10));
+			if (tmp < data.timestamp) {
+				let t =28800000;
+				let m = (data.timestamp - tmp) * 1000;
+				state.deviceTime =m -t;
+			} else {
+				console.log("关闭设备定时=============")
+				state.deviceTime = 0;
+			}
+			state.lookData = data.babylock;
+		}
+	},
 	resultFunction(state, customData) {
 		var self = this;
 		if (customData == undefined) {
@@ -97,7 +113,6 @@ const mutations = {
 				break;
 			case 628:
 				state.lookData = customData.on;
-				console.log("设置童锁===", state.lookData)
 				break;
 			case 406:
 				console.log("customData.lists[0]", customData.lists[0])
@@ -134,12 +149,7 @@ const mutations = {
 				break;
 			case 417:
 				if (customData.ret == 0) {
-					// this.$toast({
-					// 	message: "歌曲收藏成功",
-					// 	position: "bottom",
-					// 	duration: "3000",
-					// 	className: "toastActive"
-					// });
+					
 				}
 				break;
 			case 638:
@@ -148,22 +158,11 @@ const mutations = {
 				state.musicData = customData;
 				break;
 			case 410:
-				// this.$toast({
-				// 	message: "歌曲添加下载成功",
-				// 	position: "bottom",
-				// 	duration: "3000",
-				// 	className: "toastActive"
-				// });
+				
 				break;
 			case 424:
 				if (customData.ret == 0) {
-					// this.$toast({
-					// 	message: "歌曲删除成功",
-					// 	position: "bottom",
-					// 	duration: "3000",
-					// 	className: "toastActive"
-					// });
-					// this.devicesAction(641);
+					
 				}
 				break;
 			case 632:

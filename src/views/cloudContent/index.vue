@@ -5,29 +5,29 @@
 			<div class="search">
 				<div class="searchIcon center"><img src="../../assets/images/home_icon_search.png" /></div>
 				<div class="searchInput">
-					<van-cell-group><van-field class="field" v-model="serchValue" placeholder="搜索关键字" @click="goSearch" /></van-cell-group>
+					<van-cell-group><van-field class="field" v-model="serchValue" :placeholder=search @click="goSearch" /></van-cell-group>
 				</div>
 				<div class="selectIcon center"><img src="../../assets/images/home_icon_shaixuan.png" /></div>
 			</div>
 			<!--标签-->
 			<div class="label">
-				<div class="labelCell center" @click="goListen(1)">听儿歌</div>
-				<div class="labelCell center" @click="goListen(2)">讲故事</div>
-				<div class="labelCell center" @click="goListen(3)">学英语</div>
-				<div class="labelCell center" @click="goListen(4)">赏国学</div>
+				<div class="labelCell center" @click="goListen(1)">{{$t('m.Songs')}}</div>
+				<div class="labelCell center" @click="goListen(2)">{{$t('m.Stories')}}</div>
+				<div class="labelCell center" @click="goListen(3)">{{$t('m.English')}}</div>
+				<div class="labelCell center" @click="goListen(4)">{{$t('m.Classics')}}</div>
 			</div>
 			<!--轮播-->
 			<div class="swiper">
 				<van-swipe :autoplay="3000" class="swipe">
-					<van-swipe-item v-for="(image, index) in swiperList" :key="index" @click="goDetail(image.link)" v-if="image.linktype ==2"><img :src="image.path" /></van-swipe-item>
+					<van-swipe-item v-for="(image, index) in swiperList" :key="index" @click="goDetail(image.link)"><img :src="image.path" /></van-swipe-item>
 				</van-swipe>
 			</div>
 			<!--精品推荐-->
 			<div class="part">
 				<div class="title">
 					<div class="titleLeft">
-						<div class="titleLeftTop">精品推荐</div>
-						<div class="titleLeftBottom">火火兔为您精选好内容</div>
+						<div class="titleLeftTop">{{$t('m.Featured')}}</div>
+						<div class="titleLeftBottom">{{$t('m.Recommended')}}</div>
 					</div>
 					<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
 				</div>
@@ -49,8 +49,8 @@
 			<div class="part">
 				<div class="title">
 					<div class="titleLeft">
-						<div class="titleLeftTop">视频推荐</div>
-						<div class="titleLeftBottom">益智视频，精彩不断</div>
+						<div class="titleLeftTop">{{$t('m.Videos')}}</div>
+						<div class="titleLeftBottom">{{$t('m.VideosMiss')}}</div>
 					</div>
 					<router-link to="/cloudContent/videoList" class="titleRight"><img src="../../assets/images/home_icon_more.png" /></router-link>
 				</div>
@@ -74,8 +74,8 @@
 			<div class="part">
 				<div class="title">
 					<div class="titleLeft">
-						<div class="titleLeftTop">性格养成</div>
-						<div class="titleLeftBottom">从小养成好性格</div>
+						<div class="titleLeftTop">{{$t('m.Build')}}</div>
+						<div class="titleLeftBottom">{{$t('m.Nurture')}}</div>
 					</div>
 					<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
 				</div>
@@ -98,8 +98,8 @@
 			<div class="part">
 				<div class="title">
 					<div class="titleLeft">
-						<div class="titleLeftTop">优选主播</div>
-						<div class="titleLeftBottom">陪孩子一起听世界</div>
+						<div class="titleLeftTop">{{$t('m.Radio')}}</div>
+						<div class="titleLeftBottom">{{$t('m.Learn')}}</div>
 					</div>
 					<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
 				</div>
@@ -118,8 +118,8 @@
 			<div class="part">
 				<div class="title">
 					<div class="titleLeft">
-						<div class="titleLeftTop">国学熏陶</div>
-						<div class="titleLeftBottom">培养孩子良好品德素养</div>
+						<div class="titleLeftTop">{{$t('m.Chinese')}}</div>
+						<div class="titleLeftBottom">{{$t('m.Grow')}}</div>
 					</div>
 					<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
 				</div>
@@ -141,8 +141,8 @@
 			<div class="part">
 				<div class="title">
 					<div class="titleLeft">
-						<div class="titleLeftTop">财商启蒙</div>
-						<div class="titleLeftBottom">孩子的财商是这么玩出来的</div>
+						<div class="titleLeftTop">{{$t('m.Financial')}}</div>
+						<div class="titleLeftBottom">{{$t('m.Start')}}</div>
 					</div>
 					<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
 				</div>
@@ -164,8 +164,8 @@
 			<div class="part">
 				<div class="title">
 					<div class="titleLeft">
-						<div class="titleLeftTop">情商培养</div>
-						<div class="titleLeftBottom">从小就做聪明人</div>
+						<div class="titleLeftTop">{{$t('m.EQ')}}</div>
+						<div class="titleLeftBottom">{{$t('m.Help')}}</div>
 					</div>
 					<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
 				</div>
@@ -187,8 +187,8 @@
 			<div class="part">
 				<div class="title">
 					<div class="titleLeft">
-						<div class="titleLeftTop">哄睡儿歌</div>
-						<div class="titleLeftBottom">小摇床，轻轻晃，月亮伴我入梦乡</div>
+						<div class="titleLeftTop">{{$t('m.Children')}}</div>
+						<div class="titleLeftBottom">{{$t('m.Sweet')}}</div>
 					</div>
 					<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
 				</div>
@@ -210,8 +210,8 @@
 			<div class="part" style="padding-bottom: 60px;">
 				<div class="title">
 					<div class="titleLeft">
-						<div class="titleLeftTop">最新上架</div>
-						<div class="titleLeftBottom">好多新内容，快来听听吧</div>
+						<div class="titleLeftTop">{{$t('m.Latest')}}</div>
+						<div class="titleLeftBottom">{{$t('m.New')}}</div>
 					</div>
 					<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
 				</div>
@@ -229,9 +229,9 @@
 					</div>
 				</div>
 			</div>
-			<p class="PageBottom" v-show="isShowNoMore">暂无更多</p>
+			<p class="PageBottom" v-show="isShowNoMore">{{$t('m.Classics')}}暂无更多</p>
 		</div>
-		<div class="loadingding center" v-show="isLoaded"><van-loading size="30px" vertical color="#007DFF">加载中</van-loading></div>
+		<div class="loadingding center" v-show="isLoaded"><van-loading size="30px" vertical color="#007DFF">{{$t('m.Classics')}}加载中</van-loading></div>
 		<!-- <div class="goTop" v-show="isBottom" @click="goTop"><img src="../../assets/images/top.png" /></div> -->
 	</div>
 </template>
@@ -257,7 +257,8 @@ export default {
 			isLoaded: false,
 			page: 0,
 			isShowNoMore: false,
-			isBottom: false
+			isBottom: false,
+			search:''
 		};
 	},
 	created() {},
@@ -301,6 +302,7 @@ export default {
 		}
 	},
 	async mounted() {
+		this.search = this.$i18n.t('m.Search')
 		//轮播
 		this.isLoaded = true;
 		await http

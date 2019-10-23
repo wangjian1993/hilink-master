@@ -3,7 +3,7 @@
 		<van-tabs v-model="active" color="#81b4ff" @click="refresh" class="tabs">
 			<van-tab title="0">
 				<div slot="title" class="tab">
-					最新上架
+					{{$t('m.Latest')}}
 					<van-icon name="arrow-down" class="arrowDown" />
 				</div>
 				<div>
@@ -18,7 +18,7 @@
 			</van-tab>
 			<van-tab title="1">
 				<div slot="title" class="tab">
-					热门排行
+					{{$t('m.Rankings')}}
 					<van-icon name="arrow-down" class="arrowDown" />
 				</div>
 				<div>

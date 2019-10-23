@@ -2,11 +2,11 @@
 	<div class="date-time-input-wrap">
 		<div class="date-time-div">
 			<van-popup v-model="timePopup" position="bottom" :overlay="false" class="datetimeBox">
-				<p>定时关机</p>
+				<p>{{$t('m.timer')}}</p>
 				<van-picker show-toolbar :columns="columns" :show-toolbar="false" @change="onChange" />
 				<div class="datetime-btn">
-					<p @click="timeCancel()" :class="deviceTime != 0 ?'cancelText':''">{{deviceTime == 0 ?'取消':'关闭定时'}}</p>
-					<p @click="timeConfirm()">确定</p>
+					<p @click="timeCancel()" :class="deviceTime != 0 ?'cancelText':''">{{deviceTime == 0 ?$t('m.CANCEL'):$t('m.Disable')}}</p>
+					<p @click="timeConfirm()">{{$t('m.OK')}}</p>
 				</div>
 			</van-popup>
 		</div>
@@ -26,7 +26,7 @@ export default {
 			// timePopup:false,
 			currentTime: '0:00',
 			endTime: 0,
-			columns: ['不开启', '15分钟', '30分钟', '60分钟', '90分钟', '120分钟']
+			columns: [this.$t('m.Dopen'),this.$t('m.min1'),this.$t('m.min2'),this.$t('m.min3'),this.$t('m.min4'),this.$t('m.min5')]
 		};
 	},
 	mounted() {

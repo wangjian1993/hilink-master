@@ -60,6 +60,11 @@ export default {
 	}, data) {
 		commit("setDeviceTimeFn",data)
 	},
+	getDeviceAll({
+		commit
+	},data){
+		window.hilink.getDevInfo("0", 'custom','', "getResultCallback");
+	},
 	//获取本地歌曲列表
 	getDevLocal({
 		commit
@@ -149,6 +154,10 @@ export default {
 		
 		window.localResult =(res) => {
 			console.log("本地歌曲列表",res);
+		}
+		window.getResultCallback =(res) =>{
+			let json = JSON.parse(res);
+			commit("getDeviceResult", json)
 		}
 		window.getDeviceInfoData = (res) => {
 			let json = JSON.parse(res);
