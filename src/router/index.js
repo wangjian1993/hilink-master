@@ -17,7 +17,7 @@ export default new Router({
 		{ //离线帮助
 			path: '/setting',
 			name: 'setting',
-			component: () => import( /* webpackChunkName: "help" */ '@/views/Home/Setting.vue'),
+			component: () => import( /* webpackChunkName: "setting" */ '@/views/Home/Setting.vue'),
 			meta: {
 				title: "设置",
 			}
@@ -30,7 +30,7 @@ export default new Router({
 		{ //启蒙英语
 			path: '/locallist',
 			name: 'locallist',
-			component: () => import( /* webpackChunkName: "english" */ '@/views/Content/LocalList.vue'),
+			component: () => import( /* webpackChunkName: "locallist" */ '@/views/Content/LocalList.vue'),
 			meta: {
 				title: "本地歌曲",
 				keepAlive: false,
@@ -39,7 +39,7 @@ export default new Router({
 		{ //启蒙英语
 			path: '/locallistEn',
 			name: 'locallisEn',
-			component: () => import( /* webpackChunkName: "english" */ '@/views/Content/LocalListEn.vue'),
+			component: () => import( /* webpackChunkName: "locallisEn" */ '@/views/Content/LocalListEn.vue'),
 			meta: {
 				title: "我的收藏",
 				keepAlive: false,
@@ -48,7 +48,7 @@ export default new Router({
 		{ //启蒙英语
 			path: '/localfile',
 			name: 'localfile',
-			component: () => import( /* webpackChunkName: "english" */ '@/views/Content/LocalFile.vue'),
+			component: () => import( /* webpackChunkName: "localfile" */ '@/views/Content/LocalFile.vue'),
 			meta: {
 				title: "本地内容",
 				keepAlive: true,

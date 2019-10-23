@@ -3,7 +3,7 @@
 		<div class="date-time-div">
 			<van-popup v-model="timePopup" position="bottom" :overlay="false" class="datetimeBox">
 				<p>{{$t('m.timer')}}</p>
-				<van-picker show-toolbar :columns="columns" :show-toolbar="false" @change="onChange" />
+				<van-picker :columns="columns" :show-toolbar="false" @change="onChange" />
 				<div class="datetime-btn">
 					<p @click="timeCancel()" :class="deviceTime != 0 ?'cancelText':''">{{deviceTime == 0 ?$t('m.CANCEL'):$t('m.Disable')}}</p>
 					<p @click="timeConfirm()">{{$t('m.OK')}}</p>
@@ -13,7 +13,7 @@
 	</div>
 </template>
 <script>
-import { mapActions, mapMutations, mapState } from 'vuex';
+import { mapState } from 'vuex';
 import { _debounce } from '@/hilink/public';
 export default {
 	props: {
@@ -151,7 +151,7 @@ export default {
 	}
 };
 </script>
-<style lang="less">
+<style lang="less" scoped>
 .date-time-input-wrap {
 	width: 100%;
 	text-align: center;
