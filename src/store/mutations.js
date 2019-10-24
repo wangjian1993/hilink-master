@@ -46,6 +46,9 @@ const mutations = {
 	setDeviceTimeFn(state, data) {
 		state.deviceTime = 0;
 	},
+	setisDeviceid(state, data) {
+		state.isBubble = data;
+	},
 	resultData(state, resData) {
 		let type = resData;
 		state.loadingFlag = true;

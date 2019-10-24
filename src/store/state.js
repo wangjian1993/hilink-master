@@ -33,6 +33,7 @@ const state = {
 	isLine: 0,
 	lookData: 0,
 	deviceTime: 0,
+	isBubble:false,
 	albumid: [{
 			id: 104,
 			album: 1171

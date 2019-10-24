@@ -131,6 +131,14 @@ export default {
 				devName: json.devName,
 				roomName: json.roomName
 			}
+			let deviceid = localStorage.getItem('deviceid');
+			console.log("deviceid========",deviceid)
+			if (deviceid == json.devId) {
+				commit("setisDeviceid",false);
+			}else {
+				commit("setisDeviceid", true);
+				localStorage.setItem("deviceid",json.devId);
+			}
 			commit("setDevName", info);
 			json.services.forEach(function(item, index) {
 				commit("resultData", item)

@@ -3,6 +3,12 @@
 		<v-header :title="devName" :type="headerType"></v-header>
 		<!-- 产品图 -->
 		<div class="devices-img">
+			<div class="bubble-box" v-if="isBubble" @click="bubbleClick()">
+				<div class="bubble">
+					<p>长按兔耳朵按键约2秒，听到“嘟”的一声后即可进行语音对话，详见产品说明书</p>
+					<p>知道了</p>
+				</div>
+			</div>
 			<img src="../../assets/images/img_toutu_red.png" alt />
 			<img src="../../assets/images/logo.png" alt />
 		</div>
@@ -241,7 +247,8 @@ export default {
 			'playMode',
 			'loveCid',
 			'loadingFlag',
-			'devName'
+			'devName',
+			'isBubble'
 		]),
 		deviceTime: {
 			get() {
@@ -259,6 +266,9 @@ export default {
 		this.getDevicesTime();
 	},
 	methods: {
+		bubbleClick() {
+			this.isBubble = false;
+		},
 		onConfirm() {
 			let self = this;
 			console.log('定时关机==', self.timePopup);
