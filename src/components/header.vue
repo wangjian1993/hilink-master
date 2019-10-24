@@ -8,6 +8,7 @@
 			</div>
 			<div class="home-header-more">
 				<!-- <p v-if="type == 'home'" @click="helpRoute()"><img src="../assets/images/ic_yichang01.png" alt="" /></p> -->
+				<p v-if="type == 'home'" ></p>
 				<p v-if="type == 'home'" @click="onClickRight()"><img src="../assets/images/ic_gengduo.png" alt="" /></p>
 			</div>
 		</div>
@@ -86,17 +87,16 @@ export default {
 	.home-header-title {
 		width: 218.3px;
 		height: 100%;
-		overflow: hidden;
-		white-space: nowrap;
-		width: 100%;
 		padding-left: 16px;
-		text-overflow: ellipsis;
 		p {
 			color: #000000;
 			text-align: left;
 			font-size: 20px;
 			margin-left: 0px;
 			line-height: 56px;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
 		}
 	}
 	.home-header-more {

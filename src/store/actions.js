@@ -48,6 +48,12 @@ export default {
 	}, data) {
 		commit(types.SETLOCALCID, data);
 	},
+	setEnglishData({
+		commit
+	}, data) {
+		console.log("英语data ==============",data)
+		commit(types.ENGLISHDATA, data);
+	},
 	//获取设备信息
 	getDevCacheAll() {
 		if (window.hilink != undefined) {

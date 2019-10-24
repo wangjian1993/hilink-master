@@ -1,7 +1,7 @@
-/* @font-face {
+@font-face {
 	font-family: 'hwtext';
 	src: url('../font/zh/HuaweiFont-Regular.ttf');
-} */
+}
 html {
 	font-family: "hwtext", Helvetica, STHeiTi, Arial, sans-serif;
 	-ms-text-size-adjust: 100%;

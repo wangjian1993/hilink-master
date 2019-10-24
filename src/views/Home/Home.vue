@@ -1,6 +1,6 @@
 <template>
 	<div class="home">
-		<v-header :title="title" :type="headerType"></v-header>
+		<v-header :title="devName" :type="headerType"></v-header>
 		<!-- 产品图 -->
 		<div class="devices-img">
 			<img src="../../assets/images/img_toutu_red.png" alt />
@@ -8,7 +8,7 @@
 		</div>
 		<!-- 故事机开关 -->
 		<div class="devices-status">
-			<div class="devices-status-text">{{ isLine == 0 ? $t('m.off') : $t('m.on') }}</div>
+			<div class="devices-status-text">{{ isLine == 0 ? $t('m.off') : $t('m.open') }}</div>
 			<div class="devices-status-time" :class="deviceTime == 0 ? 'timeActive' : ''">
 				<div>
 					<p>
@@ -30,7 +30,7 @@
 		<div class="devices-audio" style="background: #F7F7F7;">
 			<!-- 歌曲控制 -->
 			<div class="devices-audio-contro-box" :class="isLine == 0 ? '' : 'lineAcitve'">
-				<div class="devices-audio-control">
+				<div class="devices-audio-control" :class="audioInfo.song == '' ? 'lineAcitve' : ''">
 					<div class="devices-audio-control-text">
 						<div>
 							<p>
@@ -75,7 +75,7 @@
 					</div>
 				</div>
 				<!-- 音量 -->
-				<div class="devices-audio-volume"  :class="this.$i18n.locale == 'en-US'?'volumeActiveEN':'volumeActiveZH'">
+				<div class="devices-audio-volume" :class="this.$i18n.locale == 'en-US' ? 'volumeActiveEN' : 'volumeActiveZH'">
 					<div>
 						<p>{{ $t('m.Volume') }}</p>
 					</div>
@@ -100,7 +100,7 @@
 					</div>
 					<li @click="devicesMode()" :class="isLine == 0 ? '' : 'lineAcitve'">
 						<div class="devices-audio-else-text">
-							<div  :class="this.$i18n.locale == 'en-US'?'enActive':'zhActive'">
+							<div :class="this.$i18n.locale == 'en-US' ? 'enActive' : 'zhActive'">
 								<p>{{ $t('m.Mode') }}</p>
 								<p :class="isLine == 0 ? '' : 'colorActice'">{{ playMode == 1 ? $t('m.Loopp') : $t('m.Loops') }}</p>
 							</div>
@@ -113,7 +113,7 @@
 					</li>
 					<li @click="onConfirm()" :class="isLine == 0 ? '' : 'lineAcitve'">
 						<div class="devices-audio-else-text">
-							<div  :class="this.$i18n.locale == 'en-US'?'enActive':'zhActive'">
+							<div :class="this.$i18n.locale == 'en-US' ? 'enActive' : 'zhActive'">
 								<p>{{ $t('m.timer') }}</p>
 								<p :class="deviceTime == 0 ? '' : 'colorActice'" v-if="deviceTime != 0">
 									<van-count-down :time="deviceTime">
@@ -135,7 +135,7 @@
 				<ul v-show="isFold">
 					<li :class="isLine == 0 ? '' : 'lineAcitve'" @click="devicesSwitch(1)">
 						<div class="devices-audio-else-text">
-							<div :class="this.$i18n.locale == 'en-US'?'enActive':'zhActive'">
+							<div :class="this.$i18n.locale == 'en-US' ? 'enActive' : 'zhActive'">
 								<p>{{ $t('m.Earlight') }}</p>
 								<p :class="earLight.on == 0 ? '' : 'colorActice'">{{ earLight.on == 0 ? $t('m.off') : $t('m.on') }}</p>
 							</div>
@@ -147,7 +147,7 @@
 					</li>
 					<li :class="isLine == 0 ? '' : 'lineAcitve'" @click="devicesSwitch(2)">
 						<div class="devices-audio-else-text">
-							<div  :class="this.$i18n.locale == 'en-US'?'enActive':'zhActive'">
+							<div :class="this.$i18n.locale == 'en-US' ? 'enActive' : 'zhActive'">
 								<p>{{ $t('m.Facelight') }}</p>
 								<p :class="faceLight.on == 0 ? '' : 'colorActice'">{{ faceLight.on == 0 ? $t('m.off') : $t('m.on') }}</p>
 							</div>
@@ -162,7 +162,7 @@
 			<div class="devices-audio-look" @click="devicesLockSwitch()" v-show="isFold" :class="isLine == 0 ? '' : 'lineAcitve'">
 				<div>
 					<p>{{ $t('m.Childlock') }}</p>
-					<div  :class="this.$i18n.locale == 'en-US'?'enActive':'zhActive'">
+					<div :class="this.$i18n.locale == 'en-US' ? 'enActive' : 'zhActive'">
 						<img v-if="lookData == 1" src="../../assets/images/ic_tongsuo_on.png" alt />
 						<img v-if="lookData == 0" src="../../assets/images/ic_tongsuo_off.png" alt />
 					</div>
@@ -214,11 +214,10 @@ export default {
 		return {
 			devTime: false,
 			timePopup: false,
-			modePopup:false,
+			modePopup: false,
 			noticeValue: 30,
 			isFold: false, //折叠展开
 			foldText: this.$t('m.Unfold'),
-			title: this.$t('m.HomeTitel'),
 			headerType: 'home',
 			// loadingFlag: true,
 			audioMode: false, //音乐模式
@@ -241,7 +240,8 @@ export default {
 			'lookData',
 			'playMode',
 			'loveCid',
-			'loadingFlag'
+			'loadingFlag',
+			'devName'
 		]),
 		deviceTime: {
 			get() {
@@ -255,7 +255,7 @@ export default {
 	created() {
 		this.$store.dispatch('getDevCacheAll');
 		this.$store.dispatch('init');
-		// this.$store.dispatch('getDeviceAll');
+		this.$store.dispatch('getDeviceAll');
 		this.getDevicesTime();
 	},
 	methods: {
@@ -268,10 +268,10 @@ export default {
 			let self = this;
 			self.timePopup = false; //显示
 		},
-		modePopupClick(){
+		modePopupClick() {
 			let self = this;
 			self.modePopup = false; //显示
-			self.audioMode =false;
+			self.audioMode = false;
 		},
 		deviceTimeFinish() {
 			this.deviceTime = 0;
@@ -371,25 +371,25 @@ export default {
 			if (!self.loadingFlag) {
 				return;
 			}
-			var body = {
-				from: 'DID:0',
-				to: 'UID:-1',
-				action: 631,
-				type: 4,
-				doaction: 'query'
-			};
-			var json = JSON.stringify(body);
-			var data = { custom: { function: json, name: 'function' } };
-			self.$store.dispatch('setDevInfo', data);
-			self.$store.dispatch('setLoadingFlag', false);
-			let time =setTimeout(function() {
+			// var body = {
+			// 	from: 'DID:0',
+			// 	to: 'UID:-1',
+			// 	action: 631,
+			// 	type: 4,
+			// 	doaction: 'query'
+			// };
+			// var json = JSON.stringify(body);
+			// var data = { custom: { function: json, name: 'function' } };
+			// self.$store.dispatch('setDevInfo', data);
+			// self.$store.dispatch('setLoadingFlag', false);
+			let time = setTimeout(function() {
 				self.$store.dispatch('getDevLocal');
-			}, 2000);
+			}, 1000);
 		},
 		devicesMode() {
 			let self = this;
 			self.audioMode = !self.audioMode;
-			self.modePopup =!self.modePopup;
+			self.modePopup = !self.modePopup;
 		},
 		devicesAction: _debounce(function(action, type, on) {
 			let self = this;
@@ -467,7 +467,7 @@ export default {
 				playmode: mode
 			};
 			self.audioMode = !self.audioMode;
-			self.modePopup =false;
+			self.modePopup = false;
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json, name: 'function' } };
 			self.$store.dispatch('setDevInfo', data);

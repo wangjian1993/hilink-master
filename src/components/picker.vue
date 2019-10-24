@@ -187,7 +187,4 @@ export default {
 		}
 	}
 }
-.van-picker-column__item--selected {
-	color: #007dff;
-}
 </style>

@@ -48,7 +48,8 @@ export default {
 <style lang="less" scoped>
   @import '../../assets/css/cloud/common.less';
 .content{
-    width:96%;
+    width:92%;
+	margin: 0 auto;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;

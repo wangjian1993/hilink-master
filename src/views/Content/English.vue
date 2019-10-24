@@ -4,18 +4,18 @@
 		<div class="loading-box" v-if="!loadingFlag"><van-loading size="30px" color="#007DFF" vertical>加载中</van-loading></div>
 		<div class="english-content" v-if="loadingFlag">
 			<div class="content-box">
-				<p class="content-title-zh">{{$t('m.Englishs')}}</p>
+				<p class="content-title-zh">{{ $t('m.Englishs') }}</p>
 				<p class="content-title-en">Children's song</p>
 				<div class="song-list">
 					<ul class="song">
 						<li v-for="(item, index) in englishData[104]">
 							<div class="path-div" @click="cloudAlbum(item.id)">
 								<img :src="item.coverpath" alt="" class="path-img" />
-								<img src="../../assets/images/xz.png" alt="" class="path-xz" v-if="item.id == albumid[0][1] && !setCheck" />
+								<img src="../../assets/images/xz.png" alt="" class="path-xz" v-if="item.id == albumid[0].album && !setCheck" />
 							</div>
 							<p>{{ item.name }}</p>
 							<div class="song-check" v-show="setCheck">
-								<input type="radio" :id="item.id" name="item1" @change="changeResult(item.id, 0)" v-model="item.id" :value="item.id" />
+								<input type="radio" :id="item.id" name="item1" @change="changeResult(item.id, 0)" :checked="index == 0" :value="item.id" />
 								<label :for="item.id"></label>
 							</div>
 						</li>
@@ -23,18 +23,18 @@
 				</div>
 			</div>
 			<div class="content-box">
-				<p class="content-title-zh">{{$t('m.picture')}}</p>
+				<p class="content-title-zh">{{ $t('m.picture') }}</p>
 				<p class="content-title-en">Picture Book</p>
 				<div class="song-list">
 					<ul class="song">
 						<li v-for="(item, index) in englishData[105]">
 							<div class="path-div" @click="cloudAlbum(item.id)">
 								<img :src="item.coverpath" alt="" class="path-img" />
-								<img src="../../assets/images/xz.png" alt="" class="path-xz" v-if="item.id == albumid[1][1] && !setCheck" />
+								<img src="../../assets/images/xz.png" alt="" class="path-xz" v-if="item.id == albumid[1].album && !setCheck" />
 							</div>
 							<p>{{ item.name }}</p>
 							<div class="song-check" v-show="setCheck">
-								<input type="radio" :id="item.id" name="item2" @change="changeResult(item.id, 1)" :value="item.id" />
+								<input type="radio" name="item2" @change="changeResult(item.id, 1)" :checked="index == 0" />
 								<label :for="item.id"></label>
 							</div>
 						</li>
@@ -42,18 +42,18 @@
 				</div>
 			</div>
 			<div class="content-box">
-				<p class="content-title-zh">{{$t('m.Cartoons')}}</p>
+				<p class="content-title-zh">{{ $t('m.Cartoons') }}</p>
 				<p class="content-title-en">Cartoon</p>
 				<div class="song-list">
 					<ul class="song">
 						<li v-for="(item, index) in englishData[106]">
 							<div class="path-div" @click="cloudAlbum(item.id)">
 								<img :src="item.coverpath" alt="" class="path-img" />
-								<img src="../../assets/images/xz.png" alt="" class="path-xz" v-if="item.id == albumid[2][1] && !setCheck" />
+								<img src="../../assets/images/xz.png" alt="" class="path-xz" v-if="item.id == albumid[2].album && !setCheck" />
 							</div>
 							<p>{{ item.name }}</p>
 							<div class="song-check" v-show="setCheck">
-								<input type="radio" :id="item.id" name="item3" @change="changeResult(item.id, 2)" :value="item.id" />
+								<input type="radio" :id="item.id" name="item3" @change="changeResult(item.id, 2)" :value="item.id" :checked="index == 0" />
 								<label :for="item.id"></label>
 							</div>
 						</li>
@@ -61,18 +61,18 @@
 				</div>
 			</div>
 			<div class="content-box">
-				<p class="content-title-zh">{{$t('m.Phonetics')}}</p>
+				<p class="content-title-zh">{{ $t('m.Phonetics') }}</p>
 				<p class="content-title-en">Phonics</p>
 				<div class="song-list">
 					<ul class="song">
 						<li v-for="(item, index) in englishData[107]">
 							<div class="path-div" @click="cloudAlbum(item.id)">
 								<img :src="item.coverpath" alt="" class="path-img" />
-								<img src="../../assets/images/xz.png" alt="" class="path-xz" v-if="item.id == albumid[3][1] && !setCheck" />
+								<img src="../../assets/images/xz.png" alt="" class="path-xz" v-if="item.id == albumid[3].album && !setCheck" />
 							</div>
 							<p>{{ item.name }}</p>
 							<div class="song-check" v-show="setCheck">
-								<input type="radio" :id="item.id" name="item4" @change="changeResult(item.id, 3)" :value="item.id" />
+								<input type="radio" :id="item.id" name="item4" @change="changeResult(item.id, 3)" :value="item.id" :checked="index == 0" />
 								<label :for="item.id"></label>
 							</div>
 						</li>
@@ -80,8 +80,8 @@
 				</div>
 			</div>
 			<div class="english-btn">
-				<div @click="setEnglish()" :class="setCheck ? 'englishActive' : ''">{{ setCheck ?  $t('m.Save') : $t('m.Settings') }}</div>
-				<p>{{$t('m.Select')}}</p>
+				<div @click="setEnglish()" :class="setCheck ? 'englishActive' : ''">{{ setCheck ? $t('m.Save') : $t('m.Settings') }}</div>
+				<p>{{ $t('m.Select') }}</p>
 			</div>
 		</div>
 	</div>
@@ -95,30 +95,47 @@ export default {
 		return {
 			englishData: [],
 			loadingFlag: false,
-			musicList: {
-				'0': {
-					album: 104,
-					id: ''
+			musicList: [
+				{
+					id: 104,
+					album: 1171
 				},
-				'1': {
-					album: 105,
-					id: ''
+				{
+					id: 105,
+					album: 1177
 				},
-				'2': {
-					album: 106,
-					id: ''
+				{
+					id: 106,
+					album: 1043
 				},
-				'3': {
-					album: 107,
-					id: ''
+				{
+					id: 107,
+					album: 1179
 				}
-			},
+			],
 			setCheck: false,
-			title:this.$t('m.Learning')
+			raidoCheack: 0,
+			title: this.$t('m.Learning')
 		};
 	},
 	computed: {
 		...mapState(['albumid'])
+	},
+	mounted() {
+		let self = this;
+		if (window.hilink != undefined) {
+			window['englishBack'] = resultStr => {
+				let data = self.praseResponseData(resultStr);
+				if (data.errcode == 0) {
+					self.$toast({
+						message: '启蒙英语设置成功',
+						position: 'bottom',
+						duration: '3000',
+						className: 'toastActive'
+					});
+				}
+			};
+		}
 	},
 	created() {
 		this.getEnglishData();
@@ -147,7 +164,8 @@ export default {
 		},
 		changeResult(id, index) {
 			let self = this;
-			self.musicList[index].id = id;
+			console.log('id===', id);
+			self.musicList[index].album = id;
 		},
 		//设置默认歌曲
 		setEnglish() {
@@ -163,21 +181,32 @@ export default {
 				};
 				let json = JSON.stringify(body);
 				let data = { custom: { function: json, name: 'function' } };
-				self.setDeviceInfo(data);
-				console.log("albumid",self.albumid);
-				console.log(" self.musicList", self.musicList)
-				self.musicList.for
-				self.musicList = [];		
+				self.setDeviceSongsInfo(data, 'englishBack');
+				self.$store.dispatch('setEnglishData', self.musicList);
+				self.musicList = [];
 			}
 		},
 		cloudAlbum(id) {
 			if (!parseInt(id)) {
 				return;
 			}
-			if(this.setCheck){
+			if (this.setCheck) {
 				return;
 			}
 			this.$router.push({ name: 'cloudListenDetail', query: { id: id } });
+		},
+		//回调函数转换
+		praseResponseData(resData) {
+			try {
+				return JSON.parse(resData);
+			} catch (error) {
+				var dataStr = resData.replace(/:"{/g, ':{');
+				dataStr = dataStr.replace(/}",/g, '},');
+				dataStr = dataStr.replace(/}"/g, '}');
+				dataStr = dataStr.replace(/\\/g, '');
+				dataStr = dataStr.replace(/\n/g, '');
+				return JSON.parse(dataStr);
+			}
 		}
 	},
 	components: {
@@ -208,9 +237,11 @@ export default {
 	.song-list {
 		margin-top: 11px;
 		ul {
-			display: flex;
+			width: 100%;
 			overflow-x: auto;
+			white-space: nowrap;
 			li {
+				display: inline-block;
 				width: 100px;
 				margin-right: 10px;
 				position: relative;
@@ -235,6 +266,10 @@ export default {
 					padding-top: 8px;
 					font-size: 12px;
 					text-align: center;
+					white-space: nowrap;
+					width: 100%;
+					overflow: hidden;
+					text-overflow: ellipsis;
 				}
 				.song-check {
 					position: absolute;
@@ -252,7 +287,7 @@ export default {
 				label {
 					position: absolute;
 					left: 5px;
-					top: 3px;
+					bottom: 10px;
 					width: 20px;
 					height: 20px;
 					border-radius: 50%;

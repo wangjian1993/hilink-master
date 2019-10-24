@@ -87,7 +87,8 @@ export default new Router({
 			name: 'cloudSearch',
 			component: () => import('@/views/cloudContent/search.vue'),
 			meta: {
-				title: "搜索"
+				title: "搜索",
+				keepAlive: true,
 			}
 		},
 		//火火兔云内容听儿歌页

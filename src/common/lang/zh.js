@@ -2,6 +2,7 @@ export const m = {
   // switchOpen: '已开启', //网易云音乐
 	HomeTitel:'火火兔故事机',
 	on:'已启用',
+	open:'已开启',
 	off:'已关闭',
 	timer:'定时关机',
 	Twist:'请旋转火火兔的尾巴开机',
@@ -51,7 +52,7 @@ export const m = {
 	Sweet:'小摇床，轻轻晃，月亮伴我入梦乡',
 	Latest:'最新上架',
 	New:'好多新内容，快来听听吧',
-	Learning:'英语启蒙',
+	Learning:'启蒙英语',
 	Settings:'设置',
 	Save:'保存',
 	Select:'选择英语点播内容。保存后，按机器上的英语键播放',

@@ -1,7 +1,7 @@
 <template>
 	<div class="container">
 		<v-header :title="title"></v-header>
-		<div class="content">
+		<div class="content" v-show="isLoaded">
 			<div class="musicTitle">
 				<div class="musicImgBox"><img :src="info.coverpath" class="musicImg" /></div>
 				<div>
@@ -46,8 +46,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="loadingding center" v-show="isLoaded"><van-loading size="30px" color="#007DFF" vertical>加载中</van-loading></div>
-		<p class="PageBottom">暂无更多</p>
+		<div class="loadingding center" v-show="!isLoaded"><van-loading size="30px" color="#007DFF" vertical>加载中</van-loading></div>
 	</div>
 </template>
 
@@ -71,7 +70,6 @@ export default {
 	},
 	created() {},
 	async mounted() {
-		this.isLoaded = true;
 		await http
 			.getSpecialInfo(this.$route.query.id)
 			.then(res => {
@@ -99,7 +97,7 @@ export default {
 			.catch(err => {
 				console.log(err);
 			});
-		this.isLoaded = false;
+		this.isLoaded = true;
 		this.audio = new Audio();
 	},
 	beforeRouteLeave(to, from, next) {

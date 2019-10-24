@@ -34,19 +34,21 @@ const mutations = {
 	[types.SETLOCALCID](state, data) {
 		state.songsCid = data;
 	},
-	[types.LOADINGFLAG](state,data){
-		state.loadingFlag =data;
+	[types.LOADINGFLAG](state, data) {
+		state.loadingFlag = data;
 	},
-	setDevName(state,data){
-		state.devName =data;
-		console.log("state.devName==",state.devName)
+	[types.ENGLISHDATA](state, data) {
+		state.albumid = data;
 	},
-	setDeviceTimeFn(state,data){
-		state.deviceTime =0;
+	setDevName(state, data) {
+		state.devName = data.devName;
+	},
+	setDeviceTimeFn(state, data) {
+		state.deviceTime = 0;
 	},
 	resultData(state, resData) {
 		let type = resData;
-		state.loadingFlag =true;
+		state.loadingFlag = true;
 		switch (type.sid) {
 			case 'switch':
 				state.lampSwitch = resData.data.on;
@@ -69,32 +71,30 @@ const mutations = {
 				break;
 			case 'faceLight':
 				state.faceLight.on = resData.data.on;
-				console.log("设备表情灯", state.faceLight.on)
 				break;
 			case "custom":
 				if (resData.data.action == '104') {
-					state.playMode = resData.data.playmode;
-					console.log("设备播放模式====", state.playMode);
+
 				}
 				break;
 			default:
 				break;
 		}
 	},
-	getDeviceResult(state,data){
-		console.log("data=======",data);
-		if(data.action == 104){
+	getDeviceResult(state, data) {
+		if (data.action == 104) {
 			var tmp = Date.parse(new Date()).toString();
 			tmp = parseInt(tmp.substr(0, 10));
 			if (tmp < data.timestamp) {
-				let t =28800000;
+				let t = 28800000;
 				let m = (data.timestamp - tmp) * 1000;
-				state.deviceTime =m -t;
+				state.deviceTime = m - t;
 			} else {
-				console.log("关闭设备定时=============")
 				state.deviceTime = 0;
 			}
 			state.lookData = data.babylock;
+			state.musicData = data;
+			state.playMode = data.playmode;
 		}
 	},
 	resultFunction(state, customData) {
@@ -103,11 +103,10 @@ const mutations = {
 			return;
 		}
 		let action = customData.action;
-		state.loadingFlag =true;
+		state.loadingFlag = true;
 		switch (action) {
 			case 910:
 				state.playMode = customData.playmode;
-				console.log("设置播放模式===", state.playMode)
 				break;
 			case 628:
 				state.lookData = customData.on;
@@ -133,21 +132,24 @@ const mutations = {
 				state.localSongList.channel = customData.channel;
 				state.localSongList.total = customData.total;
 				state.localTotal = customData.total;
-				console.log("获取本地歌曲列表===", state.localSongList)
 				break;
 			case 642:
 				let albumArray = [];
 				let str = customData.albumid;
 				let str1 = str.split(":");
 				str1.forEach(function(item, index) {
-					albumArray.push(item.split("="))
+					// albumArray.push(item.split("="))
+					let dataObj = {}
+					let array = item.split("=")
+					dataObj.id = array[0];
+					dataObj.album = array[1];
+					albumArray.push(dataObj);
 				})
 				state.albumid = albumArray;
-				console.log("英语启蒙查询===", state.albumid)
 				break;
 			case 417:
 				if (customData.ret == 0) {
-					
+
 				}
 				break;
 			case 638:
@@ -156,24 +158,22 @@ const mutations = {
 				state.musicData = customData;
 				break;
 			case 410:
-				
+
 				break;
 			case 424:
 				if (customData.ret == 0) {
-					
+
 				}
 				break;
 			case 632:
 				var tmp = Date.parse(new Date()).toString();
 				tmp = parseInt(tmp.substr(0, 10));
 				if (tmp < customData.timestamp) {
-					let t =28800000;
+					let t = 28800000;
 					let m = (customData.timestamp - tmp) * 1000;
-					state.deviceTime =m -t;
+					state.deviceTime = m - t;
 				} else {
-					console.log("关闭设备定时=============")
 					state.deviceTime = 0;
-					console.log("state.deviceTime",state.deviceTime)
 				}
 				break;
 			default:

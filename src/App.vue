@@ -24,7 +24,7 @@ export default {
 		/**隐藏顶部导航 */
 		if (window.hilink != undefined) {
 			window.hilink.setTitleVisible(false, 'titleVisibleCallback');
-			window.hilink.getVersion('systemResultCallback');
+			// window.hilink.getVersion('systemResultCallback');
 		}
 		var lang_flag;
 		var lang = navigator.language || navigator.userLanguage; //常规浏览器语言和IE浏览器
@@ -49,9 +49,7 @@ export default {
 			};
 			window['onResume'] = res => {
 				console.log('手机恢复后台');
-			};
-			window['systemResultCallback'] = res => {
-				console.log('获取系统信息');
+				self.$store.dispatch('getDevCacheAll');
 			};
 			//获取设备全部信息回调
 		}
@@ -126,16 +124,6 @@ html {
 	opacity: 0;
 	transform: translate3d(-100%, 0, 0);
 }
-/* .router-view {
-  width: 100%;
-  height:100%;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  margin: 0 auto;
-  overflow-y: auto;
-  overflow-x: hidden;
-} */
 .router-view {
 	width: 100%;
 	height: 100%;
@@ -168,5 +156,9 @@ html {
 	top: 0;
 	left: 0;
 	box-sizing: border-box;
+}
+.van-picker-column__item--selected {
+	color: #007dff;
+	font-weight: 500;
 }
 </style>

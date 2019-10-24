@@ -1,10 +1,11 @@
 export const m = {
 	HomeTitel:'Alilo story machine',
 	on:'On',
+	open:'On',
 	off:'Off',
 	timer:'Timer',
 	Twist:'Twist the tail to turn on the device.',
-	Loading:'Loading…',
+	Loading:'Loading',
 	Playing:'Playing',
 	Paused:'Paused',
 	Volume:'Volume',

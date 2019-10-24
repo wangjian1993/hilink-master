@@ -76,7 +76,6 @@ export default {
 					let list = self.localSongList.songs;
 					console.log('self.delIndex===', self.delIndex);
 					list.splice(self.delIndex, 1);
-					console.log('list.length====', list.length);
 					if (list.length == 0) {
 						self.beginNumber = 0;
 					}
@@ -150,7 +149,10 @@ export default {
 					};
 					let json = JSON.stringify(body);
 					let data = { custom: { function: json, name: 'function' } };
-					self.setDeviceSongsInfo(data, 'delListBack');
+					self.setDeviceSongsInfo(data, 'delListBack');	
+					let time =setTimeout(function() {
+						self.$store.dispatch('getDeviceAll');
+					}, 3000);
 				})
 				.catch(() => {
 					// on cancel

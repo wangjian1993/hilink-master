@@ -4,9 +4,9 @@ const state = {
 	playData: [],
 	playMode: -1,
 	localList: [],
-	songsCid:-1,
-	loveCid:-1,
-	loadingFlag:true,
+	songsCid: -1,
+	loveCid: -1,
+	loadingFlag: true,
 	localSongList: {
 		total: 0,
 		channel: -1,
@@ -17,24 +17,40 @@ const state = {
 	musicData: [],
 	resultStrAll: null,
 	lampSwitch: [], //开关
-	audioInfo:{
-		"song":"",
-		"play":"",
-		"volume":0,
-		"cutSong":0
+	audioInfo: {
+		"song": "",
+		"play": "",
+		"volume": 0,
+		"cutSong": 0
 	}, //歌曲信息
-	earLight:{
-		on:0
+	earLight: {
+		on: 0
 	}, //耳灯
 	faceLight: {
-		on:0
+		on: 0
 	}, //表情灯
-	volume:0,//音量
-	isLine:0,
-	lookData:0,
-	deviceTime:0,
-	albumid:[],
-	devName:{},
+	volume: 0, //音量
+	isLine: 0,
+	lookData: 0,
+	deviceTime: 0,
+	albumid: [{
+			id: 104,
+			album: 1171
+		},
+		{
+			id: 105,
+			album: 1177
+		},
+		{
+			id: 106,
+			album: 1043
+		},
+		{
+			id: 107,
+			album: 1179
+		}
+	],
+	devName:'火火兔故事机',
 };
 
 export default state;
