@@ -47,6 +47,7 @@ const mutations = {
 		state.deviceTime = 0;
 	},
 	setisDeviceid(state, data) {
+		console.log("关闭提示=======",data)
 		state.isBubble = data;
 	},
 	resultData(state, resData) {
@@ -137,11 +138,11 @@ const mutations = {
 				state.localTotal = customData.total;
 				break;
 			case 642:
+				console.log(" customData.albumid", customData.albumid)
 				let albumArray = [];
 				let str = customData.albumid;
 				let str1 = str.split(":");
 				str1.forEach(function(item, index) {
-					// albumArray.push(item.split("="))
 					let dataObj = {}
 					let array = item.split("=")
 					dataObj.id = array[0];
@@ -149,6 +150,7 @@ const mutations = {
 					albumArray.push(dataObj);
 				})
 				state.albumid = albumArray;
+				console.log("state.albumid===========",state.albumid)
 				break;
 			case 417:
 				if (customData.ret == 0) {

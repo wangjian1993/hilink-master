@@ -3,10 +3,10 @@
 		<v-header :title="title"></v-header>
 		<!--搜索-->
 		<div class="content-box" v-if="!isLoaded">
-			<div class="search">
+			<div class="search" @click="goSearch">
 				<div class="searchIcon center"><img src="../../assets/images/home_icon_search.png" /></div>
 				<div class="searchInput">
-					<van-cell-group><van-field class="field" v-model="serchValue" :placeholder=search @click="goSearch" /></van-cell-group>
+					<van-cell-group><van-field class="field" v-model="serchValue" :placeholder=search /></van-cell-group>
 				</div>
 				<div class="selectIcon center"><img src="../../assets/images/home_icon_shaixuan.png" /></div>
 			</div>
@@ -47,7 +47,7 @@
 				</div>
 			</div>
 			<!--视频推荐-->
-			<div class="part">
+		<!-- 	<div class="part">
 				<div class="title">
 					<div class="titleLeft">
 						<div class="titleLeftTop">{{$t('m.Videos')}}</div>
@@ -60,15 +60,9 @@
 						<img :src="item.picurl" />
 						<div class="text">{{ item.name }}</div>
 						<div class="text1">{{ item.description }}</div>
-						<!--absolute-->
-						<!-- <div class="pay center">付费</div> -->
-						<!-- <div class="number">
-			   <img src="../../assets/images/home_icon_yinyue.png"/>
-			    {{item.musicCount}}首
-			  </div> -->
 					</div>
 				</div>
-			</div>
+			</div> -->
 			<!--广告位-->
 			<div class="banner" @click="goVideoDetail(link)"><img class="content" :src="getVideoAdPath" /></div>
 			<!--性格养成 -->

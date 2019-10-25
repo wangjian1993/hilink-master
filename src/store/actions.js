@@ -51,8 +51,12 @@ export default {
 	setEnglishData({
 		commit
 	}, data) {
-		console.log("英语data ==============",data)
 		commit(types.ENGLISHDATA, data);
+	},
+	setDeviceidFlag({
+		commit
+	}, data) {
+		commit("setisDeviceid", data);
 	},
 	//获取设备信息
 	getDevCacheAll() {
@@ -132,7 +136,7 @@ export default {
 				roomName: json.roomName
 			}
 			let deviceid = localStorage.getItem('deviceid');
-			console.log("deviceid========",deviceid)
+
 			if (deviceid == json.devId) {
 				commit("setisDeviceid",false);
 			}else {

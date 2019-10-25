@@ -348,21 +348,35 @@
 
 .devices-audio-look:extend(.devices-audio-div) {
 	height: 64px;
-
-	div {
+	.devices-audio-look-content {
 		width: 280px;
 		margin: 0 auto;
 		display: flex;
 
-		p {
+		.devices-audio-look-text{
 			flex: 2;
 			height: 64px;
-			line-height: 64px;
-			font-size: 16px;
-			color: #000;
+			display: flex;
+			align-items: center;
+			div {
+				p {
+					text-align: left;
+					&:nth-of-type(1) {
+						font-size: 16px;
+					}
+			
+					&:nth-of-type(2) {
+						font-size: 12px;
+					}
+			
+					.item {
+						font-size: 12px;
+						color: #007dff;
+					}
+				}
+			}
 		}
-
-		div {
+		.devices-audio-look-icon {
 			flex: 2;
 			display: flex;
 			justify-content: flex-end;

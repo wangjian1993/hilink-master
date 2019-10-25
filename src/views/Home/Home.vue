@@ -166,9 +166,14 @@
 				</ul>
 			</div>
 			<div class="devices-audio-look" @click="devicesLockSwitch()" v-show="isFold" :class="isLine == 0 ? '' : 'lineAcitve'">
-				<div>
-					<p>{{ $t('m.Childlock') }}</p>
-					<div :class="this.$i18n.locale == 'en-US' ? 'enActive' : 'zhActive'">
+				<div class="devices-audio-look-content">
+					<div class="devices-audio-look-text">
+						<div :class="this.$i18n.locale == 'en-US' ? 'enActive' : 'zhActive'">
+							<p>{{ $t('m.Childlock') }}</p>
+							<p :class="isLine == 0 ? '' : 'colorActice'">{{ lookData == 0 ? $t('m.off') : $t('m.on') }}</p>
+						</div>
+					</div>
+					<div class="devices-audio-look-icon" :class="this.$i18n.locale == 'en-US' ? 'enActive' : 'zhActive'">
 						<img v-if="lookData == 1" src="../../assets/images/ic_tongsuo_on.png" alt />
 						<img v-if="lookData == 0" src="../../assets/images/ic_tongsuo_off.png" alt />
 					</div>
@@ -259,6 +264,10 @@ export default {
 			}
 		}
 	},
+	beforeRouteLeave(to, from, next) {
+		this.audioInfo.song =this.audioInfo.song;
+		next();
+	},
 	created() {
 		this.$store.dispatch('getDevCacheAll');
 		this.$store.dispatch('init');
@@ -267,7 +276,9 @@ export default {
 	},
 	methods: {
 		bubbleClick() {
-			this.isBubble = false;
+			let self =this;
+			this.$store.dispatch("setDeviceidFlag",false);
+			// self.isBubble = false;
 		},
 		onConfirm() {
 			let self = this;
@@ -350,9 +361,11 @@ export default {
 						break;
 					case 3:
 						data = { Music: { cutSong: 0 } };
+						this.audioInfo.song =this.audioInfo.song;
 						break;
 					case 4:
 						data = { Music: { cutSong: 1 } };
+						this.audioInfo.song =this.audioInfo.song;
 						break;
 					case 5:
 						on = self.audioInfo.play == 1 ? 0 : 1;

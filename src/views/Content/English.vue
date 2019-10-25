@@ -8,14 +8,14 @@
 				<p class="content-title-en">Children's song</p>
 				<div class="song-list">
 					<ul class="song">
-						<li v-for="(item, index) in englishData[104]">
+						<li v-for="(item, index) in englishData[104]" @click="radioCheck(item.id, 0, index)">
 							<div class="path-div" @click="cloudAlbum(item.id)">
 								<img :src="item.coverpath" alt="" class="path-img" />
 								<img src="../../assets/images/xz.png" alt="" class="path-xz" v-if="item.id == albumid[0].album && !setCheck" />
 							</div>
 							<p>{{ item.name }}</p>
 							<div class="song-check" v-show="setCheck">
-								<input type="radio" :id="item.id" name="item1" @change="changeResult(item.id, 0)" :checked="index == 0" :value="item.id" />
+								<input type="radio" :id="item.id" name="item1" :checked="index == radioActive1" :value="item.id" />
 								<label :for="item.id"></label>
 							</div>
 						</li>
@@ -27,14 +27,15 @@
 				<p class="content-title-en">Picture Book</p>
 				<div class="song-list">
 					<ul class="song">
-						<li v-for="(item, index) in englishData[105]">
+						<li v-for="(item, index) in englishData[105]" @click="radioCheck(item.id, 1, index)">
 							<div class="path-div" @click="cloudAlbum(item.id)">
 								<img :src="item.coverpath" alt="" class="path-img" />
 								<img src="../../assets/images/xz.png" alt="" class="path-xz" v-if="item.id == albumid[1].album && !setCheck" />
 							</div>
 							<p>{{ item.name }}</p>
 							<div class="song-check" v-show="setCheck">
-								<input type="radio" name="item2" @change="changeResult(item.id, 1)" :checked="index == 0" />
+								<input type="radio" :id="item.id" name="item2" :checked="index == radioActive2" :value="item.id" />
+								<!-- <input type="radio" name="item2" @change="changeResult(item.id, 1)" :checked="index == 0" /> -->
 								<label :for="item.id"></label>
 							</div>
 						</li>
@@ -46,14 +47,14 @@
 				<p class="content-title-en">Cartoon</p>
 				<div class="song-list">
 					<ul class="song">
-						<li v-for="(item, index) in englishData[106]">
+						<li v-for="(item, index) in englishData[106]" @click="radioCheck(item.id, 2, index)">
 							<div class="path-div" @click="cloudAlbum(item.id)">
 								<img :src="item.coverpath" alt="" class="path-img" />
 								<img src="../../assets/images/xz.png" alt="" class="path-xz" v-if="item.id == albumid[2].album && !setCheck" />
 							</div>
-							<p>{{ item.name }}</p>
+							<p>{{ item.name }}</p>					
 							<div class="song-check" v-show="setCheck">
-								<input type="radio" :id="item.id" name="item3" @change="changeResult(item.id, 2)" :value="item.id" :checked="index == 0" />
+								<input type="radio" :id="item.id" name="item3" :checked="index == radioActive3" :value="item.id"/>
 								<label :for="item.id"></label>
 							</div>
 						</li>
@@ -65,14 +66,14 @@
 				<p class="content-title-en">Phonics</p>
 				<div class="song-list">
 					<ul class="song">
-						<li v-for="(item, index) in englishData[107]">
+						<li v-for="(item, index) in englishData[107]" @click="radioCheck(item.id, 3, index)">
 							<div class="path-div" @click="cloudAlbum(item.id)">
 								<img :src="item.coverpath" alt="" class="path-img" />
 								<img src="../../assets/images/xz.png" alt="" class="path-xz" v-if="item.id == albumid[3].album && !setCheck" />
 							</div>
 							<p>{{ item.name }}</p>
 							<div class="song-check" v-show="setCheck">
-								<input type="radio" :id="item.id" name="item4" @change="changeResult(item.id, 3)" :value="item.id" :checked="index == 0" />
+								<input type="radio" :id="item.id" name="item4" :value="item.id" :checked="index == radioActive4" />
 								<label :for="item.id"></label>
 							</div>
 						</li>
@@ -115,6 +116,10 @@ export default {
 			],
 			setCheck: false,
 			raidoCheack: 0,
+			radioActive1: 0,
+			radioActive2: 0,
+			radioActive3: 0,
+			radioActive4: 0,
 			title: this.$t('m.Learning')
 		};
 	},
@@ -128,7 +133,7 @@ export default {
 				let data = self.praseResponseData(resultStr);
 				if (data.errcode == 0) {
 					self.$toast({
-						message: '启蒙英语设置成功',
+						message: this.$t('m.Learningok'),
 						position: 'bottom',
 						duration: '3000',
 						className: 'toastActive'
@@ -140,8 +145,30 @@ export default {
 	created() {
 		this.getEnglishData();
 		this.devicesAction();
+		console.log("albumid========",this.albumid)
 	},
 	methods: {
+		radioCheck(id, type, index) {
+			let self = this;
+			switch (type) {
+				case 0:
+					self.radioActive1 = index;
+					break;
+				case 1:
+					self.radioActive2 = index;
+					break;
+				case 2:
+					self.radioActive3 = index;
+					break;
+				case 3:
+					self.radioActive4 = index;
+					break;
+				default:
+					break;
+			}
+			self.musicList[type].album = id;
+			console.log("self.musicList===",self.musicList)
+		},
 		//获取歌曲资源
 		getEnglishData() {
 			let self = this;
@@ -164,7 +191,6 @@ export default {
 		},
 		changeResult(id, index) {
 			let self = this;
-			console.log('id===', id);
 			self.musicList[index].album = id;
 		},
 		//设置默认歌曲
@@ -180,6 +206,7 @@ export default {
 					list: self.musicList
 				};
 				let json = JSON.stringify(body);
+				console.log(" self.musicList======", self.musicList)
 				let data = { custom: { function: json, name: 'function' } };
 				self.setDeviceSongsInfo(data, 'englishBack');
 				self.$store.dispatch('setEnglishData', self.musicList);

@@ -3,7 +3,7 @@
 		<div class="play-img"><img src="../assets/images/Photo_player_J7.100x100.png" alt="" /></div>
 		<div class="play-text">
 			<marquee class="songstitle" direction="left" behavior="scroll" scrollamount="2" scrolldelay="0" loop="-1" width="100%" height="100%">
-				{{ audioInfo.song != '' ? audioInfo.song : '歌曲正在路上' }}
+				{{ audioInfo.song != '' ? audioInfo.song : $t('m.Loading') }}
 			</marquee>
 		</div>
 		<div class="play-btn">

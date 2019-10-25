@@ -292,10 +292,10 @@ export default {
 		cancelOrDeleteFn: function() {
 			let self =this
 			if (self.serchValue) {
-				return self.cancelOrDelete = '清除';
+				return self.cancelOrDelete = this.$t('m.Empty');
 			} else {
 				self.isShowResult = false;
-				return self.cancelOrDelete = '取消';
+				return self.cancelOrDelete = this.$t('m.CANCEL');
 			}
 		}
 	}
