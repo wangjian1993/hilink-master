@@ -52,6 +52,7 @@ const state = {
 		}
 	],
 	devName:'火火兔故事机',
+	istimePopu:true,
 };
 
 export default state;

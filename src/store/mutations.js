@@ -43,12 +43,18 @@ const mutations = {
 	setDevName(state, data) {
 		state.devName = data.devName;
 	},
+	setswitch(state, data) {
+		state.lampSwitch = data;
+		state.isLine =data;
+	},
 	setDeviceTimeFn(state, data) {
 		state.deviceTime = 0;
 	},
 	setisDeviceid(state, data) {
-		console.log("关闭提示=======",data)
 		state.isBubble = data;
+	},
+	setistimePopu(state, data) {
+		state.istimePopu =data;
 	},
 	resultData(state, resData) {
 		let type = resData;
@@ -57,6 +63,9 @@ const mutations = {
 			case 'switch':
 				state.lampSwitch = resData.data.on;
 				state.isLine = resData.data.on;
+				if(state.isLine == 0){
+					state.deviceTime = 0;
+				}
 				console.log("设备上报开关===", state.lampSwitch);
 				break;
 			case 'Music':
@@ -171,6 +180,7 @@ const mutations = {
 				}
 				break;
 			case 632:
+				// state.istimePopu =true;
 				var tmp = Date.parse(new Date()).toString();
 				tmp = parseInt(tmp.substr(0, 10));
 				if (tmp < customData.timestamp) {
@@ -178,7 +188,7 @@ const mutations = {
 					let m = (customData.timestamp - tmp) * 1000;
 					state.deviceTime = m - t;
 				} else {
-					state.deviceTime = 0;
+					state.deviceTime = 0;			
 				}
 				break;
 			default:

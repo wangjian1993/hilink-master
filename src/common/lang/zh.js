@@ -70,5 +70,7 @@ export const m = {
 	Favorites:'我的收藏',
 	PackUp:"收起",
 	Rankings:'热门排行',
-	Unfold:"展开更多"
+	Unfold:"展开更多",
+	hint:"长按兔耳朵按键约2秒，听到“嘟”的一声后即可进行语音对话，详见产品说明书",
+	Gotit:'知道了'
 }

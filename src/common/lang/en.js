@@ -69,5 +69,7 @@ export const m = {
 	Done:'Done',
 	Favorites:'Favorites',
 	PackUp:"Up",
-	Unfold:"Unfold"
+	Unfold:"Unfold",
+	hint:"Press and hold the bunny ear button for 2 seconds until you here a beep,then you can start a conversation.Refer to the product manual for more details. ",
+	Gotit:'Got it'
 }

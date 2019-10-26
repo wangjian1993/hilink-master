@@ -348,7 +348,7 @@ export default {
 	width: 100%;
 	text-align: center;
 	margin-top: 40px;
-	margin-bottom: 40px;
+	margin-bottom: 80px;
 	div {
 		width: 160px;
 		height: 36px;

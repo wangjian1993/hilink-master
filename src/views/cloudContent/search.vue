@@ -9,7 +9,7 @@
 					<van-cell-group><van-field class="field" v-model="serchValue" :placeholder="$t('m.Search')" @change="SearchResult" /></van-cell-group>
 				</div>
 			</div>
-			<div class="cancel" @click="goBack">{{ cancelOrDeleteFn }}</div>
+			<div class="cancel" :class="this.$i18n.locale == 'en-US' ? 'searchActive' : ''" @click="goBack">{{ cancelOrDeleteFn }}</div>
 		</div>
 		<!--热门搜索-->
 

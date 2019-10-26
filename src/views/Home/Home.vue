@@ -3,10 +3,10 @@
 		<v-header :title="devName" :type="headerType"></v-header>
 		<!-- 产品图 -->
 		<div class="devices-img">
-			<div class="bubble-box" v-if="isBubble" @click="bubbleClick()">
+			<div class="bubble-box" :class="this.$i18n.locale == 'en-US' ? 'bubbleActive' : ''"  v-if="isBubble" @click="bubbleClick()">
 				<div class="bubble">
-					<p>长按兔耳朵按键约2秒，听到“嘟”的一声后即可进行语音对话，详见产品说明书</p>
-					<p>知道了</p>
+					<p>{{$t('m.hint')}}</p>
+					<p>{{$t('m.Gotit')}}</p>
 				</div>
 			</div>
 			<img src="../../assets/images/img_toutu_red.png" alt />
@@ -36,7 +36,7 @@
 		<div class="devices-audio" style="background: #F7F7F7;">
 			<!-- 歌曲控制 -->
 			<div class="devices-audio-contro-box" :class="isLine == 0 ? '' : 'lineAcitve'">
-				<div class="devices-audio-control" :class="audioInfo.song == '' ? 'lineAcitve' : ''">
+				<div class="devices-audio-control">
 					<div class="devices-audio-control-text">
 						<div>
 							<p>
@@ -71,8 +71,9 @@
 						</div>
 						<div>
 							<p @click="devicesSwitch(5)">
-								<img v-if="audioInfo.play == 1" src="../../assets/images/ic_playing.png" alt />
-								<img v-if="audioInfo.play == 0" src="../../assets/images/ic_stop.png" alt />
+								<img v-if="audioInfo.play == 1 && audioInfo.song != ''" src="../../assets/images/ic_playing.png" alt />
+								<img v-if="audioInfo.play == 0 && audioInfo.song != ''" src="../../assets/images/ic_stop.png" alt />
+								<img v-if="audioInfo.song == ''" src="../../assets/images/ic_stop.png" style="background: #000000;opacity: .4;" alt />
 							</p>
 						</div>
 						<div>
@@ -170,7 +171,7 @@
 					<div class="devices-audio-look-text">
 						<div :class="this.$i18n.locale == 'en-US' ? 'enActive' : 'zhActive'">
 							<p>{{ $t('m.Childlock') }}</p>
-							<p :class="isLine == 0 ? '' : 'colorActice'">{{ lookData == 0 ? $t('m.off') : $t('m.on') }}</p>
+							<p :class="lookData == 0 ? '' : 'colorActice'">{{ lookData == 0 ? $t('m.off') : $t('m.on') }}</p>
 						</div>
 					</div>
 					<div class="devices-audio-look-icon" :class="this.$i18n.locale == 'en-US' ? 'enActive' : 'zhActive'">
@@ -253,7 +254,9 @@ export default {
 			'loveCid',
 			'loadingFlag',
 			'devName',
-			'isBubble'
+			'isBubble',
+			'istimePopu',
+			'istimePopu'
 		]),
 		deviceTime: {
 			get() {
@@ -296,6 +299,10 @@ export default {
 		},
 		deviceTimeFinish() {
 			this.deviceTime = 0;
+			console.log("取消定时关机===============",this.istimePopu);
+			if(this.istimePopu){
+				this.$store.dispatch("deviceSwitch",0)
+			}
 		},
 		//设置开关图片
 		switchIcon() {
@@ -328,7 +335,7 @@ export default {
 					className: 'toastActive'
 				});
 				return;
-			}
+			}		
 			if (window.hilink != undefined) {
 				var data;
 				var on;
@@ -355,7 +362,6 @@ export default {
 						data = { earLight: { on: on } };
 						break;
 					case 2:
-						console.log('表情灯设置===', self.faceLight.on);
 						on = self.faceLight.on == 1 ? 0 : 1;
 						data = { faceLight: { on: on } };
 						break;
@@ -370,6 +376,9 @@ export default {
 					case 5:
 						on = self.audioInfo.play == 1 ? 0 : 1;
 						data = { Music: { play: on } };
+						if(self.audioInfo.song == ''){
+							return;
+						}
 						break;
 					case 6:
 						var body = {

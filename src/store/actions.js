@@ -58,9 +58,20 @@ export default {
 	}, data) {
 		commit("setisDeviceid", data);
 	},
+	deviceSwitch({
+		commit
+	}, data) {
+		commit("setswitch", data);
+	},
+	isTimePopu({
+		commit
+	},data){
+		commit("setistimePopu",data)
+	},
 	//获取设备信息
 	getDevCacheAll() {
 		if (window.hilink != undefined) {
+			console.log("获取全部信息========")
 			window.hilink.getDevCacheAll("0", "", "resultCallback");
 		}
 	},
@@ -89,7 +100,6 @@ export default {
 			let json = { custom: { function: localData } };
 			let body = JSON.stringify(json);
 			window.hilink.setDeviceInfoWithoutCallback("0", body);
-			// window.hilink.getDevInfo("0", 'custom',body, "getResultCallback");
 		}
 	},
 	setDevInfo({
@@ -97,7 +107,7 @@ export default {
 	}, data) {
 		if (window.hilink != undefined) {
 			let body = JSON.stringify(data);
-			window.hilink.setDeviceInfoWithoutCallback("0", body);
+			window.hilink.setDeviceInfoWithoutCallback("0", body,);
 		}
 	},
 	delSongsList({
@@ -136,7 +146,6 @@ export default {
 				roomName: json.roomName
 			}
 			let deviceid = localStorage.getItem('deviceid');
-
 			if (deviceid == json.devId) {
 				commit("setisDeviceid",false);
 			}else {
