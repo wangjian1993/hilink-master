@@ -107,7 +107,9 @@ export default {
 	}, data) {
 		if (window.hilink != undefined) {
 			let body = JSON.stringify(data);
-			window.hilink.setDeviceInfoWithoutCallback("0", body,);
+			// window.hilink.setDeviceInfoWithoutCallback("0", body,);
+			console.log("发送给设备===",body)
+			window.hilink.setDeviceInfo("0", body,"getDeviceInfoData");
 		}
 	},
 	delSongsList({
@@ -116,6 +118,7 @@ export default {
 		if (window.hilink != undefined) {
 			let body = JSON.stringify(data);
 			window.hilink.setDeviceInfoWithoutCallback("0", body);
+			// window.hilink.setDeviceInfo("0", body,"songsListBack");
 		}
 	},
 	getSongsList({
@@ -124,6 +127,7 @@ export default {
 		if (window.hilink != undefined) {
 			let body = JSON.stringify(data);
 			window.hilink.setDeviceInfoWithoutCallback("0", body);
+			// window.hilink.setDeviceInfo("0", body,"delListBack");
 		}
 	},
 	init({
@@ -188,6 +192,7 @@ export default {
 		}
 		window.getDeviceInfoData = (res) => {
 			let json = JSON.parse(res);
+			console.log("发送消息res",res)
 			if(res.errcode != 0){
 				commit(types.LOADINGFLAG, true);
 			}
