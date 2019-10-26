@@ -106,8 +106,10 @@ export default {
 			let self = this;
 			if (!self.cangetlocal) return false;
 			self.limitNumber = Math.ceil(self.localTotal / 6);
-			if (self.limitNumber <= 1) {
+			console.log("self.limitNumber",self.limitNumber)
+			if (self.limitNumber == 0) {
 				self.isMore = true;
+				console.log("self.isMore",self.isMore)
 			}
 			// self.getLocalSong();
 		}, 300),

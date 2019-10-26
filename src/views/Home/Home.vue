@@ -3,10 +3,10 @@
 		<v-header :title="devName" :type="headerType"></v-header>
 		<!-- 产品图 -->
 		<div class="devices-img">
-			<div class="bubble-box" :class="this.$i18n.locale == 'en-US' ? 'bubbleActive' : ''"  v-if="isBubble" @click="bubbleClick()">
+			<div class="bubble-box" :class="this.$i18n.locale == 'en-US' ? 'bubbleActive' : ''" v-if="isBubble" @click="bubbleClick()">
 				<div class="bubble">
-					<p>{{$t('m.hint')}}</p>
-					<p>{{$t('m.Gotit')}}</p>
+					<p>{{ $t('m.hint') }}</p>
+					<p>{{ $t('m.Gotit') }}</p>
 				</div>
 			</div>
 			<img src="../../assets/images/img_toutu_red.png" alt />
@@ -54,13 +54,6 @@
 								>
 									{{ audioInfo.song != '' ? audioInfo.song : $t('m.Loading') }}
 								</marquee>
-								<!-- <van-notice-bar
-									color="#000"
-									:speed="noticeValue"
-									background="#fff"
-									:text="audioInfo.song != '' ? audioInfo.song : '歌曲正在路上'"
-									style="padding: 0;"
-                /> -->
 							</p>
 							<p></p>
 						</div>
@@ -268,7 +261,7 @@ export default {
 		}
 	},
 	beforeRouteLeave(to, from, next) {
-		this.audioInfo.song =this.audioInfo.song;
+		this.audioInfo.song = this.audioInfo.song;
 		next();
 	},
 	created() {
@@ -279,8 +272,8 @@ export default {
 	},
 	methods: {
 		bubbleClick() {
-			let self =this;
-			this.$store.dispatch("setDeviceidFlag",false);
+			let self = this;
+			this.$store.dispatch('setDeviceidFlag', false);
 			// self.isBubble = false;
 		},
 		onConfirm() {
@@ -299,9 +292,9 @@ export default {
 		},
 		deviceTimeFinish() {
 			this.deviceTime = 0;
-			console.log("取消定时关机===============",this.istimePopu);
-			if(this.istimePopu){
-				this.$store.dispatch("deviceSwitch",0)
+			console.log('取消定时关机===============', this.istimePopu);
+			if (this.istimePopu) {
+				this.$store.dispatch('deviceSwitch', 0);
 			}
 		},
 		//设置开关图片
@@ -335,7 +328,7 @@ export default {
 					className: 'toastActive'
 				});
 				return;
-			}		
+			}
 			if (window.hilink != undefined) {
 				var data;
 				var on;
@@ -367,16 +360,16 @@ export default {
 						break;
 					case 3:
 						data = { Music: { cutSong: 0 } };
-						this.audioInfo.song =this.audioInfo.song;
+						this.audioInfo.song = this.audioInfo.song;
 						break;
 					case 4:
 						data = { Music: { cutSong: 1 } };
-						this.audioInfo.song =this.audioInfo.song;
+						this.audioInfo.song = this.audioInfo.song;
 						break;
 					case 5:
 						on = self.audioInfo.play == 1 ? 0 : 1;
 						data = { Music: { play: on } };
-						if(self.audioInfo.song == ''){
+						if (self.audioInfo.song == '') {
 							return;
 						}
 						break;
