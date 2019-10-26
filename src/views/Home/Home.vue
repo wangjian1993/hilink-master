@@ -20,9 +20,9 @@
 					<p>
 						<van-count-down :time="deviceTime" @finish="deviceTimeFinish()">
 							<template v-slot="timeData">
-								<span class="item" v-if="timeData.hours != 0">{{ timeData.hours }}:</span>
-								<span class="item">{{ timeData.minutes }}:</span>
-								<span class="item">{{ timeData.seconds }}</span>
+								<span class="item" v-if="timeData.hours != 0">{{ timeRepair(timeData.hours) }}:</span>
+								<span class="item">{{ timeRepair(timeData.minutes) }}:</span>
+								<span class="item">{{ timeRepair(timeData.seconds) }}</span>
 							</template>
 						</van-count-down>
 					</p>
@@ -37,7 +37,7 @@
 			<!-- 歌曲控制 -->
 			<div class="devices-audio-contro-box" :class="isLine == 0 ? '' : 'lineAcitve'">
 				<div class="devices-audio-control">
-					<div class="devices-audio-control-text">
+					<div class="devices-audio-control-text"> 
 						<div>
 							<p>
 								<marquee
@@ -66,7 +66,8 @@
 							<p @click="devicesSwitch(5)">
 								<img v-if="audioInfo.play == 1 && audioInfo.song != ''" src="../../assets/images/ic_playing.png" alt />
 								<img v-if="audioInfo.play == 0 && audioInfo.song != ''" src="../../assets/images/ic_stop.png" alt />
-								<img v-if="audioInfo.song == ''" src="../../assets/images/ic_stop.png" style="background: #000000;opacity: .4;" alt />
+								<img v-if="audioInfo.song == '' && isLine == 1" src="../../assets/images/ic_stop.png" style="background: #000000;opacity: .4;" alt />
+								<img v-if="audioInfo.song == null" src="../../assets/images/ic_stop.png" alt />
 							</p>
 						</div>
 						<div>
@@ -107,8 +108,8 @@
 						</div>
 						<div class="devices-audio-else-icon">
 							<img v-if="playMode == -1" src="../../assets/images/ic_liebiao.png" alt />
-							<img v-if="playMode == 0 && isLine != 0" src="../../assets/images/ic_danqu_hover.png" alt />
-							<img v-if="playMode == 1 && isLine != 0" src="../../assets/images/ic_liebiao_hover.png" alt />
+							<img v-if="playMode == 0" src="../../assets/images/ic_danqu_hover.png" alt />
+							<img v-if="playMode == 1" src="../../assets/images/ic_liebiao_hover.png" alt />
 						</div>
 					</li>
 					<li @click="onConfirm()" :class="isLine == 0 ? '' : 'lineAcitve'">
@@ -118,9 +119,9 @@
 								<p :class="deviceTime == 0 ? '' : 'colorActice'" v-if="deviceTime != 0">
 									<van-count-down :time="deviceTime">
 										<template v-slot="timeData">
-											<span class="item" v-if="timeData.hours != 0">{{ timeData.hours }}:</span>
-											<span class="item">{{ timeData.minutes }}:</span>
-											<span class="item">{{ timeData.seconds }}</span>
+											<span class="item" v-if="timeData.hours != 0">{{ timeRepair(timeData.hours) }}:</span>
+											<span class="item">{{ timeRepair(timeData.minutes) }}:</span>
+											<span class="item">{{ timeRepair(timeData.seconds) }}</span>
 										</template>
 									</van-count-down>
 								</p>
@@ -260,9 +261,13 @@ export default {
 			}
 		}
 	},
-	beforeRouteLeave(to, from, next) {
-		this.audioInfo.song = this.audioInfo.song;
-		next();
+	mounted() {
+		let self = this;
+		if (window.hilink != undefined) {
+			window['backPressedCallback'] = resultStr => {
+				console.log("安卓返回键======",resultStr)
+			};
+		}
 	},
 	created() {
 		this.$store.dispatch('getDevCacheAll');
@@ -271,6 +276,13 @@ export default {
 		this.getDevicesTime();
 	},
 	methods: {
+		timeRepair(time){
+			if(time < 9){
+				return '0' + time
+			}else{
+				return time
+			}
+		},
 		bubbleClick() {
 			let self = this;
 			this.$store.dispatch('setDeviceidFlag', false);
@@ -278,6 +290,15 @@ export default {
 		},
 		onConfirm() {
 			let self = this;
+			if (self.isLine == 0) {
+				this.$toast({
+					message: this.$t('m.Twist'),
+					position: 'bottom',
+					duration: '3000',
+					className: 'toastActive'
+				});
+				return;
+			}
 			console.log('定时关机==', self.timePopup);
 			self.timePopup = !self.timePopup; //显示
 		},
@@ -396,23 +417,21 @@ export default {
 			if (!self.loadingFlag) {
 				return;
 			}
-			// var body = {
-			// 	from: 'DID:0',
-			// 	to: 'UID:-1',
-			// 	action: 631,
-			// 	type: 4,
-			// 	doaction: 'query'
-			// };
-			// var json = JSON.stringify(body);
-			// var data = { custom: { function: json, name: 'function' } };
-			// self.$store.dispatch('setDevInfo', data);
-			// self.$store.dispatch('setLoadingFlag', false);
 			let time = setTimeout(function() {
 				self.$store.dispatch('getDevLocal');
 			}, 1000);
 		},
 		devicesMode() {
 			let self = this;
+			if (self.isLine == 0) {
+				this.$toast({
+					message: this.$t('m.Twist'),
+					position: 'bottom',
+					duration: '3000',
+					className: 'toastActive'
+				});
+				return;
+			}
 			self.audioMode = !self.audioMode;
 			self.modePopup = !self.modePopup;
 		},
@@ -502,6 +521,15 @@ export default {
 		onVolumeChange: _debounce(function(value) {
 			let self = this;
 			if (!self.loadingFlag) {
+				return;
+			}
+			if (self.isLine == 0) {
+				this.$toast({
+					message: this.$t('m.Twist'),
+					position: 'bottom',
+					duration: '3000',
+					className: 'toastActive'
+				});
 				return;
 			}
 			let data = { Music: { volume: value } };

@@ -286,17 +286,17 @@ export default {
 			this.$store.state.params = type;
 		},
 		//回到顶部
-		goTop() {
-			let scrollTop = document.documentElement.scrollTop || document.body.crollTop;
-			let timer = setInterval(() => {
-				let speed = -(Math.ceil(scrollTop) / 5);
-				scrollTop = scrollTop + speed;
-				document.documentElement.scrollTop = document.body.crollTop = scrollTop;
-				if (speed == 0) {
-					clearInterval(timer);
-				}
-			});
-		}
+		// goTop() {
+		// 	let scrollTop = document.documentElement.scrollTop || document.body.crollTop;
+		// 	let timer = setInterval(() => {
+		// 		let speed = -(Math.ceil(scrollTop) / 5);
+		// 		scrollTop = scrollTop + speed;
+		// 		document.documentElement.scrollTop = document.body.crollTop = scrollTop;
+		// 		if (speed == 0) {
+		// 			clearInterval(timer);
+		// 		}
+		// 	});
+		// }
 	},
 	async mounted() {
 		this.search = this.$i18n.t('m.Search')
@@ -412,35 +412,35 @@ export default {
 			});
 		this.isLoaded = false;
 		var that = this;
-		window.onscroll = function() {
-			//变量scrollTop是滚动条滚动时，距离顶部的距离
-			var scrollTop = document.documentElement.scrollTop || document.body.scrollTop; //变量windowHeight是可视区的高度
-			var windowHeight = document.documentElement.clientHeight || document.body.clientHeight; //变量scrollHeight是滚动条的总高度
-			var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight; //滚动条到底部的条件
-			if (scrollTop + windowHeight == scrollHeight) {
-				if (that.getNewSpecialsList.length % 10 != 0) {
-					this.isShowNoMore = true;
-					return;
-				}
-				++that.page;
-				(that.isLoaded = true),
-					//最新上架
-					http
-						.getNewSpecials(that.page)
-						.then(res => {
-							that.getNewSpecialsList = that.getNewSpecialsList.concat(res.data.content.list);
-							that.isLoaded = false;
-						})
-						.catch(err => {
-							console.log(err);
-						});
-			}
-			if (scrollTop > windowHeight) {
-				that.isBottom = true;
-			} else {
-				that.isBottom = false;
-			}
-		};
+		// window.onscroll = function() {
+		// 	//变量scrollTop是滚动条滚动时，距离顶部的距离
+		// 	var scrollTop = document.documentElement.scrollTop || document.body.scrollTop; //变量windowHeight是可视区的高度
+		// 	var windowHeight = document.documentElement.clientHeight || document.body.clientHeight; //变量scrollHeight是滚动条的总高度
+		// 	var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight; //滚动条到底部的条件
+		// 	if (scrollTop + windowHeight == scrollHeight) {
+		// 		if (that.getNewSpecialsList.length % 10 != 0) {
+		// 			this.isShowNoMore = true;
+		// 			return;
+		// 		}
+		// 		++that.page;
+		// 		(that.isLoaded = true),
+		// 			//最新上架
+		// 			http
+		// 				.getNewSpecials(that.page)
+		// 				.then(res => {
+		// 					that.getNewSpecialsList = that.getNewSpecialsList.concat(res.data.content.list);
+		// 					that.isLoaded = false;
+		// 				})
+		// 				.catch(err => {
+		// 					console.log(err);
+		// 				});
+		// 	}
+		// 	if (scrollTop > windowHeight) {
+		// 		that.isBottom = true;
+		// 	} else {
+		// 		that.isBottom = false;
+		// 	}
+		// };
 	},
 	components: {
 		'v-header': Header

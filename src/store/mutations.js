@@ -45,7 +45,15 @@ const mutations = {
 	},
 	setswitch(state, data) {
 		state.lampSwitch = data;
-		state.isLine =data;
+		state.isLine = data;
+		state.audioInfo.song = null
+		state.audioInfo.cutSong = -1
+		state.audioInfo.play = -1
+		state.volume = 0
+		state.playMode= -1
+		state.earLight.on = 0
+		state.faceLight.on = 0
+		state.lookData = 0
 	},
 	setDeviceTimeFn(state, data) {
 		state.deviceTime = 0;
@@ -54,7 +62,7 @@ const mutations = {
 		state.isBubble = data;
 	},
 	setistimePopu(state, data) {
-		state.istimePopu =data;
+		state.istimePopu = data;
 	},
 	resultData(state, resData) {
 		let type = resData;
@@ -63,27 +71,37 @@ const mutations = {
 			case 'switch':
 				state.lampSwitch = resData.data.on;
 				state.isLine = resData.data.on;
-				if(state.isLine == 0){
+				if (state.isLine == 0) {
 					state.deviceTime = 0;
+					state.audioInfo.song = null
+					state.audioInfo.cutSong = -1
+					state.audioInfo.play = -1
+					state.playMode= -1
+					state.volume = 0
+					state.earLight.on = 0
+					state.faceLight.on = 0
+					state.lookData = 0
 				}
 				console.log("设备上报开关===", state.lampSwitch);
 				break;
 			case 'Music':
-				state.audioInfo.song = resData.data.song;
-				state.audioInfo.cutSong = resData.data.cutSong;
-				state.audioInfo.play = resData.data.play;
-				state.volume = resData.data.volume;
-				console.log("音乐上下一曲", state.audioInfo.cutSong)
-				console.log("音乐开关===", state.audioInfo.play)
-				console.log("音乐名称===", state.audioInfo.song)
-				console.log("音乐音量===", state.volume)
+				if (state.isLine == 1) {
+					state.audioInfo.song = resData.data.song;
+					state.audioInfo.cutSong = resData.data.cutSong;
+					state.audioInfo.play = resData.data.play;
+					state.volume = resData.data.volume;
+				}
 				break;
 			case 'earLight':
-				state.earLight.on = resData.data.on;
+				if (state.isLine == 1) {
+					state.earLight.on = resData.data.on;
+				}
 				console.log("设备耳灯", state.earLight.on)
 				break;
 			case 'faceLight':
-				state.faceLight.on = resData.data.on;
+				if (state.isLine == 1) {
+					state.faceLight.on = resData.data.on;
+				}
 				break;
 			case "custom":
 				if (resData.data.action == '104') {
@@ -159,7 +177,7 @@ const mutations = {
 					albumArray.push(dataObj);
 				})
 				state.albumid = albumArray;
-				console.log("state.albumid===========",state.albumid)
+				console.log("state.albumid===========", state.albumid)
 				break;
 			case 417:
 				if (customData.ret == 0) {
@@ -188,7 +206,7 @@ const mutations = {
 					let m = (customData.timestamp - tmp) * 1000;
 					state.deviceTime = m - t;
 				} else {
-					state.deviceTime = 0;			
+					state.deviceTime = 0;
 				}
 				break;
 			default:

@@ -65,8 +65,8 @@ export default {
 	},
 	isTimePopu({
 		commit
-	},data){
-		commit("setistimePopu",data)
+	}, data) {
+		commit("setistimePopu", data)
 	},
 	//获取设备信息
 	getDevCacheAll() {
@@ -79,12 +79,12 @@ export default {
 	setDeviceTime({
 		commit
 	}, data) {
-		commit("setDeviceTimeFn",data)
+		commit("setDeviceTimeFn", data)
 	},
 	getDeviceAll({
 		commit
-	},data){
-		window.hilink.getDevInfo("0", 'custom','', "getResultCallback");
+	}, data) {
+		window.hilink.getDevInfo("0", 'custom', '', "getResultCallback");
 	},
 	//获取本地歌曲列表
 	getDevLocal({
@@ -97,7 +97,11 @@ export default {
 				action: 405
 			};
 			let localData = JSON.stringify(d);
-			let json = { custom: { function: localData } };
+			let json = {
+				custom: {
+					function: localData
+				}
+			};
 			let body = JSON.stringify(json);
 			window.hilink.setDeviceInfoWithoutCallback("0", body);
 		}
@@ -108,8 +112,15 @@ export default {
 		if (window.hilink != undefined) {
 			let body = JSON.stringify(data);
 			// window.hilink.setDeviceInfoWithoutCallback("0", body,);
-			console.log("发送给设备===",body)
-			window.hilink.setDeviceInfo("0", body,"getDeviceInfoData");
+			console.log("发送给设备===", body)
+			window.hilink.setDeviceInfo("0", body, "getDeviceInfoData");
+		}
+	},
+	setBackPressed({
+		commit
+	}, data) {
+		if (window.hilink != undefined) {
+			window.hilink.overrideBackPressed(true, "backPressedCallback");
 		}
 	},
 	delSongsList({
@@ -151,10 +162,10 @@ export default {
 			}
 			let deviceid = localStorage.getItem('deviceid');
 			if (deviceid == json.devId) {
-				commit("setisDeviceid",false);
-			}else {
+				commit("setisDeviceid", false);
+			} else {
 				commit("setisDeviceid", true);
-				localStorage.setItem("deviceid",json.devId);
+				localStorage.setItem("deviceid", json.devId);
 			}
 			commit("setDevName", info);
 			json.services.forEach(function(item, index) {
@@ -182,18 +193,18 @@ export default {
 				commit("resultData", json)
 			}
 		}
-		
-		window.localResult =(res) => {
-			console.log("本地歌曲列表",res);
+
+		window.localResult = (res) => {
+			console.log("本地歌曲列表", res);
 		}
-		window.getResultCallback =(res) =>{
+		window.getResultCallback = (res) => {
 			let json = JSON.parse(res);
 			commit("getDeviceResult", json)
 		}
 		window.getDeviceInfoData = (res) => {
 			let json = JSON.parse(res);
-			console.log("发送消息res",res)
-			if(res.errcode != 0){
+			console.log("发送消息res", res)
+			if (res.errcode != 0) {
 				commit(types.LOADINGFLAG, true);
 			}
 		}

@@ -115,14 +115,14 @@ export default {
 				}
 			}
 			&:last-child {
-				margin-left: 23px;
+				margin-left: 43px;
 				width: 22px;
 				img {
 					width: 22px;
 					height: 22px;
 					position: absolute;
 					top: 50%;
-					left: 0%;
+					right: 0;
 					transform: translate(0%, -50%);
 				}
 			}
