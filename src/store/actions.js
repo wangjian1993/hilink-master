@@ -120,6 +120,7 @@ export default {
 		commit
 	}, data) {
 		if (window.hilink != undefined) {
+			console.log("重写设备返回========")
 			window.hilink.overrideBackPressed(true, "backPressedCallback");
 		}
 	},

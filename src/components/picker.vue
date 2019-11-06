@@ -62,7 +62,7 @@ export default {
 			var date = new Date();
 			//2. 获取当前分钟
 			let min = date.getMinutes();
-			let d = date.setMinutes(min + parseInt(1));
+			let d = date.setMinutes(min + parseInt(nub));
 			// let d = date.setMinutes(min + parseInt(1));
 			let timeDate = parseInt(d.toString().slice(0, 10));
 			return timeDate;

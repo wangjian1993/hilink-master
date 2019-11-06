@@ -1,6 +1,6 @@
 <template>
 	<div class="home">
-		<v-header :title="devName" :type="headerType"></v-header>
+		<v-header :title="$store.state.devName" :type="headerType"></v-header>
 		<!-- 产品图 -->
 		<div class="devices-img">
 			<div class="bubble-box" :class="this.$i18n.locale == 'en-US' ? 'bubbleActive' : ''" v-if="isBubble" @click="bubbleClick()">
@@ -37,7 +37,7 @@
 			<!-- 歌曲控制 -->
 			<div class="devices-audio-contro-box" :class="isLine == 0 ? '' : 'lineAcitve'">
 				<div class="devices-audio-control">
-					<div class="devices-audio-control-text"> 
+					<div class="devices-audio-control-text">
 						<div>
 							<p>
 								<marquee
@@ -265,7 +265,19 @@ export default {
 		let self = this;
 		if (window.hilink != undefined) {
 			window['backPressedCallback'] = resultStr => {
-				console.log("安卓返回键======",resultStr)
+				console.log('resultStr====', resultStr);
+			};
+			window['goBack'] = resultStr => {
+				if (this.timePopup) {
+					this.timePopup = false;
+				} else {
+					// console.log('url--info====', this.$route.path);
+					// if (this.$route.path == '/' || this.$route.path == '/home') {
+						window.hilink.overrideBackPressed(false, 'backPressedCallback');
+					// } else {
+					// 	this.$router.go(-1);
+					// }
+				}
 			};
 		}
 	},
@@ -273,14 +285,15 @@ export default {
 		this.$store.dispatch('getDevCacheAll');
 		this.$store.dispatch('init');
 		this.$store.dispatch('getDeviceAll');
+		this.$store.dispatch('setBackPressed');
 		this.getDevicesTime();
 	},
 	methods: {
-		timeRepair(time){
-			if(time < 9){
-				return '0' + time
-			}else{
-				return time
+		timeRepair(time) {
+			if (time < 10) {
+				return '0' + time;
+			} else {
+				return time;
 			}
 		},
 		bubbleClick() {
