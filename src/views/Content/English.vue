@@ -191,6 +191,7 @@ export default {
 		},
 		changeResult(id, index) {
 			let self = this;
+			console.log("self.musicList[index].album========",self.musicList[index].album)
 			self.musicList[index].album = id;
 		},
 		//设置默认歌曲
@@ -210,7 +211,7 @@ export default {
 				let data = { custom: { function: json, name: 'function' } };
 				self.setDeviceSongsInfo(data, 'englishBack');
 				self.$store.dispatch('setEnglishData', self.musicList);
-				self.musicList = [];
+				self.musicList = self.musicList;
 			}
 		},
 		cloudAlbum(id) {

@@ -124,6 +124,11 @@ export default {
 			window.hilink.overrideBackPressed(true, "backPressedCallback");
 		}
 	},
+	actionsDeviceName({
+		commit
+	}, data) {
+		commit("setDevName", data);
+	},
 	delSongsList({
 		commit
 	}, data) {
@@ -157,10 +162,6 @@ export default {
 				dataStr = dataStr.replace(/\n/g, '');
 				json = JSON.parse(dataStr);
 			}
-			let info = {
-				devName: json.devName,
-				roomName: json.roomName
-			}
 			let deviceid = localStorage.getItem('deviceid');
 			if (deviceid == json.devId) {
 				commit("setisDeviceid", false);
@@ -168,7 +169,7 @@ export default {
 				commit("setisDeviceid", true);
 				localStorage.setItem("deviceid", json.devId);
 			}
-			commit("setDevName", info);
+			commit("setDevName", json.devName);
 			json.services.forEach(function(item, index) {
 				commit("resultData", item)
 			})

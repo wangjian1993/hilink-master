@@ -60,7 +60,7 @@ export default new Router({
 			component: () => import( /* webpackChunkName: "english" */ '@/views/Content/English.vue'),
 			meta: {
 				title: "启蒙英语",
-				keepAlive: true,
+				keepAlive: false,
 			}
 		},
 		{ //首页

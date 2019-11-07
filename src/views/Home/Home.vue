@@ -283,7 +283,6 @@ export default {
 	},
 	created() {
 		this.$store.dispatch('getDevCacheAll');
-		this.$store.dispatch('init');
 		this.$store.dispatch('getDeviceAll');
 		this.$store.dispatch('setBackPressed');
 		this.getDevicesTime();

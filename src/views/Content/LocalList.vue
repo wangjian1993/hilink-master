@@ -79,6 +79,9 @@ export default {
 				if (data.errcode == 0) {
 					let list = self.localSongList.songs;
 					console.log('self.delIndex===', self.delIndex);
+					if(self.delIndex <  self.musicData.idx){
+						 self.musicData.idx  = self.musicData.idx -1;
+					}
 					list.splice(self.delIndex, 1);
 					if (list.length == 0) {
 						self.beginNumber = 0;

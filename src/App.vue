@@ -16,11 +16,12 @@ export default {
 			isPlay: false,
 			transitionName: null,
 			path: '',
-			type:'AliloCloud',
-			title:this.$t('m.AliloCloud')
+			type: 'AliloCloud',
+			title: this.$t('m.AliloCloud')
 		};
 	},
 	created() {
+		this.$store.dispatch('init');
 		/**隐藏顶部导航 */
 		if (window.hilink != undefined) {
 			window.hilink.setTitleVisible(false, 'titleVisibleCallback');
@@ -51,6 +52,12 @@ export default {
 				console.log('手机恢复后台');
 				self.$store.dispatch('getDevCacheAll');
 			};
+			// window['deviceEventCallback'] = res => {
+			// 	console.log("11111111111111")
+			// 	// console.log(res);
+			// 	// console.log("devName============",res.devName);
+			// 	// console.log('deviceEventCallback========', res);
+			// };
 			//获取设备全部信息回调
 		}
 	},
@@ -137,7 +144,7 @@ html {
 .van-overlay {
 	background-color: rgba(0, 0, 0, 0.3);
 }
-.popup{
+.popup {
 	width: 100%;
 	height: 100%;
 	position: fixed;
@@ -147,7 +154,7 @@ html {
 	left: 0;
 	box-sizing: border-box;
 }
-.popup1{
+.popup1 {
 	width: 100%;
 	height: 100%;
 	position: fixed;

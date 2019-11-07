@@ -41,7 +41,7 @@ const mutations = {
 		state.albumid = data;
 	},
 	setDevName(state, data) {
-		state.devName = data.devName;
+		state.devName = data;
 	},
 	setswitch(state, data) {
 		state.lampSwitch = data;
