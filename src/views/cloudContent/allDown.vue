@@ -71,6 +71,14 @@ export default {
 			let self = this;
 			console.log(index)
 			self.$refs.checkboxes[index].toggle();
+			if(self.result.length == 8){
+				this.$toast({
+					message: '批量下载每次最多添加八首',
+					position: 'bottom',
+					duration: '2000',
+					className: 'toastActive'
+				});
+			}
 		},
 		downAllList() {
 			let self = this;

@@ -1,5 +1,3 @@
-// const http = "https://cloud.alilo.com.cn";
-// const getBannerList = http + "/baby/api/wx/getBannerList";
 import axios from "axios";
 import qs from "qs";
 export function fetch(options) {

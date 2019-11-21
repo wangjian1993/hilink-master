@@ -127,6 +127,19 @@ export default {
 				};
 			}
 		},
+		logTime() {
+			var d = new Date();
+			// 获取当前日期与当前时间
+			var getHours = d.getHours();
+			// 获取到当前分钟：
+			var getMinutes = d.getMinutes();
+			// 获取到当前秒：
+			var getSeconds = d.getSeconds();
+			// 获取到当前毫秒：
+			var getMilliseconds = d.getMilliseconds();
+			// console.log("getMilliseconds======",getMilliseconds)
+			return getHours + ':' + getMinutes + ':' + getSeconds + ':' + getMilliseconds;
+		},
 		allDownClick() {
 			let id = this.$route.query.id;
 			if (!parseInt(id)) {
@@ -235,6 +248,8 @@ export default {
 				default:
 					break;
 			}
+			let logdate =self.logTime();
+			console.log('发送数据给设备=============', logdate);
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json, name: 'function' } };
 			self.$store.dispatch("setDevInfo", data);

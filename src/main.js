@@ -16,7 +16,7 @@ Vue.use(vConsole)
 // hilink sdk公共函数
 import hilink from './hilink/index'
 Vue.use(hilink);
-Vue.use(VueI18n)
+Vue.use(VueI18n);
 Vue.prototype.$base64 = base64;
 //vant按需加载组件
 import {

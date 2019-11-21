@@ -184,6 +184,10 @@ export default {
 				text-align: center;
 				font-size: 16px;
 				color: #007dff;
+				&:nth-of-type(1){
+					border-right: .5px solid;
+					border-color: rgba(0, 0, 0,.2)
+				}
 			}
 			.cancelText {
 				color: #fa2a2d;

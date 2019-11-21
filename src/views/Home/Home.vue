@@ -50,7 +50,7 @@
 									align="absmiddle"
 									width="100%"
 									height="100%"
-									style="font-size: 14px;"
+									style="font-size: 16px;color: #000000;opacity: .9;"
 								>
 									{{ audioInfo.song != '' ? audioInfo.song : $t('m.Loading') }}
 								</marquee>
@@ -90,14 +90,14 @@
 			<div class="devices-audio-else-controle">
 				<ul>
 					<div class="devices-audio-else-mode" v-show="audioMode">
-						<ul>
-							<li @click="devicesModeAction(1)" :class="[isLine == 0 ? '' : 'lineAcitve', playMode == 1 ? 'modeActive' : '']">
+						<div class="devices-audio-else-mode-ul">
+							<div @click="devicesModeAction(1)" :class="[isLine == 0 ? '' : 'lineAcitve', playMode == 1 ? 'modeActive' : '']">
 								<p>{{ $t('m.Loopp') }}</p>
-							</li>
-							<li @click="devicesModeAction(0)" :class="[isLine == 0 ? '' : 'lineAcitve', playMode == 0 ? 'modeActive' : '']">
+							</div>
+							<div @click="devicesModeAction(0)" :class="[isLine == 0 ? '' : 'lineAcitve', playMode == 0 ? 'modeActive' : '']">
 								<p>{{ $t('m.Loops') }}</p>
-							</li>
-						</ul>
+							</div>
+						</div>
 					</div>
 					<li @click="devicesMode()" :class="isLine == 0 ? '' : 'lineAcitve'">
 						<div class="devices-audio-else-text">
@@ -116,7 +116,7 @@
 						<div class="devices-audio-else-text">
 							<div :class="this.$i18n.locale == 'en-US' ? 'enActive' : 'zhActive'">
 								<p>{{ $t('m.timer') }}</p>
-								<p :class="deviceTime == 0 ? '' : 'colorActice'" v-if="deviceTime != 0">
+								<p :class="deviceTime == 0 ? '' : 'colorActice'" v-if="deviceTime != 0 && isLine == 1">
 									<van-count-down :time="deviceTime">
 										<template v-slot="timeData">
 											<span class="item" v-if="timeData.hours != 0">{{ timeRepair(timeData.hours) }}:</span>
@@ -138,7 +138,7 @@
 						<div class="devices-audio-else-text">
 							<div :class="this.$i18n.locale == 'en-US' ? 'enActive' : 'zhActive'">
 								<p>{{ $t('m.Earlight') }}</p>
-								<p :class="earLight.on == 0 ? '' : 'colorActice'">{{ earLight.on == 0 ? $t('m.off') : $t('m.on') }}</p>
+								<p :class="earLight.on == 0 ? '' : 'colorActice'" v-if="earLight.on == 1">{{ earLight.on == 0 ? $t('m.off') : $t('m.on') }}</p>
 							</div>
 						</div>
 						<div class="devices-audio-else-icon">
@@ -150,7 +150,7 @@
 						<div class="devices-audio-else-text">
 							<div :class="this.$i18n.locale == 'en-US' ? 'enActive' : 'zhActive'">
 								<p>{{ $t('m.Facelight') }}</p>
-								<p :class="faceLight.on == 0 ? '' : 'colorActice'">{{ faceLight.on == 0 ? $t('m.off') : $t('m.on') }}</p>
+								<p :class="faceLight.on == 0 ? '' : 'colorActice'"  v-if="faceLight.on == 1">{{ faceLight.on == 0 ? $t('m.off') : $t('m.on') }}</p>
 							</div>
 						</div>
 						<div class="devices-audio-else-icon">
@@ -165,7 +165,7 @@
 					<div class="devices-audio-look-text">
 						<div :class="this.$i18n.locale == 'en-US' ? 'enActive' : 'zhActive'">
 							<p>{{ $t('m.Childlock') }}</p>
-							<p :class="lookData == 0 ? '' : 'colorActice'">{{ lookData == 0 ? $t('m.off') : $t('m.on') }}</p>
+							<p :class="lookData == 0 ? '' : 'colorActice'"  v-if="lookData == 1">{{ lookData == 0 ? $t('m.off') : $t('m.on') }}</p>
 						</div>
 					</div>
 					<div class="devices-audio-look-icon" :class="this.$i18n.locale == 'en-US' ? 'enActive' : 'zhActive'">
@@ -273,7 +273,7 @@ export default {
 				} else {
 					// console.log('url--info====', this.$route.path);
 					// if (this.$route.path == '/' || this.$route.path == '/home') {
-						window.hilink.overrideBackPressed(false, 'backPressedCallback');
+					window.hilink.overrideBackPressed(false, 'backPressedCallback');
 					// } else {
 					// 	this.$router.go(-1);
 					// }
@@ -419,10 +419,25 @@ export default {
 					default:
 						break;
 				}
+				let logdate =self.logTime();
+				console.log('发送数据给设备=============', logdate);
 				self.$store.dispatch('setDevInfo', data);
 				self.$store.dispatch('setLoadingFlag', false);
 			}
 		}, 200),
+		logTime() {
+			var d = new Date();
+			// 获取当前日期与当前时间
+			var getHours = d.getHours();
+			// 获取到当前分钟：
+			var getMinutes = d.getMinutes();
+			// 获取到当前秒：
+			var getSeconds = d.getSeconds();
+			// 获取到当前毫秒：
+			var getMilliseconds = d.getMilliseconds();
+			// console.log("getMilliseconds======",getMilliseconds)
+			return getHours + ':' + getMinutes + ':' + getSeconds + ':' + getMilliseconds;
+		},
 		//播放模式选择
 		getDevicesTime() {
 			let self = this;
@@ -497,6 +512,8 @@ export default {
 			};
 			self.audioMode = false;
 			var json = JSON.stringify(body);
+			let logdate =self.logTime();
+			console.log('发送数据给设备=============', logdate);
 			var data = { custom: { function: json, name: 'function' } };
 			self.$store.dispatch('setDevInfo', data);
 			self.$store.dispatch('setLoadingFlag', false);

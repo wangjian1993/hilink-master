@@ -1,5 +1,5 @@
 <template>
-	<div id="app">
+	<div id="app" class="hhtApp">
 		<v-header :title="title"></v-header>
 		<keep-alive><router-view v-if="$route.meta.keepAlive"></router-view></keep-alive>
 		<router-view v-if="!$route.meta.keepAlive"></router-view>
@@ -87,7 +87,7 @@ export default {
 	}
 };
 </script>
-<style>
+<style lang="less">
 @font-face {
 	font-family: 'hwtext-zh';
 	src: url('assets/font/zh/HuaweiFont-Regular.ttf');
@@ -166,6 +166,19 @@ html {
 }
 .van-picker-column__item--selected {
 	color: #007dff;
-	font-weight: 500;
+	font-size: 18px;
+}
+.van-picker {
+	width: 95%;
+	margin: 0 auto;
+}
+.van-picker-column__item {
+	/* font-size: 16px; */
+	/* opacity: .9; */
+}
+.van-toast {
+	background: rgba(217, 217, 217, 0.95);
+	color: #000000;
+	border-radius: 35px;
 }
 </style>
