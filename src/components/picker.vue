@@ -3,7 +3,7 @@
 		<div class="date-time-div">
 			<van-popup v-model="timePopup" position="bottom" :overlay="false" class="datetimeBox">
 				<p>{{ $t('m.timer') }}</p>
-				<awesome-picker ref="pickerDom" :data="columns"></awesome-picker>
+				<van-picker :columns="columns" :show-toolbar="false" @change="onChange" :item-height="36"/>
 				<div class="datetime-btn">
 					<p @click="timeCancel()" :class="deviceTime != 0 ? 'cancelText' : ''">{{ deviceTime == 0 ? $t('m.CANCEL') : $t('m.Disable') }}</p>
 					<p @click="timeConfirm()">{{ $t('m.OK') }}</p>
@@ -27,7 +27,7 @@ export default {
 			currentTime: '0:00',
 			endTime: 0,
 			setTime: false,
-			columns: [[this.$t('m.Dopen'), this.$t('m.min1'), this.$t('m.min2'), this.$t('m.min3'), this.$t('m.min4'), this.$t('m.min5')]]
+			columns: [this.$t('m.Dopen'), this.$t('m.min1'), this.$t('m.min2'), this.$t('m.min3'), this.$t('m.min4'), this.$t('m.min5')]
 		};
 	},
 	mounted() {
@@ -47,9 +47,6 @@ export default {
 	},
 	created() {},
 	methods: {
-		show() {
-			this.$refs.picker.pickerDom();
-		},
 		/* 取消按钮 */
 		timeCancel() {
 			let self = this;
@@ -57,7 +54,7 @@ export default {
 				self.$emit('update:timePopup', false); //弹框隐藏，意为timePopup为false
 			} else {
 				self.$emit('update:timePopup', false); //弹框隐藏，意为timePopup为false
-				self.delDevicesTime();
+				self.delDevicesTime(); 
 				return false;
 			}
 		},
@@ -187,9 +184,9 @@ export default {
 				text-align: center;
 				font-size: 16px;
 				color: #007dff;
-				&:nth-of-type(1) {
-					border-right: 0.5px solid;
-					border-color: rgba(0, 0, 0, 0.2);
+				&:nth-of-type(1){
+					border-right: .5px solid;
+					border-color: rgba(0, 0, 0,.2)
 				}
 			}
 			.cancelText {
