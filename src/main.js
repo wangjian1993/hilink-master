@@ -11,8 +11,6 @@ import VueVideoPlayer from 'vue-video-player'
 import 'video.js/dist/video-js.css'
 import base64 from './assets/js/base64'
 import VueI18n from 'vue-i18n'
-import AwesomePicker from 'vue-awesome-picker';
-Vue.use(AwesomePicker);
 // const vConsole = new Vconsole()
 // Vue.use(vConsole)
 // hilink sdk公共函数

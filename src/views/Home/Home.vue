@@ -219,7 +219,7 @@ export default {
 	data() {
 		return {
 			devTime: false,
-			timePopup: true,
+			timePopup: false,
 			modePopup: false,
 			noticeValue: 30,
 			isFold: false, //折叠展开
