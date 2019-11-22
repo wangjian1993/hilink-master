@@ -3,7 +3,7 @@
 		<div class="date-time-div">
 			<van-popup v-model="timePopup" position="bottom" :overlay="false" class="datetimeBox">
 				<p>{{ $t('m.timer') }}</p>
-				<van-picker :columns="columns" :show-toolbar="false" @change="onChange" />
+				<van-picker :columns="columns" :show-toolbar="false" @change="onChange" :item-height="44"/>
 				<div class="datetime-btn">
 					<p @click="timeCancel()" :class="deviceTime != 0 ? 'cancelText' : ''">{{ deviceTime == 0 ? $t('m.CANCEL') : $t('m.Disable') }}</p>
 					<p @click="timeConfirm()">{{ $t('m.OK') }}</p>

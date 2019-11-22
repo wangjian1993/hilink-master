@@ -167,14 +167,17 @@ html {
 .van-picker-column__item--selected {
 	color: #007dff;
 	font-size: 18px;
+	// height: 56px;
+	// line-height: 56px;
 }
 .van-picker {
-	width: 95%;
+	width: 312px;
 	margin: 0 auto;
 }
 .van-picker-column__item {
 	/* font-size: 16px; */
 	/* opacity: .9; */
+	// height: 36px;
 }
 .van-toast {
 	background: rgba(217, 217, 217, 0.95);
