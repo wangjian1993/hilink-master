@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import axios from "./api/index"
-import './assets/css/app.css' //公共css
+
 import './assets/css/cloud/video.css' //公共css
 import 'amfe-flexible'
 import App from './App.vue'
@@ -15,6 +15,7 @@ import VueI18n from 'vue-i18n'
 // Vue.use(vConsole)
 // hilink sdk公共函数
 import hilink from './hilink/index'
+import './assets/css/app.css' //公共css
 Vue.use(hilink);
 Vue.use(VueI18n);
 Vue.prototype.$base64 = base64;
