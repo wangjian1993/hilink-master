@@ -65,6 +65,7 @@ export default {
 <style lang="less" scoped>
 .app {
 	margin-top: 80px;
+	margin-bottom: 80px;
 }
 .local-list {
 	width: 92%;
