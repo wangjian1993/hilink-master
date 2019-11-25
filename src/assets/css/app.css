@@ -13,7 +13,7 @@ body {
   margin: 0;
   line-height: 1.5;
   color: #323232;
-  background-color: white;
+  /* background-color: white; */
   height: 100%;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
