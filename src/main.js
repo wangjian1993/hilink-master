@@ -11,7 +11,7 @@ import VueVideoPlayer from 'vue-video-player'
 import 'video.js/dist/video-js.css'
 import base64 from './assets/js/base64'
 import VueI18n from 'vue-i18n'
-// const vConsole = new Vconsole()
+// const vConsole = new Vconsole() 
 // Vue.use(vConsole)
 // hilink sdk公共函数
 import hilink from './hilink/index'

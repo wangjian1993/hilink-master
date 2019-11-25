@@ -80,7 +80,7 @@
 					<div>
 						<p>{{ $t('m.Volume') }}</p>
 					</div>
-					<div><van-slider v-model="$store.state.volume" bar-height="2px" @change="onVolumeChange" active-color="#007DFF" /></div>
+					<div><van-slider v-model="$store.state.volume" :disabled="isLine == 0" bar-height="2px" @change="onVolumeChange" active-color="#007DFF" /></div>
 					<div>
 						<span>{{ volume }}%</span>
 					</div>
@@ -94,6 +94,7 @@
 							<div @click="devicesModeAction(1)" :class="[isLine == 0 ? '' : 'lineAcitve', playMode == 1 ? 'modeActive' : '']">
 								<p>{{ $t('m.Loopp') }}</p>
 							</div>
+							<span class="mode-wire"></span>
 							<div @click="devicesModeAction(0)" :class="[isLine == 0 ? '' : 'lineAcitve', playMode == 0 ? 'modeActive' : '']">
 								<p>{{ $t('m.Loops') }}</p>
 							</div>
@@ -553,6 +554,7 @@ export default {
 				return;
 			}
 			if (self.isLine == 0) {
+				console.log("1111111111111")
 				this.$toast({
 					message: this.$t('m.Twist'),
 					position: 'bottom',
