@@ -40,6 +40,9 @@ const mutations = {
 	[types.ENGLISHDATA](state, data) {
 		state.albumid = data;
 	},
+	[types.SET_UPFLAG](state, data) {
+		state.upDate = data;
+	},
 	setDevName(state, data) {
 		state.devName = data;
 	},
@@ -67,17 +70,7 @@ const mutations = {
 	resultData(state, resData) {
 		let type = resData;
 		state.loadingFlag = true;
-		var d = new Date();
-		// 获取当前日期与当前时间
-		var getHours = d.getHours();
-		// 获取到当前分钟：
-		var getMinutes = d.getMinutes();
-		// 获取到当前秒：
-		var getSeconds = d.getSeconds();
-		// 获取到当前毫秒：
-		var getMilliseconds = d.getMilliseconds();
-		var logTime = getHours + ':' + getMinutes + ':' + getSeconds + ':' + getMilliseconds;
-		console.log("接收数据数据11111111111=======", logTime,resData.data)
+		console.log("获取设备信息=============",resData)
 		switch (type.sid) {
 			case 'switch':
 				state.lampSwitch = resData.data.on;
@@ -116,7 +109,11 @@ const mutations = {
 				break;
 			case "custom":
 				if (resData.data.action == '104') {
-
+					let type =resData.data.function;
+					state.upflag =type.upflag;
+					if(state.upflag != 0 && state.upflag != undefined){
+						state.upDate=true;
+					}
 				}
 				break;
 			default:
@@ -144,17 +141,6 @@ const mutations = {
 		if (customData == undefined) {
 			return;
 		}
-		var d = new Date();
-		// 获取当前日期与当前时间
-		var getHours = d.getHours();
-		// 获取到当前分钟：
-		var getMinutes = d.getMinutes();
-		// 获取到当前秒：
-		var getSeconds = d.getSeconds();
-		// 获取到当前毫秒：
-		var getMilliseconds = d.getMilliseconds();
-		var logTime = getHours + ':' + getMinutes + ':' + getSeconds + ':' + getMilliseconds;
-		console.log("接收数据数据2222222222222=======", logTime,customData)
 		let action = customData.action;
 		state.loadingFlag = true;
 		switch (action) {
@@ -210,6 +196,10 @@ const mutations = {
 				break;
 			case 104:
 				state.musicData = customData;
+				state.upflag =customData.upflag;
+				if(state.upflag != 0 && state.upflag != undefined){
+					state.upDate=true;
+				}
 				break;
 			case 410:
 

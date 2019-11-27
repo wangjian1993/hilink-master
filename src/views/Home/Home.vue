@@ -203,12 +203,26 @@
 				</li>
 			</ul>
 		</div>
-		<van-popup v-model="upDate" class="updata-box" round :close-on-click-overlay="false" position="bottom">
-			<div class="updata-msg">检测到设备有最新固件.是否升级?</div>
-			<div class="updata-btn">
-				<p @click="upDataBtn(1)">取消</p>
-				<p @click="upDataBtn(2)">升级</p>
+		<van-popup v-model="$store.state.upDate" class="updata-box" round :close-on-click-overlay="false" position="bottom">
+			<div v-if="upflag == 2">
+				<div class="updata-msg">检测到设备有最新固件.是否升级?</div>
+				<div class="updata-btn">
+					<p @click="upDataBtn(1)">取消</p>
+					<p @click="upDataBtn(2)">升级</p>
+				</div>
 			</div>
+			<div v-if="upflag == 3">
+				<div class="updata-msg">1/2 正在升级设备固件...</div>
+				<div class="updata-btn" @click="cloneDevic()">
+					<p>确定</p>
+				</div>
+			</div>
+			<div v-if="upflag == 4">
+				<div class="updata-msg">2/2 设备正在重启...</div>
+				<div class="updata-btn" @click="cloneDevic()">
+					<p>确定</p>
+				</div>
+			</div>	
 		</van-popup>
 		<div class="popup1" v-if="modePopup" @click="modePopupClick()"></div>
 		<div class="popup" v-if="timePopup" @click="popupClick()"></div>
@@ -237,8 +251,7 @@ export default {
 			audioMode: false, //音乐模式
 			foldIcon: require('../../assets/images/ic_shouqi.png'),
 			songsCid: -1,
-			time: 0,
-			upDate: true
+			time: 0
 		};
 	},
 	computed: {
@@ -259,7 +272,8 @@ export default {
 			'devName',
 			'isBubble',
 			'istimePopu',
-			'istimePopu'
+			'istimePopu',
+			'upflag'
 		]),
 		deviceTime: {
 			get() {
@@ -330,7 +344,11 @@ export default {
 			let data = { custom: { function: json } };
 			self.$store.dispatch('setDevInfo', data);
 			self.$store.dispatch('setLoadingFlag', false);
-			self.upDate =false;
+			self.$store.dispatch("actionsUpFlag",false);
+		},
+		//退出设备页面
+		cloneDevic(){
+			window.hilink.finishDeviceActivity();
 		},
 		bubbleClick() {
 			let self = this;
@@ -457,7 +475,6 @@ export default {
 						break;
 				}
 				let logdate = self.logTime();
-				console.log('发送数据给设备=============', logdate);
 				self.$store.dispatch('setDevInfo', data);
 				self.$store.dispatch('setLoadingFlag', false);
 			}
@@ -550,7 +567,6 @@ export default {
 			self.audioMode = false;
 			var json = JSON.stringify(body);
 			let logdate = self.logTime();
-			console.log('发送数据给设备=============', logdate);
 			var data = { custom: { function: json, name: 'function' } };
 			self.$store.dispatch('setDevInfo', data);
 			self.$store.dispatch('setLoadingFlag', false);

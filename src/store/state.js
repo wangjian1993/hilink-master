@@ -53,6 +53,8 @@ const state = {
 	],
 	devName:'火火兔故事机',
 	istimePopu:true,
+	upflag:0,
+	upDate: false
 };
 
 export default state;

@@ -81,6 +81,11 @@ export default {
 	}, data) {
 		commit("setDeviceTimeFn", data)
 	},
+	actionsUpFlag({
+		commit
+	}, data) {
+		commit(types.SET_UPFLAG, data)
+	},
 	getDeviceAll({
 		commit
 	}, data) {
