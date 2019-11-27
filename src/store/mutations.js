@@ -70,7 +70,7 @@ const mutations = {
 	resultData(state, resData) {
 		let type = resData;
 		state.loadingFlag = true;
-		console.log("获取设备信息=============",resData)
+		console.log("获取设备信息=============", resData)
 		switch (type.sid) {
 			case 'switch':
 				state.lampSwitch = resData.data.on;
@@ -109,10 +109,10 @@ const mutations = {
 				break;
 			case "custom":
 				if (resData.data.action == '104') {
-					let type =resData.data.function;
-					state.upflag =type.upflag;
-					if(state.upflag != 0 && state.upflag != undefined){
-						state.upDate=true;
+					let type = resData.data.function;
+					state.upflag = type.upflag;
+					if (state.upflag != 0 && state.upflag != undefined && state.upflag != 1) {
+						state.upDate = true;
 					}
 				}
 				break;
@@ -196,9 +196,9 @@ const mutations = {
 				break;
 			case 104:
 				state.musicData = customData;
-				state.upflag =customData.upflag;
-				if(state.upflag != 0 && state.upflag != undefined){
-					state.upDate=true;
+				state.upflag = customData.upflag;
+				if (state.upflag != 0 && state.upflag != undefined && state.upflag != 1) {
+					state.upDate = true;
 				}
 				break;
 			case 410:
