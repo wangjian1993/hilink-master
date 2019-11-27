@@ -23,9 +23,14 @@
 							<p class="inroName">{{ item.name }}</p>
 							<p class="inroName">{{ item.timelength }}</p>
 						</div>
-						<div class="right" @click="devicesMusic(1, item)">
+						<div class="right" @click="devicesMusic(1, item)" v-if="isLine == 1">
 							<img src="../../assets/images/icon_demand.png" />
 							<div style="color: #000000;">点播</div>
+						</div>
+						<div class="playCell" @click="play(item.path, index)" v-if="isLine == 0">
+							<img src="../../assets/images/icon_listen_pause.png" class="rightImg" v-show="active != index" />
+							<img src="../../assets/images/icon_listen_playing.png" class="rightImg" v-show="active == index" />
+							<p v-bind:class="[active == index ? 'active' : '']">试听</p>
 						</div>
 					</div>
 					<div class="playOrFavor" v-if="showIndex == index && showTab">
@@ -51,6 +56,7 @@
 </template>
 
 <script>
+import { mapActions, mapMutations, mapState, mapGetters } from 'vuex';
 import { _debounce } from '@/hilink/public';
 import http from '../../api/index.js';
 import Header from '@/components/header.vue';
@@ -67,6 +73,11 @@ export default {
 			showTab: true,
 			title: null
 		};
+	},
+	computed: {
+		...mapState([
+			'isLine'
+		]),
 	},
 	created() {},
 	async mounted() {
@@ -149,6 +160,9 @@ export default {
 		},
 		//显示点播收藏
 		show(index) {
+			if(this.isLine == 0){
+				return;
+			}
 			if (this.showIndex == index) {
 				this.showTab = !this.showTab;
 				return;

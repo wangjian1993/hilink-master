@@ -151,7 +151,7 @@
 						<div class="devices-audio-else-text">
 							<div :class="this.$i18n.locale == 'en-US' ? 'enActive' : 'zhActive'">
 								<p>{{ $t('m.Facelight') }}</p>
-								<p :class="faceLight.on == 0 ? '' : 'colorActice'"  v-if="faceLight.on == 1">{{ faceLight.on == 0 ? $t('m.off') : $t('m.on') }}</p>
+								<p :class="faceLight.on == 0 ? '' : 'colorActice'" v-if="faceLight.on == 1">{{ faceLight.on == 0 ? $t('m.off') : $t('m.on') }}</p>
 							</div>
 						</div>
 						<div class="devices-audio-else-icon">
@@ -166,7 +166,7 @@
 					<div class="devices-audio-look-text">
 						<div :class="this.$i18n.locale == 'en-US' ? 'enActive' : 'zhActive'">
 							<p>{{ $t('m.Childlock') }}</p>
-							<p :class="lookData == 0 ? '' : 'colorActice'"  v-if="lookData == 1">{{ lookData == 0 ? $t('m.off') : $t('m.on') }}</p>
+							<p :class="lookData == 0 ? '' : 'colorActice'" v-if="lookData == 1">{{ lookData == 0 ? $t('m.off') : $t('m.on') }}</p>
 						</div>
 					</div>
 					<div class="devices-audio-look-icon" :class="this.$i18n.locale == 'en-US' ? 'enActive' : 'zhActive'">
@@ -203,6 +203,13 @@
 				</li>
 			</ul>
 		</div>
+		<van-popup v-model="upDate" class="updata-box" round :close-on-click-overlay="false" position="bottom">
+			<div class="updata-msg">检测到设备有最新固件.是否升级?</div>
+			<div class="updata-btn">
+				<p @click="upDataBtn(1)">取消</p>
+				<p @click="upDataBtn(2)">升级</p>
+			</div>
+		</van-popup>
 		<div class="popup1" v-if="modePopup" @click="modePopupClick()"></div>
 		<div class="popup" v-if="timePopup" @click="popupClick()"></div>
 		<v-picker :timePopup.sync="timePopup"></v-picker>
@@ -230,7 +237,8 @@ export default {
 			audioMode: false, //音乐模式
 			foldIcon: require('../../assets/images/ic_shouqi.png'),
 			songsCid: -1,
-			time: 0
+			time: 0,
+			upDate: true
 		};
 	},
 	computed: {
@@ -295,6 +303,34 @@ export default {
 			} else {
 				return time;
 			}
+		},
+		//升级弹窗
+		upDataBtn(type){
+			let self = this;
+			if (!self.loadingFlag) {
+				return;
+			}
+			var body;
+			if (type == 1) {
+				body = {
+					from: 'DID:0',
+					to: 'UID:-1',
+					action: 4000,
+					setupgrade:0
+				};
+			} else if (type == 2){
+				body = {
+					from: 'DID:0',
+					to: 'UID:-1',
+					action: 4000,
+					setupgrade:1
+				};
+			}
+			let json = JSON.stringify(body);
+			let data = { custom: { function: json } };
+			self.$store.dispatch('setDevInfo', data);
+			self.$store.dispatch('setLoadingFlag', false);
+			self.upDate =false;
 		},
 		bubbleClick() {
 			let self = this;
@@ -420,7 +456,7 @@ export default {
 					default:
 						break;
 				}
-				let logdate =self.logTime();
+				let logdate = self.logTime();
 				console.log('发送数据给设备=============', logdate);
 				self.$store.dispatch('setDevInfo', data);
 				self.$store.dispatch('setLoadingFlag', false);
@@ -513,7 +549,7 @@ export default {
 			};
 			self.audioMode = false;
 			var json = JSON.stringify(body);
-			let logdate =self.logTime();
+			let logdate = self.logTime();
 			console.log('发送数据给设备=============', logdate);
 			var data = { custom: { function: json, name: 'function' } };
 			self.$store.dispatch('setDevInfo', data);
@@ -554,7 +590,7 @@ export default {
 				return;
 			}
 			if (self.isLine == 0) {
-				console.log("1111111111111")
+				console.log('1111111111111');
 				this.$toast({
 					message: this.$t('m.Twist'),
 					position: 'bottom',

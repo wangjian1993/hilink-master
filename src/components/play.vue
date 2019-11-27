@@ -10,7 +10,7 @@
 			<p @click="devicesSwitch(3)"><img src="../assets/images/icon_device_pre.png" alt="" /></p>
 			<p @click="devicesSwitch(5)">
 				<img v-if="audioInfo.play == 1" src="../assets/images/icon_device_play.png" alt="" />
-				<img v-if="audioInfo.play == 0" src="../assets/images/icon_device_pause.png" alt="" />
+				<img v-else src="../assets/images/icon_device_pause.png" alt="" />
 			</p>
 			<p @click="devicesSwitch(4)"><img src="../assets/images/icon_device_next.png" alt="" /></p>
 			<p @click="devicesModeAction()">
