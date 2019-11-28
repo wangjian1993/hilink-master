@@ -23,7 +23,7 @@
 							<p class="inroName">{{ item.name }}</p>
 							<p class="inroName">{{ item.timelength }}</p>
 						</div>
-						<div class="right" @click="devicesMusic(1, item)" v-if="isLine == 1">
+						<div class="right" @click="devicesMusic(1, item, index)" v-if="isLine == 1">
 							<img src="../../assets/images/icon_demand.png" />
 							<div style="color: #000000;">点播</div>
 						</div>
@@ -71,13 +71,12 @@ export default {
 			isLoaded: false,
 			showIndex: -1,
 			showTab: true,
-			title: null
+			title: null,
+			total: 0
 		};
 	},
 	computed: {
-		...mapState([
-			'isLine'
-		]),
+		...mapState(['isLine'])
 	},
 	created() {},
 	async mounted() {
@@ -104,6 +103,7 @@ export default {
 				this.musicList = res.data.content.musicList;
 				this.info = res.data.content.info;
 				this.title = res.data.content.info.name;
+				this.total = res.data.content.total;
 			})
 			.catch(err => {
 				console.log(err);
@@ -160,7 +160,7 @@ export default {
 		},
 		//显示点播收藏
 		show(index) {
-			if(this.isLine == 0){
+			if (this.isLine == 0) {
 				return;
 			}
 			if (this.showIndex == index) {
@@ -176,7 +176,7 @@ export default {
 		 * 2.收藏
 		 * 3.下载
 		 * */
-		devicesMusic: _debounce(function(type, item) {
+		devicesMusic: _debounce(function(type, item, index) {
 			let self = this;
 			var body;
 			var path = item.path.indexOf('https:') > -1 ? item.path.replace('https', 'http') : item.path;
@@ -196,11 +196,13 @@ export default {
 								albumname: item.specialname,
 								albumid: item.special_id,
 								type: 5,
+								total: this.total,
 								res: [
 									{
 										filesize: '',
 										lrc: '',
 										fmt: 'mp3',
+										index: index,
 										duration: item.lengthOfTime,
 										url: path
 									}
@@ -229,10 +231,10 @@ export default {
 						]
 					};
 					self.$toast({
-						message: "歌曲添加收藏成功",
-						position: "bottom",
-						duration: "3000",
-						className: "toastActive"
+						message: '歌曲添加收藏成功',
+						position: 'bottom',
+						duration: '3000',
+						className: 'toastActive'
 					});
 					break;
 				case 3:
@@ -262,11 +264,11 @@ export default {
 				default:
 					break;
 			}
-			let logdate =self.logTime();
+			let logdate = self.logTime();
 			console.log('发送数据给设备=============', logdate);
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json, name: 'function' } };
-			self.$store.dispatch("setDevInfo", data);
+			self.$store.dispatch('setDevInfo', data);
 		}, 300)
 	},
 

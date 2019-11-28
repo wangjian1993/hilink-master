@@ -111,8 +111,11 @@ const mutations = {
 				if (resData.data.action == '104') {
 					let type = resData.data.function;
 					state.upflag = type.upflag;
+					console.log("type.upflag===============");
 					if (state.upflag != 0 && state.upflag != undefined && state.upflag != 1) {
 						state.upDate = true;
+					} else {
+						state.upDate = false;
 					}
 				}
 				break;
@@ -195,10 +198,14 @@ const mutations = {
 			case 638:
 				break;
 			case 104:
+				state.playMode = customData.playmode;
 				state.musicData = customData;
 				state.upflag = customData.upflag;
+				console.log("customData.upflag================", customData.upflag)
 				if (state.upflag != 0 && state.upflag != undefined && state.upflag != 1) {
 					state.upDate = true;
+				} else {
+					state.upDate = false;
 				}
 				break;
 			case 410:

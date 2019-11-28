@@ -3,7 +3,7 @@
 		<v-header :title="title"></v-header>
 		<div class="list-content">
 			<div class="loading-box"></div>
-			<div class="file-box"><van-cell v-for="(item, index) in localList.channels" :title="item.name" is-link @click="localClick(item)" /></div>
+			<div class="file-box"><van-cell v-for="(item, index) in localList.channels" v-if="item.name != '我的收藏'" :title="item.name" is-link @click="localClick(item)" /></div>
 		</div>
 	</div>
 </template>
