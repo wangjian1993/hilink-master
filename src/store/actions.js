@@ -168,7 +168,6 @@ export default {
 				json = JSON.parse(dataStr);
 			}
 			let deviceid = localStorage.getItem('deviceid');
-			console.log("json==============",json)
 			if (deviceid == json.devId) {
 				commit("setisDeviceid", false);
 			} else {

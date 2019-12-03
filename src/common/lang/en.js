@@ -4,7 +4,7 @@ export const m = {
 	open:'On',
 	off:'Off',
 	timer:'Timer',
-	Twist:'If the last time was through the app shutdown, you need to rotate the Alilo tail back and forth to boot',
+	Twist:'Twist the tail to turn on the device.',
 	Loading:'Loading',
 	Playing:'Playing',
 	Paused:'Paused',
@@ -70,6 +70,6 @@ export const m = {
 	Favorites:'Favorites',
 	PackUp:"Up",
 	Unfold:"Unfold",
-	hint:"Press and hold the button of the 'Alilo' logo in the middle of the fuselage. After hearing the sound of 'du', you can start to speak. Then you can let go and wait for the reply.See the product description for details.",
+	hint:"Press and hold the bunny ear button for 2 seconds until you here a beep,then you can start a conversation.Refer to the product manual for more details. ",
 	Gotit:'Got it'
 }

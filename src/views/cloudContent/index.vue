@@ -202,7 +202,7 @@
 				</div>
 			</div>
 			<!--最新上架 -->
-			<div class="part content-buttom">
+			<div class="part" style="padding-bottom: 60px;">
 				<div class="title">
 					<div class="titleLeft">
 						<div class="titleLeftTop">{{$t('m.Latest')}}</div>

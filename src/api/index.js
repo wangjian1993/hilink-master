@@ -65,13 +65,13 @@ export default {
         });
     },
     //性格养成
-    getMusicXGYC() {
+    getMusicXGYC(page,pageSize) {
         return fetch({
             url: cloudUrl + "xgyc",
             method: "get",
             params: {
-                page: 0,
-                pageSize: 6
+                page:page,
+                pageSize:pageSize
             }
         });
     },
@@ -99,35 +99,45 @@ export default {
         });
     },
     // 国学熏陶
-    getgxxtData() {
+    getgxxtData(page,pageSize) {
         return fetch({
             url: cloudUrl + "gxxt",
             method: "get",
             params: {
-                page: 0,
-                pageSize: 4
+               page: page,
+               pageSize: pageSize
             }
         });
     },
     //财商启蒙
-    getcsqmData() {
+    getcsqmData(page,pageSize) {
         return fetch({
             url: cloudUrl + "csqm",
             method: "get",
             params: {
-                page: 0,
-                pageSize: 4
+                page: page,
+                pageSize:pageSize
             }
         });
     },
+	//根据专辑id集合获取多个音频专辑信息
+	getAudioSpecialByIDs(data) {
+	  return fetch({
+	    url: cloudUrl + "getAudioSpecialByIDs",
+	    method: "post",
+	    params: {
+	      speicalIds: data
+	    }
+	  });
+	},
     //情商培养
-    getqspyData() {
+    getqspyData(page,pageSize) {
         return fetch({
             url: cloudUrl + "qspy",
             method: "get",
             params: {
-                page: 0,
-                pageSize: 4
+                page: page,
+                pageSize:pageSize
             }
         });
     },
@@ -142,13 +152,13 @@ export default {
             }
         });
     },
-    getSleepData() {
+    getSleepData(page,pageSize) {
         return fetch({
             url: cloudUrl + "sleepZone",
             method: "get",
             params: {
-                page: 0,
-                pageSize: 4
+                page: page,
+                pageSize: pageSize
             }
         });
     },
@@ -175,18 +185,25 @@ export default {
             }
         });
     },
-    getAlbumsData(tabStates,page,type) {
+    getAlbumsData(page,type) {
         return fetch({
             url: cloudUrl + "enterClassByType",
             method: "post",
             params: {
                 page: page,
-                pageSize: 10,
-                st: tabStates,
+                pageSize: 20,
+                st: 2,
                 type: type
             }
         });
     },
+	rank() {
+	  return fetch({
+	    url: "https://cloud.alilo.com.cn/baby/api/ranking/getRanking",
+	    method: "get",
+	    params: { channel: 10 }
+	  });
+	},
     websockLogin(openid, did) {
         return fetch({
             url: hhtUrl + "/wechat/login",

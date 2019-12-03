@@ -49,8 +49,6 @@ export default {
 		this.cname = this.$route.params.name;
 		if(this.$route.params.name == "我的收藏"){
 			this.title =this.$t('m.Favorites')
-		}else if(this.$route.params.name == "/"){
-			this.title ="根目录"
 		}else {
 			this.title = this.$route.params.name;
 		}
