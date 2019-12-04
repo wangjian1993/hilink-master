@@ -1,49 +1,41 @@
 <template>
-  <album-list :type="dataType"></album-list>
+	<div class="app">
+		<v-header :title="title"></v-header>
+		<album-list :type="dataType"></album-list>
+	</div>
 </template>
 
 <script>
-import albumList from "../../components/AlbumList.vue";
+import Header from '@/components/header.vue';
+import albumList from '../../components/AlbumList.vue';
 export default {
-  data() {
-    return {
-      dataType:-1
-    };
-  },
-  components: {
-    albumList
-  },
-  created() {
-	this.dataType =this.$route.query.type;
-    switch (this.$route.query.type) {
-      // case 1:
-      //   document.title = "听儿歌";
-      //   break;
-      // case 2:
-      //   document.title = "讲故事";
-      //   break;
-      // case 3:
-      //   document.title = "学英语";
-      //   break;
-      // case 4:
-      //   document.title = "赏国学";
-      //   break;
-    }
-    // this.$axios
-    //   .getAlbumsData(0,this.$route.query.type)
-    //   .then(res => {
-    //     this.dataList = res.data.content.list;
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //   });
-  },
-  beforeRouteLeave(to, from, next) {
-    // 销毁组件，避免通过vue-router再次进入时，仍是上次的history缓存的状态
-    this.$destroy(true);
-    next();
-  }
+	data() {
+		return {
+			dataType: -1,
+			title: null
+		};
+	},
+	components: {
+		'v-header': Header,
+		albumList
+	},
+	created() {
+		this.dataType = this.$route.query.type;
+		if(this.dataType == 1){
+			this.title = '听儿歌';
+		}else if(this.dataType == 2){
+			this.title = '讲故事';
+		}else if(this.dataType == 3){
+			this.title = '学英语';
+		}else if(this.dataType == 4){
+			this.title = '赏国学';
+		}
+	},
+	beforeRouteLeave(to, from, next) {
+		// 销毁组件，避免通过vue-router再次进入时，仍是上次的history缓存的状态
+		this.$destroy(true);
+		next();
+	}
 };
 </script>
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>

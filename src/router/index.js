@@ -113,7 +113,7 @@ export default new Router({
 		{
 			path: '/cloudContent/allDown',
 			name: 'cloudAllDown',
-			component: () => import( /* webpackChunkName: "cloudListenDetail" */ '@/views/cloudContent/allDown.vue'),
+			component: () => import( /* webpackChunkName: "cloudListenDetail" */ '@/views/cloud/allDown.vue'),
 			meta: {
 				keepAlive: false,
 			}

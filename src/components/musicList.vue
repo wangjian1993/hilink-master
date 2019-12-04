@@ -14,25 +14,26 @@
 				</div>
 				<div class="music_cell_right" @click="listenOrOffline(item.path, index, item.id, item)" v-show="isLine == 0">
 					<img class="secondImg" :src="active != index ? require('../assets/images/icon_listen_pause.png') : require('../assets/images/icon_listen_playing.png')" />
-					<p :class="{ opacity: !deviceOnline }">试听</p>
+					<span>试听</span>
 				</div>
 				<div class="music_cell_right" @click="devicesMusic(1, item, index)" v-show="isLine == 1">
-					<img class="secondImg" src="../assets/images/huiben_xiangqing_black.png"/>
-					<span style="color:#999999">点播</span>
+					<img class="secondImg" src="../assets/images/huiben_xiangqing_black.png" />
+					<span>点播</span>
 				</div>
 			</div>
 			<div class="music_show_cell" v-show="showActive == index">
-				<div class="show_cell_cell" @click="listenOrOffline(item.path, index, item.id, item)" :class="{ opacity: !deviceOnline }">
+				<div class="show_cell_cell" @click="listenOrOffline(item.path, index, item.id, item)">
 					<img class="secondImg" :src="active != index ? require('../assets/images/icon_listen_pause.png') : require('../assets/images/icon_listen_playing.png')" />
-					<p :class="{ opacity: !deviceOnline }">试听</p>
+					<p>试听</p>
 				</div>
-				<div class="show_cell_cell" @click="devicesMusic(2, item)" :class="{ opacity: !deviceOnline }">
+				<div class="show_cell_cell" @click="devicesMusic(2, item)">
 					<img src="../assets/images/sc.png" alt />
 					<p>收藏</p>
 				</div>
-				<div class="show_cell_cell" @click="devicesMusic(3, item)" :class="{ opacity: !deviceOnline }">
-					<img src="../assets/images/icon_download_1.png" alt />
-					<p>下载</p>
+				<div class="show_cell_cell" @click="devicesMusic(3, item)">
+					<img src="../assets/images/icon_download_1.png" v-if="item.copyrightId == 0" alt class="downloadImg"/>
+					<img src="../assets/images/icon_download_1.png" v-if="item.copyrightId == 1" alt />
+					<p :class="item.copyrightId == 0?'downloadImg':''">下载</p>
 				</div>
 			</div>
 		</div>
@@ -54,6 +55,12 @@ export default {
 		isReload: {
 			type: Number,
 			default: 0
+		},
+		albumId:{
+			type: Number
+		},
+		total:{
+			type: Number
 		}
 	},
 	data() {
@@ -77,10 +84,11 @@ export default {
 	},
 	mounted() {},
 	computed: {
-		...mapState(['deviceOnline', 'isLine'])
+		...mapState(['isLine'])
 	},
 	created() {
 		this.$audio = new Audio();
+		console.log("albumId111111111======",this.albumId)
 	},
 	methods: {
 		//试听播放或者离线
@@ -131,7 +139,6 @@ export default {
 			let self = this;
 			var body;
 			var path = item.path.indexOf('https:') > -1 ? item.path.replace('https', 'http') : item.path;
-			console.log(type);
 			switch (type) {
 				case 1:
 					body = {
@@ -190,13 +197,22 @@ export default {
 					});
 					break;
 				case 3:
+					if(item.copyrightId == 0){
+						self.$toast({
+							message: '应版权方要求,暂无法下载',
+							position: 'bottom',
+							duration: '3000',
+							className: 'toastActive'
+						});
+						return;
+					}
 					var id = item.music_id.toString();
 					body = {
 						from: 'DID:0',
 						to: 'UID:-1',
 						action: 409,
 						songlistname: '最新下载',
-						songlistid: self.info.id,
+						songlistid: self.albumId,
 						songs: [
 							{
 								id: id,
@@ -206,6 +222,7 @@ export default {
 							}
 						]
 					};
+					console.log("body===========",body)
 					self.$toast({
 						message: '歌曲下载添加成功',
 						position: 'bottom',
@@ -256,6 +273,9 @@ export default {
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
+	.music_cell_left {
+		padding-left: 15px;
+	}
 	.music_cell_left_sub {
 		margin-top: 10px;
 		font-size: 12px;
@@ -272,26 +292,27 @@ export default {
 			margin-left: 20px;
 		}
 	}
-	.music_cell_right {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		height: 50px;
-		img {
-			width: 20px;
-			height: 20px;
-		}
-		span {
-			font-size: 14px;
-			margin-top: 3px;
-		}
-	}
 	.music_cell_index {
 		font-size: 14px;
 	}
 	.selectInx {
 		color: #4da6ff;
+	}
+}
+.music_cell_right {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	img{
+		width: 22px;
+		margin: 0 auto;
+		padding-top: 3px;
+	}
+	span{
+		display: block;
+		font-size: 14px;
+		margin-top: 4px;
 	}
 }
 .music_show_cell {
@@ -309,7 +330,7 @@ export default {
 		width: 30%;
 		height: 50px;
 		img {
-			width: 22px;
+			// width: 22px;
 			height: 16px;
 		}
 		p {
@@ -320,5 +341,8 @@ export default {
 }
 .opacity {
 	opacity: 0.65;
+}
+.downloadImg{
+	opacity: .3;
 }
 </style>

@@ -18,10 +18,10 @@
 						</div>
 					</div>
 				</div>
-				<div class="album-icon"><img src="../../assets/images/download_list.png" class="head_download" @click="goDownload" /></div>
+				<div class="album-icon" v-if="isLine == 1"><img src="../../assets/images/download_list.png" class="head_download" @click="goDownload" /></div>
 			</div>
 			<van-tabs v-model="active" color="#4da6ff">
-				<van-tab title="列表"><music-list :items="musicList" :routeLeave="routeLeave"></music-list></van-tab>
+				<van-tab title="列表"><music-list :items="musicList" :total="total" :audioInfoData="audioInfoData.id" :routeLeave="routeLeave"></music-list></van-tab>
 				<van-tab title="简介">
 					<div class="introduct" v-if="audioInfoData.brief">
 						<div class="title">编辑推荐</div>
@@ -73,9 +73,7 @@ export default {
 		this.getAudioData(id);
 	},
 	computed: {
-		...mapState({
-			deviceOnline: state => state.deviceOnline
-		})
+		...mapState(["isLine"])
 	},
 	mounted() {
 		document.title = '专辑详情  ';
@@ -127,11 +125,7 @@ export default {
 		},
 		//批量下载
 		goDownload() {
-			if (this.deviceOnline) {
-				this.$router.push({ path: '/downLoad', query: { id: this.audioId } });
-			} else {
-				this.$toast('故事机离线');
-			}
+			this.$router.push({ name: 'cloudAllDown', query: { id: this.audioId } });
 		},
 		goEnshrine() {}
 	},

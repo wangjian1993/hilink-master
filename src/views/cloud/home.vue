@@ -11,7 +11,9 @@
 			</div>
 			<!-- 轮播 -->
 			<van-swipe :autoplay="3000" class="van_swipe">
-				<van-swipe-item v-for="(item, index) in bannerData" :key="index" v-if="item.linktype == 2" @click="swiperClick(item.link, item.linktype)"><img :src="item.path" /></van-swipe-item>
+				<van-swipe-item v-for="(item, index) in bannerData" :key="index" v-if="item.linktype == 2" @click="swiperClick(item.link, item.linktype)">
+					<img :src="item.path" />
+				</van-swipe-item>
 			</van-swipe>
 
 			<!-- tab -->
@@ -52,25 +54,25 @@
 				</router-link>
 			</div>
 			<van-tabs v-model="active" color="#4da6ff" @change="getAgeData" swipeable>
-				<van-tab title="0-1岁"><music-list :items="ageData" name="2760" :showIndex="false" :isReload="isReload"></music-list></van-tab>
-				<van-tab title="1-2岁"><music-list :items="ageData" name="2761" :showIndex="false" :isReload="isReload"></music-list></van-tab>
-				<van-tab title="2-3岁"><music-list :items="ageData" name="2762" :showIndex="false" :isReload="isReload"></music-list></van-tab>
-				<van-tab title="3-4岁"><music-list :items="ageData" name="2763" :showIndex="false" :isReload="isReload"></music-list></van-tab>
-				<van-tab title="4-5岁"><music-list :items="ageData" name="2764" :showIndex="false" :isReload="isReload"></music-list></van-tab>
-				<van-tab title="5-6岁"><music-list :items="ageData" name="2765" :showIndex="false" :isReload="isReload"></music-list></van-tab>
+				<van-tab title="0-1岁"><music-list :items="ageData" :albumId="albumId" :total="total" name="2760" :showIndex="false" :isReload="isReload"></music-list></van-tab>
+				<van-tab title="1-2岁"><music-list :items="ageData" :albumId="albumId" :total="total" name="2761" :showIndex="false" :isReload="isReload"></music-list></van-tab>
+				<van-tab title="2-3岁"><music-list :items="ageData" :albumId="albumId" :total="total" name="2762" :showIndex="false" :isReload="isReload"></music-list></van-tab>
+				<van-tab title="3-4岁"><music-list :items="ageData" :albumId="albumId" :total="total" name="2763" :showIndex="false" :isReload="isReload"></music-list></van-tab>
+				<van-tab title="4-5岁"><music-list :items="ageData" :albumId="albumId" :total="total" name="2764" :showIndex="false" :isReload="isReload"></music-list></van-tab>
+				<van-tab title="5-6岁"><music-list :items="ageData" :albumId="albumId" :total="total" name="2765" :showIndex="false" :isReload="isReload"></music-list></van-tab>
 			</van-tabs>
 			<div class="next" @click="nextSong">
 				<img src="../../assets/images/icon_refresh.png" alt />
 				<span>换一批</span>
 			</div>
 			<!-- 精品推荐 -->
-			<swiper-list :name="title[0].name" :title="title[0].title" :item="recommend" :num="title[0].num"></swiper-list>
+			<list :name="title[0].name" :title="title[0].title" :item="recommend" :num="title[0].num" :size="105" :isShowMore="true"></list>
 			<!-- 英语启蒙 -->
 			<list :name="title[10].name" :title="title[10].title" :item="yingyuData" :num="title[10].num" :size="163" :isShowMore="false"></list>
 			<!-- 国学经典 -->
 			<list :name="title[5].name" :title="title[5].title" :item="gxxtData" :num="title[5].num" :size="105" :isShowMore="true"></list>
 			<!-- 最新上线 -->
-			<swiper-list :name="title[9].name" :title="title[9].title" :item="newData" :num="count"></swiper-list>
+			<list :name="title[9].name" :title="title[9].title" :item="newData" :num="title[9].num" :size="105" :isShowMore="true"></list>
 			<!-- 安全教育知识普及 -->
 			<list :name="title[11].name" :title="title[11].title" :item="safeData" :num="title[11].num" :size="348" :isShowMore="false"></list>
 			<!-- 性格养成 -->
@@ -80,16 +82,12 @@
 			<!-- 视频推荐 -->
 			<!-- <video-list :name="title[1].name" :title="title[1].title" :item="videoData" :num="title[1].num"></video-list> -->
 			<!-- 付费精选 -->
-			<!-- 热门主播 -->
-			<!-- <fm-list :name="title[4].name" :title="title[4].title" :item="HostFMData" :num="title[4].num"></fm-list> -->
 			<!-- 情商培养 -->
 			<list :name="title[7].name" :title="title[7].title" :item="qspyData" :num="title[7].num" :size="165" :isShowMore="true"></list>
 			<!-- 财商启蒙 -->
 			<list :name="title[6].name" :title="title[6].title" :item="csqmData" :num="title[6].num" :size="165" :isShowMore="true"></list>
 			<!-- 哄睡儿歌 -->
 			<!-- <list :name="title[8].name" :title="title[8].title" :item="sleepData" :num="title[8].num"></list> -->
-			<!-- 回到顶部 -->
-			<scroll-into :backToTop="backToTop"></scroll-into>
 		</div>
 		<!-- <div class="bottom"></div> -->
 		<div class="loadingding center" v-show="isLoaded"><van-loading size="30px" vertical color="#007DFF">加载中</van-loading></div>
@@ -100,7 +98,6 @@ import { mapState } from 'vuex';
 import musicList from '../../components/musicList.vue';
 const List = () => import('@/components/list');
 const videoList = () => import('@/components/videoList');
-const scrollInto = () => import('@/components/scrollInto');
 export default {
 	data() {
 		return {
@@ -174,7 +171,7 @@ export default {
 				{
 					name: '最新上架',
 					title: '好多新内容,快来听听吧',
-					num: 3
+					num: 6
 				},
 				{
 					name: '英语启蒙',
@@ -195,7 +192,9 @@ export default {
 			active: 0,
 			tabActive: 0,
 			isReload: 1, //播放列表样式重载
-			ageData: [] //分龄数据
+			ageData: [], //分龄数据
+			albumId: 0,
+			total: 0
 		};
 	},
 	computed: {
@@ -212,26 +211,6 @@ export default {
 		// });
 	},
 	methods: {
-		//微信登陆
-		getWeixin() {
-			this.$axios
-				.weixin({
-					userName: localStorage.getItem('openID'),
-					channel: 'weixin_h5',
-					from: 'weixin',
-					head: localStorage.getItem('head'),
-					nickName: localStorage.getItem('nickName'),
-					phone: localStorage.getItem('phone')
-				})
-				.then(res => {
-					if (res.data.success) {
-						// localStorage.setItem("phone", res.data.data.phone);
-						localStorage.setItem('token', res.data.data.token);
-						localStorage.setItem('userId', res.data.data.userId);
-						// this.$toast(res.data.data.userId);
-					}
-				});
-		},
 		// 轮播图
 		bannerList() {
 			var that = this;
@@ -250,12 +229,16 @@ export default {
 		//专辑列表
 		getRecommendData() {
 			var that = this;
+			//精品推荐
+			that.$axios.recommendSpecial(0, 7).then(function(res) {
+				that.recommend = res.data.content.list.sort(that.randomArray);
+			});
 			//视频
 			that.$axios.getVideoData().then(function(res) {
 				that.videoData = res.data.content.list;
 			});
 			//习惯养成
-			that.$axios.getMusicXGYC(0,6).then(res => {
+			that.$axios.getMusicXGYC(0, 6).then(res => {
 				that.musicXGYC = res.data.content.list;
 			});
 			//付费精选
@@ -263,20 +246,23 @@ export default {
 				that.payData = res.data.content.list;
 			});
 			// 国学熏陶
-			that.$axios.getgxxtData(0,6).then(res => {
+			that.$axios.getgxxtData(0, 6).then(res => {
 				that.gxxtData = res.data.content.list;
 			});
 			//财商启蒙
-			that.$axios.getcsqmData(0,6).then(res => {
+			that.$axios.getcsqmData(0, 6).then(res => {
 				that.csqmData = res.data.content.list;
 			});
 			//情商培养
-			that.$axios.getqspyData(0,4).then(res => {
+			that.$axios.getqspyData(0, 4).then(res => {
 				that.qspyData = res.data.content.list;
 			});
 			//分龄推荐
 			that.$axios.getSpecialInfo('2760').then(res => {
 				that.ageData = res.data.content.musicList.splice(0, 5);
+				console.log('res.data.content.info.id=========', res.data.content.info.id);
+				that.albumId = res.data.content.info.id;
+				that.total = res.data.content.total;
 				//转换格式
 				that.ageData.forEach((v, i) => {
 					let s = (parseInt(v.timelength % 60) + '').padStart(2, '0');
@@ -300,22 +286,14 @@ export default {
 				that.confidentData = res.data.content.audioSpeicalList;
 			});
 			setTimeout(function() {
-				that.isLoaded =false;
+				that.isLoaded = false;
 			}, 200);
 		},
 		getNewSpecialsData() {
 			//最新上架
 			let that = this;
-			that.$axios.getNewSpecials({}).then(res => {
-				console.log('请求');
-				if (that.page == 0) {
-					let nub = res.data.content.total;
-					that.sunCount = nub;
-					that.count = Math.ceil(nub / 5);
-				}
-				let data = res.data.content.list;
-				that.isLoading = false;
-				that.newData = data.sort(this.randomArray);
+			that.$axios.getNewSpecials().then(res => {
+				that.newData = res.data.content.list;
 			});
 		},
 		//跳转设备
@@ -398,7 +376,6 @@ export default {
 	components: {
 		List,
 		videoList,
-		scrollInto,
 		musicList
 	},
 	beforeRouteEnter(to, from, next) {
@@ -413,15 +390,16 @@ export default {
 .app {
 	background: #fff;
 	margin-top: 80px;
+	margin-bottom: 50px;
 }
-.loadingding{
-    position:fixed;
-    left:50%;
-    top:50%;
-    width:100px;
-    height:100px;
-    margin:-50px 0 0 -50px;
-    color: #81b4ff;
-    text-align: center
+.loadingding {
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	width: 100px;
+	height: 100px;
+	margin: -50px 0 0 -50px;
+	color: #81b4ff;
+	text-align: center;
 }
 </style>

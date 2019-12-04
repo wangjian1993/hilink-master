@@ -35,13 +35,13 @@ export default {
         });
     },
     //最新推荐
-    recommendSpecial() {
+    recommendSpecial(page,pageSize=7) {
         return fetch({
             url: cloudUrl + "recommendSpecial",
             method: "get",
             params: {
-                page: 0,
-                pageSize: 7
+                page:page,
+                pageSize:pageSize
             }
         });
     },
@@ -142,12 +142,12 @@ export default {
         });
     },
     //最新上架
-    getNewSpecials(page) {
+    getNewSpecials() {
         return fetch({
             url: cloudUrl + "newSpecials",
             method: "get",
             params: {
-                page: page,
+                page:0,
                 pageSize: 10
             }
         });
