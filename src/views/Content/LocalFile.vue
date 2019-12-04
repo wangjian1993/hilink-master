@@ -3,7 +3,9 @@
 		<v-header :title="title"></v-header>
 		<div class="list-content">
 			<div class="loading-box"></div>
-			<div class="file-box"><van-cell v-for="(item, index) in localList.channels" v-if="item.name != '我的收藏'" :title="item.name" is-link @click="localClick(item)" /></div>
+			<div class="file-box">
+				<van-cell v-for="(item, index) in localList.channels" v-if="item.name != '我的收藏'" :title="fileName(item.name)" is-link @click="localClick(item)" />
+			</div>
 		</div>
 	</div>
 </template>
@@ -42,6 +44,14 @@ export default {
 			this.$router.push({ name: 'locallist', params: { id: item.cid, name: item.name } });
 			this.$store.dispatch('setLocalCid', item.cid);
 			this.$store.dispatch('putLocalList', data);
+		},
+		fileName(name){
+			console.log("name======",name)
+			if(name == "/"){
+				return "根目录"
+			}else{
+				return name;
+			}
 		},
 		devicesAction() {
 			let self = this;

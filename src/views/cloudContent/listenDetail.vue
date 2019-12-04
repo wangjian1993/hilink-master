@@ -8,7 +8,7 @@
 					<div class="musicName">{{ info.name }}</div>
 					<div class="musicMusic">共{{ info.musicCount }}首</div>
 				</div>
-				<div class="all-down" @click="allDownClick()">
+				<div class="all-down" @click="allDownClick()" v-if="isLine == 1">
 					<p><img src="../../assets/images/icon_download_no.png" alt="" /></p>
 				</div>
 			</div>
@@ -196,13 +196,13 @@ export default {
 								albumname: item.specialname,
 								albumid: item.special_id,
 								type: 5,
-								total: this.total,
+								total: self.total,
+								index: index,
 								res: [
 									{
 										filesize: '',
 										lrc: '',
 										fmt: 'mp3',
-										index: index,
 										duration: item.lengthOfTime,
 										url: path
 									}
