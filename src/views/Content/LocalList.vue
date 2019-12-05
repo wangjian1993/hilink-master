@@ -56,9 +56,9 @@ export default {
 		this.getSongsTotal();
 		this.beginNumber = 0;
 		this.getNumber = 0;
-		// window.addEventListener('scroll', () => {
-		// 	this.toBottom();
-		// });
+		window.addEventListener('scroll', () => {
+			this.toBottom();
+		});
 	},
 	mounted() {
 		let self = this;
@@ -71,13 +71,16 @@ export default {
 					if (self.beginNumber == 0) {
 						self.loading = true;
 					}
+					// if(this.localSongList.songs.length == this.localTotal){
+					// 	console.log("没有了=================")
+					// 	that.isMore = true;
+					// }
 				}
 			};
 			window['delListBack'] = resultStr => {
 				let data = self.praseResponseData(resultStr);
 				if (data.errcode == 0) {
 					let list = self.localSongList.songs;
-					console.log('self.delIndex===', self.delIndex);
 					if(self.delIndex <  self.musicData.idx){
 						 self.musicData.idx  = self.musicData.idx -1;
 					}
@@ -191,25 +194,27 @@ export default {
 				that.isMore = true;
 			}
 		},
-		// toBottom() {
-		// 	let that = this;
-		// 	let scrollH = document.body.scrollTop || document.documentElement.scrollTop;
-		// 	var docH, windowH; //滚动条滚动高度
-		// 	docH = document.body.scrollHeight || document.documentElement.scrollHeight; //文档高度
-		// 	windowH = window.innerHeight || document.body.clientHeight || document.documentElement.clientHeight; //浏览器窗口高度
-		// 	if (scrollH + windowH >= docH && !that.isStop) {
-		// 		console.log('加载1111======');
-		// 		//滚动到底部和页面没有正在执行请求网络数据的过程中的条件要同时成立才可以执行请求请求数据操作
-		// 		if (that.isBottom && that.beginNumber <= that.limitNumber) {
-		// 			console.log('that.beginNumber222====', that.beginNumber);
-		// 			console.log('that.limitNumber222====', that.limitNumber);
-		// 			console.log('加载2222======');
-		// 			that.getNumber = that.getNumber + 1;
-		// 			that.isBottom = false;
-		// 			that.devicesPage();
-		// 		}
-		// 	}
-		// },
+		toBottom() {
+			let that = this;
+			let scrollH = document.body.scrollTop || document.documentElement.scrollTop;
+			var docH, windowH; //滚动条滚动高度
+			docH = document.body.scrollHeight || document.documentElement.scrollHeight; //文档高度
+			windowH = window.innerHeight || document.body.clientHeight || document.documentElement.clientHeight; //浏览器窗口高度
+			if (scrollH + windowH >= docH && !that.isStop) {
+				console.log('加载1111======');
+				//滚动到底部和页面没有正在执行请求网络数据的过程中的条件要同时成立才可以执行请求请求数据操作
+				if (that.cangetlocal && that.beginNumber <= that.limitNumber) {
+					let list = that.localSongList.songs;
+					if (list.length == 0) {
+						that.beginNumber = 0;
+					} else {
+						that.beginNumber = that.beginNumber + 1;
+					}
+					that.cangetlocal = false;
+					that.getLocalSong();
+				}
+			}
+		},
 		//回调函数转换
 		praseResponseData(resData) {
 			try {

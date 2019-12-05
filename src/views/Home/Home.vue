@@ -29,9 +29,9 @@
 					<p>{{ $t('m.timer') }}</p>
 				</div>
 			</div>
-			<div class="devices-status-btn" @click="devicesSwitch(0)">
+			<!-- <div class="devices-status-btn" @click="devicesSwitch(0)">
 				<p :class="isLine == 1 ? 'switchAcitve' : ''"><img :src="switchIcon()" alt /></p>
-			</div>
+			</div> -->
 		</div>
 		<div class="devices-audio" style="background: #F7F7F7;">
 			<!-- 歌曲控制 -->
@@ -213,16 +213,12 @@
 			</div>
 			<div v-if="upflag == 3">
 				<div class="updata-msg">1/2 正在升级设备固件...</div>
-				<div class="updata-btn" @click="cloneDevic()">
-					<p>确定</p>
-				</div>
+				<div class="updata-btn" @click="cloneDevic()"><p>确定</p></div>
 			</div>
 			<div v-if="upflag == 4">
 				<div class="updata-msg">2/2 设备正在重启...</div>
-				<div class="updata-btn" @click="cloneDevic()">
-					<p>确定</p>
-				</div>
-			</div>	
+				<div class="updata-btn" @click="cloneDevic()"><p>确定</p></div>
+			</div>
 		</van-popup>
 		<div class="popup1" v-if="modePopup" @click="modePopupClick()"></div>
 		<div class="popup" v-if="timePopup" @click="popupClick()"></div>
@@ -319,7 +315,7 @@ export default {
 			}
 		},
 		//升级弹窗
-		upDataBtn(type){
+		upDataBtn(type) {
 			let self = this;
 			if (!self.loadingFlag) {
 				return;
@@ -330,24 +326,24 @@ export default {
 					from: 'DID:0',
 					to: 'UID:-1',
 					action: 4000,
-					setupgrade:0
+					setupgrade: 0
 				};
-			} else if (type == 2){
+			} else if (type == 2) {
 				body = {
 					from: 'DID:0',
 					to: 'UID:-1',
 					action: 4000,
-					setupgrade:1
+					setupgrade: 1
 				};
 			}
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json } };
 			self.$store.dispatch('setDevInfo', data);
 			self.$store.dispatch('setLoadingFlag', false);
-			self.$store.dispatch("actionsUpFlag",false);
+			self.$store.dispatch('actionsUpFlag', false);
 		},
 		//退出设备页面
-		cloneDevic(){
+		cloneDevic() {
 			window.hilink.finishDeviceActivity();
 		},
 		bubbleClick() {

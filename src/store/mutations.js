@@ -148,6 +148,7 @@ const mutations = {
 		}
 		let action = customData.action;
 		state.loadingFlag = true;
+		console.log("action=======",action)
 		switch (action) {
 			case 910:
 				state.playMode = customData.playmode;
@@ -194,9 +195,6 @@ const mutations = {
 				console.log("state.albumid===========", state.albumid)
 				break;
 			case 417:
-				if (customData.ret == 0) {
-
-				}
 				break;
 			case 638:
 				break;
@@ -214,9 +212,17 @@ const mutations = {
 			case 410:
 
 				break;
+			case 204:
+				
+				break;	
 			case 424:
 				if (customData.ret == 0) {
-
+					this.$toast({
+						message: '歌曲点播成功',
+						position: 'bottom',
+						duration: '3000',
+						className: 'toastActive'
+					});
 				}
 				break;
 			case 632:

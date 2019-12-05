@@ -210,12 +210,6 @@ export default {
 							}
 						]
 					};
-					self.$toast({
-						message: '歌曲点播成功',
-						position: 'bottom',
-						duration: '3000',
-						className: 'toastActive'
-					});
 					break;
 				case 2:
 					body = {
