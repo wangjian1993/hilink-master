@@ -1,3 +1,4 @@
+import {loadPlay} from '../assets/js/cache.js'
 const state = {
 	devicesInfo: [], //设备信息
 	timePopup: false,
@@ -57,6 +58,8 @@ const state = {
 	upDate: false,
 	isShare:false,
 	limitNumber: 0,
+	historyList:[],
+	playHistory: loadPlay(), // 播放历史
 };
 
 export default state;

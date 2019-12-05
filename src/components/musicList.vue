@@ -97,6 +97,7 @@ export default {
 		},
 		//手机播放音乐
 		play(src, index, id, data) {
+			this.$store.dispatch('savePlayHistory',data);
 			if (src == this.src) {
 				if (this.$audio.paused) {
 					this.active = index;
@@ -141,6 +142,7 @@ export default {
 			var path = item.path.indexOf('https:') > -1 ? item.path.replace('https', 'http') : item.path;
 			switch (type) {
 				case 1:
+					self.$store.dispatch('savePlayHistory',item);
 					body = {
 						from: 'DID:0',
 						to: 'UID:-1',

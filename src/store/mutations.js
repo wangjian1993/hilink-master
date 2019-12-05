@@ -43,6 +43,9 @@ const mutations = {
 	[types.SET_UPFLAG](state, data) {
 		state.upDate = data;
 	},
+	[types.SET_PLAY_HISTORY](state, history) {
+	    state.playHistory = history
+	},
 	setDevName(state, data) {
 		state.devName = data;
 	},

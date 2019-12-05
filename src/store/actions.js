@@ -1,5 +1,7 @@
 import * as types from "./mutation-type.js";
-
+import {
+  savePlay
+} from '../assets/js/cache'
 export default {
 
 	//获取设备全部信息
@@ -52,6 +54,11 @@ export default {
 		commit
 	}, data) {
 		commit(types.ENGLISHDATA, data);
+	},
+	savePlayHistory({
+		commit
+	}, data) {
+		commit(types.SET_PLAY_HISTORY, savePlay(data))
 	},
 	setDeviceidFlag({
 		commit
@@ -218,10 +225,10 @@ export default {
 		}
 
 		window.shareCallback = res => {
-			console.log("判断设备分享=======",res)
-			if(res == 0){
+			console.log("判断设备分享=======", res)
+			if (res == 0) {
 				commit("isShareDevie", true);
-			}else {
+			} else {
 				commit("isShareDevie", false);
 			}
 		}

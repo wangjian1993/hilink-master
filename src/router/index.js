@@ -157,53 +157,61 @@ export default new Router({
 			}
 		},
 		{
-		  path: "/cloudContent/albumList",
-		  name: 'albumList',
-		  component: () => import('@/views/cloud/albumList.vue'),
-		  meta: {
-		    title: "专辑列表"
-		  }
+			path: "/cloudContent/albumList",
+			name: 'albumList',
+			component: () => import('@/views/cloud/albumList.vue'),
+			meta: {
+				title: "专辑列表"
+			}
 		},
 		{
-		  path: "/cloudContent/ssec",
-		  name: "ssec",
-		  component: () => import('@/views/cloud/ssec.vue'),
-		  meta: {
-		    title: "听讲赏学"
-		  }
+			path: "/cloudContent/ssec",
+			name: "ssec",
+			component: () => import('@/views/cloud/ssec.vue'),
+			meta: {
+				title: "听讲赏学"
+			}
 		},
 		{
-		  path: "/cloudContent/albumDetail",
-		  name: 'albumDetail',
-		  component: () => import('@/views/cloud/albumDetail.vue'),
-		  meta: {
-		    title: "专辑详情"
-		  }
+			path: "/cloudContent/albumDetail",
+			name: 'albumDetail',
+			component: () => import('@/views/cloud/albumDetail.vue'),
+			meta: {
+				title: "专辑详情"
+			}
 		},
 		{
-		  path: "/cloudContent/rank",
-		  name: 'rank',
-		  component: () => import('@/views/cloud/rank.vue'),
-		  meta: {
-		    title: "排行榜",
-			keepAlive: true
-		  }
+			path: "/cloudContent/rank",
+			name: 'rank',
+			component: () => import('@/views/cloud/rank.vue'),
+			meta: {
+				title: "排行榜",
+				keepAlive: true
+			}
 		},
 		{
-		  path: "/cloudContent/differentAge",
-		  name: 'differentAge',
-		  component: () => import('@/views/cloud/differentAge.vue'),
-		  meta: {
-		    title: "分龄推荐"
-		  }
+			path: "/cloudContent/differentAge",
+			name: 'differentAge',
+			component: () => import('@/views/cloud/differentAge.vue'),
+			meta: {
+				title: "分龄推荐"
+			}
 		},
 		{
-		  path: "/cloudContent/video",
-		  name: "video",
-		  component: () => import('@/views/cloud/video.vue'),
-		  meta: {
-		    title: "视频"
-		  }
+			path: "/cloudContent/video",
+			name: "video",
+			component: () => import('@/views/cloud/video.vue'),
+			meta: {
+				title: "视频"
+			}
+		},
+		{
+			path: "/cloudContent/history",
+			name: "history",
+			component: () => import('@/views/cloud/history.vue'),
+			meta: {
+				title: "历史记录"
+			}
 		},
 	]
 })

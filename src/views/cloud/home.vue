@@ -224,7 +224,7 @@ export default {
 		},
 		//历史记录
 		goHistory() {
-			this.$router.push({ path: '/history' });
+			this.$router.push({ name: 'history' });
 		},
 		//专辑列表
 		getRecommendData() {
