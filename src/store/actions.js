@@ -73,6 +73,7 @@ export default {
 		if (window.hilink != undefined) {
 			console.log("获取全部信息========")
 			window.hilink.getDevCacheAll("0", "", "resultCallback");
+			window.hilink.getUserRole("shareCallback");
 		}
 	},
 	//获取本地歌曲列表
@@ -216,8 +217,13 @@ export default {
 			}
 		}
 
-		window.allResultCallback = res => {
-			console.log("测试多条发送", res)
+		window.shareCallback = res => {
+			console.log("判断设备分享=======",res)
+			if(res == 0){
+				commit("isShareDevie", true);
+			}else {
+				commit("isShareDevie", false);
+			}
 		}
 	}
 };

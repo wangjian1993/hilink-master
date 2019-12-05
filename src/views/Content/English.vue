@@ -15,7 +15,7 @@
 							</div>
 							<p>{{ item.name }}</p>
 							<div class="song-check" v-show="setCheck">
-								<input type="radio" :id="item.id" name="item1" :checked="index == radioActive1" :value="item.id" />
+								<input type="radio" :id="item.id" name="item1" :checked="item.id == albumid[0].album" :value="item.id" />
 								<label :for="item.id"></label>
 							</div>
 						</li>
@@ -34,7 +34,7 @@
 							</div>
 							<p>{{ item.name }}</p>
 							<div class="song-check" v-show="setCheck">
-								<input type="radio" :id="item.id" name="item2" :checked="index == radioActive2" :value="item.id" />
+								<input type="radio" :id="item.id" name="item2" :checked="item.id == albumid[1].album" :value="item.id" />
 								<!-- <input type="radio" name="item2" @change="changeResult(item.id, 1)" :checked="index == 0" /> -->
 								<label :for="item.id"></label>
 							</div>
@@ -54,7 +54,7 @@
 							</div>
 							<p>{{ item.name }}</p>					
 							<div class="song-check" v-show="setCheck">
-								<input type="radio" :id="item.id" name="item3" :checked="index == radioActive3" :value="item.id"/>
+								<input type="radio" :id="item.id" name="item3" :checked="item.id == albumid[2].album" :value="item.id"/>
 								<label :for="item.id"></label>
 							</div>
 						</li>
@@ -73,7 +73,7 @@
 							</div>
 							<p>{{ item.name }}</p>
 							<div class="song-check" v-show="setCheck">
-								<input type="radio" :id="item.id" name="item4" :value="item.id" :checked="index == radioActive4" />
+								<input type="radio" :id="item.id" name="item4" :value="item.id" :checked="item.id == albumid[3].album" />
 								<label :for="item.id"></label>
 							</div>
 						</li>

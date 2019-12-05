@@ -67,10 +67,12 @@ const mutations = {
 	setistimePopu(state, data) {
 		state.istimePopu = data;
 	},
+	isShareDevie(state,data){
+		state.isShare =data;
+	},
 	resultData(state, resData) {
 		let type = resData;
 		state.loadingFlag = true;
-		console.log("获取设备信息=============", resData)
 		switch (type.sid) {
 			case 'switch':
 				state.lampSwitch = resData.data.on;
@@ -146,6 +148,7 @@ const mutations = {
 		}
 		let action = customData.action;
 		state.loadingFlag = true;
+		console.log("action=======",action)
 		switch (action) {
 			case 910:
 				state.playMode = customData.playmode;
@@ -174,6 +177,7 @@ const mutations = {
 				state.localSongList.channel = customData.channel;
 				state.localSongList.total = customData.total;
 				state.localTotal = customData.total;
+				state.limitNumber = Math.ceil(customData.total / 6);
 				break;
 			case 642:
 				console.log(" customData.albumid", customData.albumid)
@@ -191,9 +195,6 @@ const mutations = {
 				console.log("state.albumid===========", state.albumid)
 				break;
 			case 417:
-				if (customData.ret == 0) {
-
-				}
 				break;
 			case 638:
 				break;
@@ -211,9 +212,17 @@ const mutations = {
 			case 410:
 
 				break;
+			case 204:
+				
+				break;	
 			case 424:
 				if (customData.ret == 0) {
-
+					this.$toast({
+						message: '歌曲点播成功',
+						position: 'bottom',
+						duration: '3000',
+						className: 'toastActive'
+					});
 				}
 				break;
 			case 632:

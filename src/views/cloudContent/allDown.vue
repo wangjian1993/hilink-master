@@ -2,11 +2,12 @@
 	<div class="container">
 		<v-header :title="title"></v-header>
 		<div class="music-list">
+			<p class="downMsg">*应版权方要求,部门歌曲暂无法提供下载</p>
 			<van-checkbox-group v-model="result" checked-color="#07c160" ref="checkboxGroup" :max="checkboxMax">
 				<van-cell-group>
 					<van-cell v-for="(item, index) in musicList" :title="item.name"  clickable
 			      :key="index"  @click="toggle(index)">
-						<van-checkbox :name="index"  ref="checkboxes" slot="right-icon" />
+						<van-checkbox :name="index"  ref="checkboxes" slot="right-icon"  v-if="item.copyrightId == 1"/>			
 					</van-cell>
 				</van-cell-group>
 			</van-checkbox-group>
@@ -146,4 +147,10 @@ export default {
 <style lang="less" scoped>
 @import url('../../assets/css/cloud/common.less');
 @import url('../../assets/css/cloud/listenDetail.less');
+.downMsg{
+	width: 100%;
+	text-align: center;
+	font-size: 14px;
+	color: #c81624;
+}
 </style>
