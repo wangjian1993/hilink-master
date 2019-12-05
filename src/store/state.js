@@ -54,7 +54,9 @@ const state = {
 	devName:'火火兔故事机',
 	istimePopu:true,
 	upflag:0,
-	upDate: false
+	upDate: false,
+	isShare:false,
+	limitNumber: 0,
 };
 
 export default state;

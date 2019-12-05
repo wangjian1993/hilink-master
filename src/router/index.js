@@ -124,7 +124,8 @@ export default new Router({
 			name: 'cloudHostDetail',
 			component: () => import('@/views/cloudContent/hostDetail.vue'),
 			meta: {
-				keepAlive: false
+				keepAlive: false,
+				title: "优选主播",
 			}
 		},
 		//火火兔云内容视频详情页面

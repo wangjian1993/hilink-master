@@ -67,10 +67,12 @@ const mutations = {
 	setistimePopu(state, data) {
 		state.istimePopu = data;
 	},
+	isShareDevie(state,data){
+		state.isShare =data;
+	},
 	resultData(state, resData) {
 		let type = resData;
 		state.loadingFlag = true;
-		console.log("获取设备信息=============", resData)
 		switch (type.sid) {
 			case 'switch':
 				state.lampSwitch = resData.data.on;
@@ -174,6 +176,7 @@ const mutations = {
 				state.localSongList.channel = customData.channel;
 				state.localSongList.total = customData.total;
 				state.localTotal = customData.total;
+				state.limitNumber = Math.ceil(customData.total / 6);
 				break;
 			case 642:
 				console.log(" customData.albumid", customData.albumid)

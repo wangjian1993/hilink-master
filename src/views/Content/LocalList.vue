@@ -34,7 +34,6 @@ export default {
 			offsetFlag: false,
 			cangetlocal: true,
 			beginNumber: 0,
-			limitNumber: 0,
 			isStop: false,
 			delIndex: -1,
 			isMore: false,
@@ -42,7 +41,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapState(['localSongList', 'localTotal', 'musicData', 'loadingFlag'])
+		...mapState(['localSongList', 'localTotal', 'musicData', 'loadingFlag','limitNumber'])
 	},
 	created() {
 		this.cid = this.$route.params.id;
@@ -56,7 +55,6 @@ export default {
 		}
 		this.getSongsTotal();
 		this.beginNumber = 0;
-		this.limitNumber = 0;
 		this.getNumber = 0;
 		// window.addEventListener('scroll', () => {
 		// 	this.toBottom();
@@ -71,7 +69,6 @@ export default {
 				if (data.errcode == 0) {
 					self.cangetlocal = true;
 					if (self.beginNumber == 0) {
-						self.devicesPage();
 						self.loading = true;
 					}
 				}
@@ -107,17 +104,6 @@ export default {
 			let data = { custom: { function: json, name: 'function' } };
 			self.setDeviceSongsInfo(data, 'songsListBack');
 		},
-		devicesPage: _debounce(function() {
-			let self = this;
-			if (!self.cangetlocal) return false;
-			self.limitNumber = Math.ceil(self.localTotal / 6);
-			console.log("self.limitNumber",self.limitNumber)
-			if (self.limitNumber == 0) {
-				self.isMore = true;
-				console.log("self.isMore",self.isMore)
-			}
-			// self.getLocalSong();
-		}, 300),
 		getLocalSong: _debounce(function() {
 			let self = this;
 			if (self.beginNumber >= self.limitNumber) {
@@ -136,7 +122,7 @@ export default {
 			let data = { custom: { function: json, name: 'function' } };
 			console.log('beginNumberbeginNumber111111===========', self.beginNumber);
 			self.setDeviceSongsInfo(data, 'songsListBack');
-		}, 400),
+		}, 50),
 		songDel(item, index) {
 			let self = this;
 			if (!self.cangetlocal) {
@@ -262,6 +248,7 @@ export default {
 }
 .app {
 	margin-top: 80px;
+	background: #fff;
 }
 .local-list {
 	width: 92%;

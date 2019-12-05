@@ -43,7 +43,7 @@
 							<img src="../../assets/images/sc.png" />
 							<p>收藏</p>
 						</div>
-						<div class="playCell" @click="devicesMusic(3, item)">
+						<div class="playCell" @click="devicesMusic(3, item)" :class="item.copyrightId == 0?'isDown':''">
 							<img src="../../assets/images/icon_download_1.png" />
 							<p>下载</p>
 						</div>
@@ -238,6 +238,16 @@ export default {
 					});
 					break;
 				case 3:
+				console.log("item",item)
+					if(item.copyrightId == 0){
+						self.$toast({
+							message: '应版权方要求.暂无法下载',
+							position: 'bottom',
+							duration: '3000',
+							className: 'toastActive'
+						});
+						return;
+					}
 					var id = item.music_id.toString();
 					body = {
 						from: 'DID:0',
@@ -281,4 +291,7 @@ export default {
 <style lang="less" scoped>
 @import url('../../assets/css/cloud/common.less');
 @import url('../../assets/css/cloud/listenDetail.less');
+.isDown{
+	opacity: .3;
+}
 </style>
