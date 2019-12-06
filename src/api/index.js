@@ -181,7 +181,7 @@ export default {
             method: "post",
             params: {
                 page: page,
-                pageSize: 10,
+                pageSize: 20,
                 st: tabStates,
                 type: type
             }

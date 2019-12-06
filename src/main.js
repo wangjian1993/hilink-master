@@ -6,13 +6,13 @@ import 'amfe-flexible'
 import App from './App.vue'
 import router from './router/index'
 import store from './store/index'
-import Vconsole from 'vconsole'
+// import Vconsole from 'vconsole'
 import VueVideoPlayer from 'vue-video-player'
 import 'video.js/dist/video-js.css'
 import base64 from './assets/js/base64'
 import VueI18n from 'vue-i18n'
-const vConsole = new Vconsole()
-Vue.use(vConsole)
+// const vConsole = new Vconsole()
+// Vue.use(vConsole)
 // hilink sdk公共函数
 import hilink from './hilink/index'
 import './assets/css/app.css' //公共css
@@ -43,11 +43,12 @@ import {
 	Checkbox,
 	RadioGroup,
 	Radio,
-	CountDown 
+	CountDown,
+	List
 } from 'vant';
 Vue.use(Tab).use(Tabs).use(Button).use(NavBar).use(Slider).use(Toast).use(DatetimePicker).use(Popup).use(Field).use(
 	Icon).use(Loading).use(NoticeBar).use(Dialog).use(Picker).use(Cell).use(CellGroup).use(CheckboxGroup).use(Checkbox).use(
-	RadioGroup).use(Radio).use(CountDown);
+	RadioGroup).use(Radio).use(CountDown).use(List);
 Vue.use(Swipe).use(SwipeItem);
 Vue.use(VueVideoPlayer)
 Vue.config.productionTip = false
