@@ -25,7 +25,7 @@ export default {
 		return {
 			// timePopup:false,
 			currentTime: '0:00',
-			endTime: 0,
+			endTime: 15,
 			setTime: false,
 			columns: [this.$t('m.min1'), this.$t('m.min2'), this.$t('m.min3'), this.$t('m.min4'), this.$t('m.min5')]
 		};

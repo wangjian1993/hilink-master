@@ -119,7 +119,7 @@ export default {
 				to: 'UID:-1',
 				action: 401,
 				channel: self.cid,
-				offset: self.beginNumber * 6
+				offset: self.beginNumber * 4
 			};
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json, name: 'function' } };

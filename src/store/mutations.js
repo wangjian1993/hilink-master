@@ -177,7 +177,7 @@ const mutations = {
 				state.localSongList.channel = customData.channel;
 				state.localSongList.total = customData.total;
 				state.localTotal = customData.total;
-				state.limitNumber = Math.ceil(customData.total / 6);
+				state.limitNumber = Math.ceil(customData.total / 4);
 				break;
 			case 642:
 				console.log(" customData.albumid", customData.albumid)
