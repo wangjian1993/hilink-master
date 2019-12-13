@@ -88,6 +88,11 @@ export default {
 	}, data) {
 		commit("isClickBtnMutation", data)
 	},
+	loadingImgActions({
+		commit
+	}, data) {
+		commit("loadingImgMutation", data)
+	},
 	//获取设备信息
 	getDevCacheAll() {
 		if (window.hilink != undefined) {

@@ -647,7 +647,8 @@ export default {
 			};
 			this.$store.dispatch('putLocalList', data);
 			this.$store.dispatch('setLocalCid', self.loveCid);
-			this.$store.dispatch("locaFlagActions",false)
+			this.$store.dispatch("locaFlagActions",false);
+			this.$store.dispatch("loadingImgActions",true);
 			self.$router.push({
 				name: 'locallist',
 				params: { id: self.loveCid, name: '我的收藏' }

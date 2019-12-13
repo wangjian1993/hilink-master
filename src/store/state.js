@@ -60,7 +60,8 @@ const state = {
 	locaFlag:false,
 	ifDefeated:false,
 	locaTip:"加载中...",
-	isClickBtn:false
+	isClickBtn:false,
+	loadingImg:true
 };
 
 export default state;

@@ -82,8 +82,11 @@ const mutations = {
 		state.locaFlag = data;
 	},
 	isClickBtnMutation(state, data){
-		console.log("弹窗=======",data)
 		state.isClickBtn = data;
+	},
+	loadingImgMutation(state, data){
+		state.loadingImg = data;
+		console.log("state.loadingImg",state.loadingImg)
 	},
 	resultData(state, resData) {
 		let type = resData;
@@ -205,6 +208,7 @@ const mutations = {
 				state.localSongList.total = customData.total;
 				state.ifDefeated =false;
 				state.locaFlag =true;
+				state.loadingImg =false;
 				state.locaTip ="点击加载更多";
 				state.isClickBtn =false;
 				console.log("state.locaFlag",state.locaFlag)

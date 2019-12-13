@@ -2,7 +2,7 @@
 	<div class="app">
 		<v-header :title="title"></v-header>
 		<div class="list-content">
-			<div class="loading-box" v-if="!loading"><van-loading size="24px" type="spinner" vertical color="#007DFF">加载中</van-loading></div>
+			<div class="loading-box" v-if="loadingImg"><van-loading size="24px" type="spinner" vertical color="#007DFF">加载中</van-loading></div>
 			<div class="loading-box1" v-if="isClickBtn"><van-loading size="24px" type="spinner" vertical color="#007DFF">加载中</van-loading></div>
 			<div class="local-list" v-if="loading">
 				<ul>
@@ -49,7 +49,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapState(['localSongList', 'localTotal', 'musicData', 'loadingFlag', 'limitNumber', 'locaFlag', 'locaTip', 'isClickBtn'])
+		...mapState(['localSongList', 'localTotal', 'musicData', 'loadingFlag', 'limitNumber', 'locaFlag', 'locaTip', 'isClickBtn','loadingImg'])
 	},
 	created() {
 		this.$store.dispatch('isClickBtnActions', false);

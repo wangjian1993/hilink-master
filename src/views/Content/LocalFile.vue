@@ -44,7 +44,8 @@ export default {
 			this.$router.push({ name: 'locallist', params: { id: item.cid, name: item.name } });
 			this.$store.dispatch('setLocalCid', item.cid);
 			this.$store.dispatch('putLocalList', data);
-			this.$store.dispatch("locaFlagActions",false)
+			this.$store.dispatch("locaFlagActions",false);
+			this.$store.dispatch("loadingImgActions",true);
 		},
 		fileName(name){
 			console.log("name======",name)
