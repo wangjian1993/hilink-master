@@ -61,10 +61,6 @@
 								<img src="../../assets/images/sc.png" />
 								<p>收藏</p>
 							</div>
-							<div class="playCell" @click="devicesMusic(3,item)">
-								<img src="../../assets/images/icon_demand.png" />
-								<p>下载</p>
-							</div>
 						</div>
 					</div>
 				</div>

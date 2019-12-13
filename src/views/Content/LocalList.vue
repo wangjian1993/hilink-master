@@ -10,8 +10,7 @@
 						<span><img v-if="cid == musicData.channel && index == musicData.idx ? 'textActive' : ''" src="../../assets/images/gif.gif" alt="" /></span>
 						<span @click="songDel(opt, index)"><img src="../../assets/images/delete.png" alt="" /></span>
 					</li>
-					<p class="moreBtn" @click="listMore()" v-if="!isMore">点击加载更多...</p>
-					<p class="moreBtn" v-if="isMore">暂无更多</p>
+					<p class="moreBtn" @click="listMore()" v-if="isMore && localSongList.songs.length >= 4">{{tip}}</p>
 				</ul>
 			</div>
 		</div>
@@ -36,29 +35,33 @@ export default {
 			beginNumber: 0,
 			isStop: false,
 			delIndex: -1,
-			isMore: false,
-			isBottom: false
+			delPage: 0,
+			isMore: true,
+			isNull:false,
+			isBottom: false,
+			tip:"点击加载更多...",
+			sumPage:0
 		};
 	},
 	computed: {
-		...mapState(['localSongList', 'localTotal', 'musicData', 'loadingFlag','limitNumber'])
+		...mapState(['localSongList', 'localTotal', 'musicData', 'loadingFlag', 'limitNumber'])
 	},
 	created() {
 		this.cid = this.$route.params.id;
 		this.cname = this.$route.params.name;
-		if(this.$route.params.name == "我的收藏"){
-			this.title =this.$t('m.Favorites')
-		}else if(this.$route.params.name == "/"){
-			this.title ="根目录"
-		}else {
+		if (this.$route.params.name == '我的收藏') {
+			this.title = this.$t('m.Favorites');
+		} else if (this.$route.params.name == '/') {
+			this.title = '根目录';
+		} else {
 			this.title = this.$route.params.name;
 		}
 		this.getSongsTotal();
 		this.beginNumber = 0;
 		this.getNumber = 0;
-		window.addEventListener('scroll', () => {
-			this.toBottom();
-		});
+		// window.addEventListener('scroll', () => {
+		// 	this.toBottom();
+		// });
 	},
 	mounted() {
 		let self = this;
@@ -71,19 +74,17 @@ export default {
 					if (self.beginNumber == 0) {
 						self.loading = true;
 					}
-					// if(this.localSongList.songs.length == this.localTotal){
-					// 	console.log("没有了=================")
-					// 	that.isMore = true;
-					// }
+					self.beginNumber = self.beginNumber + 1;
 				}
 			};
 			window['delListBack'] = resultStr => {
 				let data = self.praseResponseData(resultStr);
 				if (data.errcode == 0) {
 					let list = self.localSongList.songs;
-					if(self.delIndex <  self.musicData.idx){
-						 self.musicData.idx  = self.musicData.idx -1;
+					if (self.delIndex < self.musicData.idx) {
+						self.musicData.idx = self.musicData.idx - 1;
 					}
+					self.delPage = self.delPage + 1;
 					list.splice(self.delIndex, 1);
 					if (list.length == 0) {
 						self.beginNumber = 0;
@@ -110,8 +111,9 @@ export default {
 		getLocalSong: _debounce(function() {
 			let self = this;
 			if (self.beginNumber >= self.limitNumber) {
+				console.log("没有了000000000000000000===================")
 				self.cangetlocal = true;
-				self.isMore = true;
+				self.tip = "暂无更多";
 				return true;
 			}
 			let body = {
@@ -119,7 +121,7 @@ export default {
 				to: 'UID:-1',
 				action: 401,
 				channel: self.cid,
-				offset: self.beginNumber * 4
+				offset: self.beginNumber * 4 - self.delPage
 			};
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json, name: 'function' } };
@@ -149,16 +151,14 @@ export default {
 					};
 					let json = JSON.stringify(body);
 					let data = { custom: { function: json, name: 'function' } };
-					self.setDeviceSongsInfo(data, 'delListBack');	
-					let time =setTimeout(function() {
+					self.setDeviceSongsInfo(data, 'delListBack');
+					let time = setTimeout(function() {
 						self.$store.dispatch('getDeviceAll');
 					}, 3000);
 				})
 				.catch(() => {
 					// on cancel
 				});
-
-			console.log(item);
 		},
 		localSongPut: _debounce(function(index) {
 			let self = this;
@@ -180,18 +180,20 @@ export default {
 		}, 400),
 		listMore() {
 			let that = this;
-			if (that.cangetlocal && that.beginNumber <= that.limitNumber) {
+			console.log("that.beginNumber111111111======",that.beginNumber)
+			console.log("that.limitNumber======",that.limitNumber)
+			if (that.cangetlocal && that.beginNumber < that.limitNumber) {
 				console.log('加载更多=========', that.localSongList.songs);
 				let list = that.localSongList.songs;
 				if (list.length == 0) {
+					console.log('没有了111=======');
 					that.beginNumber = 0;
-				} else {
-					that.beginNumber = that.beginNumber + 1;
 				}
 				that.cangetlocal = false;
 				that.getLocalSong();
 			} else {
-				that.isMore = true;
+				console.log("没有了111111111111111111111111111111")
+				that.tip = "暂无更多";
 			}
 		},
 		toBottom() {
@@ -203,15 +205,19 @@ export default {
 			if (scrollH + windowH >= docH && !that.isStop) {
 				console.log('加载1111======');
 				//滚动到底部和页面没有正在执行请求网络数据的过程中的条件要同时成立才可以执行请求请求数据操作
-				if (that.cangetlocal && that.beginNumber <= that.limitNumber) {
+				if (that.cangetlocal && that.beginNumber < that.limitNumber) {
 					let list = that.localSongList.songs;
 					if (list.length == 0) {
+						console.log('没有了=======');
 						that.beginNumber = 0;
 					} else {
 						that.beginNumber = that.beginNumber + 1;
 					}
 					that.cangetlocal = false;
 					that.getLocalSong();
+				} else {
+					console.log("没有了222222222222222222222222222222")
+					that.tip = "暂无更多";
 				}
 			}
 		},

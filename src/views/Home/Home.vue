@@ -15,7 +15,7 @@
 		<!-- 故事机开关 -->
 		<div class="devices-status">
 			<div class="devices-status-text">{{ isLine == 0 ? $t('m.off') : $t('m.open') }}</div>
-			<div class="devices-status-time" :class="deviceTime == 0 ? 'timeActive' : ''">
+			<div class="devices-status-time" v-if="deviceTime != 0 && isLine == 1">
 				<div>
 					<p>
 						<van-count-down :time="deviceTime" @finish="deviceTimeFinish()">
@@ -26,7 +26,7 @@
 							</template>
 						</van-count-down>
 					</p>
-					<p>{{ $t('m.timer') }}</p>
+					<p>{{ deviceTime == 0 ? $t('m.timer') : $t('m.timeroff') }}</p>
 				</div>
 			</div>
 			<!-- <div class="devices-status-btn" @click="devicesSwitch(0)">
@@ -116,7 +116,7 @@
 					<li @click="onConfirm()" :class="isLine == 0 ? '' : 'lineAcitve'">
 						<div class="devices-audio-else-text">
 							<div :class="this.$i18n.locale == 'en-US' ? 'enActive' : 'zhActive'">
-								<p>{{ $t('m.timer') }}</p>
+								<p>{{ deviceTime == 0 ? $t('m.timer') : $t('m.timeroff') }}</p>
 								<p :class="deviceTime == 0 ? '' : 'colorActice'" v-if="deviceTime != 0 && isLine == 1">
 									<van-count-down :time="deviceTime">
 										<template v-slot="timeData">
@@ -267,7 +267,6 @@ export default {
 			'loadingFlag',
 			'devName',
 			'isBubble',
-			'istimePopu',
 			'istimePopu',
 			'upflag'
 		]),

@@ -47,16 +47,18 @@ const mutations = {
 		state.devName = data;
 	},
 	setswitch(state, data) {
-		state.lampSwitch = data;
-		state.isLine = data;
-		state.audioInfo.song = null
-		state.audioInfo.cutSong = -1
-		state.audioInfo.play = -1
-		state.volume = 0
-		state.playMode = -1
-		state.earLight.on = 0
-		state.faceLight.on = 0
-		state.lookData = 0
+		// if (state.isLine == 0) {
+			state.lampSwitch = data;
+			state.isLine = data;
+			state.audioInfo.song = null
+			state.audioInfo.cutSong = -1
+			state.audioInfo.play = -1
+			state.volume = 0
+			state.playMode = -1
+			state.earLight.on = 0
+			state.faceLight.on = 0
+			state.lookData = 0
+		// }
 	},
 	setDeviceTimeFn(state, data) {
 		state.deviceTime = 0;
@@ -67,8 +69,8 @@ const mutations = {
 	setistimePopu(state, data) {
 		state.istimePopu = data;
 	},
-	isShareDevie(state,data){
-		state.isShare =data;
+	isShareDevie(state, data) {
+		state.isShare = data;
 	},
 	resultData(state, resData) {
 		let type = resData;
@@ -92,6 +94,7 @@ const mutations = {
 				break;
 			case 'Music':
 				if (state.isLine == 1) {
+					// let regex = /[!.、_ 0-9]/g;
 					state.audioInfo.song = resData.data.song;
 					state.audioInfo.cutSong = resData.data.cutSong;
 					state.audioInfo.play = resData.data.play;
@@ -130,10 +133,12 @@ const mutations = {
 			var tmp = Date.parse(new Date()).toString();
 			tmp = parseInt(tmp.substr(0, 10));
 			if (tmp < data.timestamp) {
+				console.log("timestamp1111111111111")
 				let t = 28800000;
 				let m = (data.timestamp - tmp) * 1000;
 				state.deviceTime = m - t;
 			} else {
+				console.log("timestamp2222222222222")
 				state.deviceTime = 0;
 			}
 			state.lookData = data.babylock;
@@ -148,7 +153,7 @@ const mutations = {
 		}
 		let action = customData.action;
 		state.loadingFlag = true;
-		console.log("action=======",action)
+		console.log("action=======", action)
 		switch (action) {
 			case 910:
 				state.playMode = customData.playmode;
@@ -175,9 +180,11 @@ const mutations = {
 				let array = state.localSongList.songs
 				state.localSongList.songs = array.concat(customData.songs);
 				state.localSongList.channel = customData.channel;
-				state.localSongList.total = customData.total;
 				state.localTotal = customData.total;
 				state.limitNumber = Math.ceil(customData.total / 4);
+				console.log("customData.total==========",customData.total)
+				console.log("state.limitNumber==========",state.limitNumber)
+				state.localSongList.total = customData.total;
 				break;
 			case 642:
 				console.log(" customData.albumid", customData.albumid)
@@ -213,8 +220,8 @@ const mutations = {
 
 				break;
 			case 204:
-				
-				break;	
+
+				break;
 			case 424:
 				if (customData.ret == 0) {
 					this.$toast({

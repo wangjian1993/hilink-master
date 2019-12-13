@@ -168,13 +168,27 @@ export default {
 				dataStr = dataStr.replace(/\n/g, '');
 				json = JSON.parse(dataStr);
 			}
-			let deviceid = localStorage.getItem('deviceid');
-			console.log("json==============",json)
-			if (deviceid == json.devId) {
-				commit("setisDeviceid", false);
+			let deviceid = localStorage.getItem(json.devId);
+			let userName = localStorage.getItem('iphone');
+			console.log("json==============", json)
+			console.log("userName=======", userName)
+			if (userName) {
+				console.log("1111111111111111111111111")
+				//相同手机
+				if (deviceid == json.devId) {
+					console.log("3333333333333333333333333")
+					commit("setisDeviceid", false);
+				} else {
+					console.log("4444444444444444444444444")
+					commit("setisDeviceid", true);
+					localStorage.setItem(json.devId, json.devId);
+				}
 			} else {
+				console.log("2222222222222222222222222")
+				//不同手机
 				commit("setisDeviceid", true);
-				localStorage.setItem("deviceid", json.devId);
+				localStorage.setItem(json.devId, json.devId);
+				localStorage.setItem("iphone", true);
 			}
 			commit("setDevName", json.devName);
 			json.services.forEach(function(item, index) {
@@ -219,10 +233,10 @@ export default {
 		}
 
 		window.shareCallback = res => {
-			console.log("判断设备分享=======",res)
-			if(res == 0){
+			console.log("判断设备分享=======", res)
+			if (res == 0) {
 				commit("isShareDevie", true);
-			}else {
+			} else {
 				commit("isShareDevie", false);
 			}
 		}

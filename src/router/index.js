@@ -37,15 +37,6 @@ export default new Router({
 			}
 		},
 		{ //启蒙英语
-			path: '/locallistEn',
-			name: 'locallisEn',
-			component: () => import( /* webpackChunkName: "locallisEn" */ '@/views/Content/LocalListEn.vue'),
-			meta: {
-				title: "我的收藏",
-				keepAlive: false,
-			}
-		},
-		{ //启蒙英语
 			path: '/localfile',
 			name: 'localfile',
 			component: () => import( /* webpackChunkName: "localfile" */ '@/views/Content/LocalFile.vue'),

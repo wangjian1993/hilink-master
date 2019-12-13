@@ -8,7 +8,7 @@
 					<van-icon name="arrow-down" class="arrowDown" />
 				</div>
 				<div>
-					<div class="cell" v-for="(item, index) in dataList" :key="index" @click="goDetail(item.id)">
+					<div class="cell" v-for="(item, index) in dataList" :key="index" @click="goDetail(item.id)" v-if="item.musicCount != 0">
 						<div class="cellImgBox"><img :src="item.coverpath" class="cellImg" /></div>
 						<div>
 							<div class="cellName van-ellipsis">{{ item.name }}</div>
@@ -23,7 +23,7 @@
 					<van-icon name="arrow-down" class="arrowDown" />
 				</div>
 				<div>
-					<div class="cell" v-for="(item, index) in dataList" :key="index" @click="goDetail(item.id)">
+					<div class="cell" v-for="(item, index) in dataList" :key="index" @click="goDetail(item.id)" v-if="item.musicCount != 0">
 						<div class="cellImgBox"><img :src="item.coverpath" class="cellImg" /></div>
 						<div>
 							<div class="cellName">{{ item.name }}</div>
@@ -32,8 +32,8 @@
 					</div>
 				</div>
 			</van-tab>
+			<p class="PageBottom" v-show="isShowNoMore">暂无更多</p>
 		</van-tabs>
-		<p class="PageBottom" v-show="isShowNoMore">暂无更多</p>
 		<div class="loadingding center" v-show="isLoaded"><van-loading size="30px" color="#007DFF" vertical>加载中</van-loading></div>
 	</div>
 </template>
@@ -141,7 +141,7 @@ export default {
 <style lang="less" scoped>
 @import url('../../assets/css/cloud/common.less');
 @import url('../../assets/css/cloud/listen.less');
-.container {
-	margin-bottom: 130px;
+.tabs{
+	margin-bottom: 40px;
 }
 </style>
