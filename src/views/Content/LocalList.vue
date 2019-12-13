@@ -42,6 +42,7 @@ export default {
 			isMore: true,
 			isNull: false,
 			isBottom: false,
+			
 			// tip: '点击加载更多...',
 			sumPage: 0,
 			ifDefeated: false
@@ -82,7 +83,7 @@ export default {
 					}
 					self.beginNumber = self.beginNumber + 1;
 				}
-				if (data.errcode == 408 || data.errcode == -41) {
+				if (data.errcode == 408 || data.errcode == -41 || data.errcode == -1) {
 					self.loading = true;
 					self.$store.dispatch('locaTipActions', '网络忙,点击重新加载');
 					// self.isClickBtn = false;
@@ -129,7 +130,7 @@ export default {
 			// if (type == 0) {
 			// 	self.loading = false;
 			// }
-			if (self.beginNumber >= self.limitNumber) {
+			if (self.beginNumber >= self.limitNumber && !self.ifDefeated) {
 				console.log('没有了000000000000000000===================');
 				self.cangetlocal = true;
 				// self.tip = '暂无更多';
@@ -211,6 +212,7 @@ export default {
 		}, 400),
 		listMore() {
 			let that = this;
+			console.log("that.ifDefeated",that.ifDefeated)
 			if (that.ifDefeated) {
 				that.getLocalSong(0);
 				return;
