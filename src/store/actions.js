@@ -58,6 +58,16 @@ export default {
 	}, data) {
 		commit("setisDeviceid", data);
 	},
+	defeatedActions({
+		commit
+	}, data) {
+		commit("defeatedMutation", data);
+	},
+	locaTipActions({
+		commit
+	}, data) {
+		commit("locaTipMutation", data)
+	},
 	deviceSwitch({
 		commit
 	}, data) {
@@ -67,6 +77,16 @@ export default {
 		commit
 	}, data) {
 		commit("setistimePopu", data)
+	},
+	locaFlagActions({
+		commit
+	}, data) {
+		commit("locaFlagMutation", data)
+	},
+	isClickBtnActions({
+		commit
+	}, data) {
+		commit("isClickBtnMutation", data)
 	},
 	//获取设备信息
 	getDevCacheAll() {
@@ -173,18 +193,14 @@ export default {
 			console.log("json==============", json)
 			console.log("userName=======", userName)
 			if (userName) {
-				console.log("1111111111111111111111111")
 				//相同手机
 				if (deviceid == json.devId) {
-					console.log("3333333333333333333333333")
 					commit("setisDeviceid", false);
 				} else {
-					console.log("4444444444444444444444444")
 					commit("setisDeviceid", true);
 					localStorage.setItem(json.devId, json.devId);
 				}
 			} else {
-				console.log("2222222222222222222222222")
 				//不同手机
 				commit("setisDeviceid", true);
 				localStorage.setItem(json.devId, json.devId);
@@ -226,7 +242,7 @@ export default {
 		}
 		window.getDeviceInfoData = (res) => {
 			let json = JSON.parse(res);
-			console.log("发送消息res", res)
+			console.log("发送消息res===", res)
 			if (res.errcode != 0) {
 				commit(types.LOADINGFLAG, true);
 			}

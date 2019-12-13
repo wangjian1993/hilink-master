@@ -44,6 +44,7 @@ export default {
 			this.$router.push({ name: 'locallist', params: { id: item.cid, name: item.name } });
 			this.$store.dispatch('setLocalCid', item.cid);
 			this.$store.dispatch('putLocalList', data);
+			this.$store.dispatch("locaFlagActions",false)
 		},
 		fileName(name){
 			console.log("name======",name)
@@ -63,6 +64,7 @@ export default {
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json } };
 			self.setDeviceInfo(data);
+			console.log("重新获取本地列表========")
 			self.loading = true;
 		}
 	},

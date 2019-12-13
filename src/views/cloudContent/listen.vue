@@ -59,7 +59,6 @@ export default {
 	},
 	activated() {
 		//获取页面数据
-		console.log('hahahh11111111');
 		this.isLoaded = true;
 		var type = this.tabTitle == 0 ? 1 : 2;
 		this.isShowNoMore = false;
@@ -80,7 +79,11 @@ export default {
 			var scrollTop = document.documentElement.scrollTop || document.body.scrollTop; //变量windowHeight是可视区的高度
 			var windowHeight = document.documentElement.clientHeight || document.body.clientHeight; //变量scrollHeight是滚动条的总高度
 			var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight; //滚动条到底部的条件
-			if (scrollTop + windowHeight == scrollHeight) {
+			console.log("加载更多============================");
+			console.log("scrollTop===",scrollTop)
+			console.log("windowHeight===",windowHeight)
+			console.log("scrollHeight===",scrollHeight)
+			if (scrollTop + windowHeight >= scrollHeight) {
 				if (that.dataList.length >= that.total) {
 					console.log("没有了==================")
 					that.isShowNoMore = true;

@@ -12,11 +12,11 @@
 			<img src="../../assets/images/img_toutu_red.png" alt />
 			<img src="../../assets/images/logo.png" alt />
 		</div>
-		<!-- 故事机开关 -->
+		<!-- 故事机开关 --> 
 		<div class="devices-status">
 			<div class="devices-status-text">{{ isLine == 0 ? $t('m.off') : $t('m.open') }}</div>
-			<div class="devices-status-time" v-if="deviceTime != 0 && isLine == 1">
-				<div>
+			<div class="devices-status-time">
+				<div v-show="deviceTime != 0 && isLine == 1">
 					<p>
 						<van-count-down :time="deviceTime" @finish="deviceTimeFinish()">
 							<template v-slot="timeData">
@@ -29,9 +29,9 @@
 					<p>{{ deviceTime == 0 ? $t('m.timer') : $t('m.timeroff') }}</p>
 				</div>
 			</div>
-			<!-- <div class="devices-status-btn" @click="devicesSwitch(0)">
+			<div class="devices-status-btn" @click="devicesSwitch(0)">
 				<p :class="isLine == 1 ? 'switchAcitve' : ''"><img :src="switchIcon()" alt /></p>
-			</div> -->
+			</div>
 		</div>
 		<div class="devices-audio" style="background: #F7F7F7;">
 			<!-- 歌曲控制 -->
@@ -646,7 +646,8 @@ export default {
 				songs: []
 			};
 			this.$store.dispatch('putLocalList', data);
-			console.log('self.loveCid', self.loveCid);
+			this.$store.dispatch('setLocalCid', self.loveCid);
+			this.$store.dispatch("locaFlagActions",false)
 			self.$router.push({
 				name: 'locallist',
 				params: { id: self.loveCid, name: '我的收藏' }

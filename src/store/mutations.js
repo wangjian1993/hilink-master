@@ -66,11 +66,24 @@ const mutations = {
 	setisDeviceid(state, data) {
 		state.isBubble = data;
 	},
+	defeatedMutation(state, data){
+		state.ifDefeated = data;
+	},
 	setistimePopu(state, data) {
 		state.istimePopu = data;
 	},
+	locaTipMutation(state, data){
+		state.locaTip = data;
+	},
 	isShareDevie(state, data) {
 		state.isShare = data;
+	},
+	locaFlagMutation(state, data){
+		state.locaFlag = data;
+	},
+	isClickBtnMutation(state, data){
+		console.log("弹窗=======",data)
+		state.isClickBtn = data;
 	},
 	resultData(state, resData) {
 		let type = resData;
@@ -177,14 +190,24 @@ const mutations = {
 					channel: -1,
 					songs: []
 				};
-				let array = state.localSongList.songs
+				let array = state.localSongList.songs;
+				if(state.songsCid != customData.channel){
+					return;
+				}
+				console.log("本地列表数据=====",customData.songs)
 				state.localSongList.songs = array.concat(customData.songs);
 				state.localSongList.channel = customData.channel;
 				state.localTotal = customData.total;
 				state.limitNumber = Math.ceil(customData.total / 4);
-				console.log("customData.total==========",customData.total)
-				console.log("state.limitNumber==========",state.limitNumber)
+				console.log("customData.total==========",customData.total);
+				console.log("state.limitNumber==========",state.limitNumber);
+				console.log("songsCid==========",state.songsCid);
 				state.localSongList.total = customData.total;
+				state.ifDefeated =false;
+				state.locaFlag =true;
+				state.locaTip ="点击加载更多";
+				state.isClickBtn =false;
+				console.log("state.locaFlag",state.locaFlag)
 				break;
 			case 642:
 				console.log(" customData.albumid", customData.albumid)

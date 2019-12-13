@@ -57,6 +57,10 @@ const state = {
 	upDate: false,
 	isShare:false,
 	limitNumber: 0,
+	locaFlag:false,
+	ifDefeated:false,
+	locaTip:"加载中...",
+	isClickBtn:false
 };
 
 export default state;
