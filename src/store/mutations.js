@@ -48,16 +48,16 @@ const mutations = {
 	},
 	setswitch(state, data) {
 		// if (state.isLine == 0) {
-			state.lampSwitch = data;
-			state.isLine = data;
-			state.audioInfo.song = null
-			state.audioInfo.cutSong = -1
-			state.audioInfo.play = -1
-			state.volume = 0
-			state.playMode = -1
-			state.earLight.on = 0
-			state.faceLight.on = 0
-			state.lookData = 0
+		state.lampSwitch = data;
+		state.isLine = data;
+		state.audioInfo.song = null
+		state.audioInfo.cutSong = -1
+		state.audioInfo.play = -1
+		state.volume = 0
+		state.playMode = -1
+		state.earLight.on = 0
+		state.faceLight.on = 0
+		state.lookData = 0
 		// }
 	},
 	setDeviceTimeFn(state, data) {
@@ -66,27 +66,27 @@ const mutations = {
 	setisDeviceid(state, data) {
 		state.isBubble = data;
 	},
-	defeatedMutation(state, data){
+	defeatedMutation(state, data) {
 		state.ifDefeated = data;
 	},
 	setistimePopu(state, data) {
 		state.istimePopu = data;
 	},
-	locaTipMutation(state, data){
+	locaTipMutation(state, data) {
 		state.locaTip = data;
 	},
 	isShareDevie(state, data) {
 		state.isShare = data;
 	},
-	locaFlagMutation(state, data){
+	locaFlagMutation(state, data) {
 		state.locaFlag = data;
 	},
-	isClickBtnMutation(state, data){
+	isClickBtnMutation(state, data) {
 		state.isClickBtn = data;
 	},
-	loadingImgMutation(state, data){
+	loadingImgMutation(state, data) {
 		state.loadingImg = data;
-		console.log("state.loadingImg",state.loadingImg)
+		console.log("state.loadingImg", state.loadingImg)
 	},
 	resultData(state, resData) {
 		let type = resData;
@@ -194,24 +194,26 @@ const mutations = {
 					songs: []
 				};
 				let array = state.localSongList.songs;
-				if(state.songsCid != customData.channel){
+				if (state.songsCid != customData.channel) {
 					return;
 				}
-				console.log("本地列表数据=====",customData.songs)
-				state.localSongList.songs = array.concat(customData.songs);
+				// state.localSongList.songs = array.concat(customData.songs);
+				let list = array.concat(customData.songs);
+				const res = new Map();
+				let songList = list.filter((list) => !res.has(list.name) && res.set(list.name, 1));
+				state.localSongList.songs = songList;
 				state.localSongList.channel = customData.channel;
 				state.localTotal = customData.total;
 				state.limitNumber = Math.ceil(customData.total / 4);
-				console.log("customData.total==========",customData.total);
-				console.log("state.limitNumber==========",state.limitNumber);
-				console.log("songsCid==========",state.songsCid);
+				console.log("customData.total==========", customData.total);
+				console.log("state.limitNumber==========", state.limitNumber);
+				console.log("songsCid==========", state.songsCid);
 				state.localSongList.total = customData.total;
-				state.ifDefeated =false;
-				state.locaFlag =true;
-				state.loadingImg =false;
-				state.locaTip ="点击加载更多";
-				state.isClickBtn =false;
-				console.log("state.locaFlag",state.locaFlag)
+				state.ifDefeated = false;
+				state.locaFlag = true;
+				state.loadingImg = false;
+				state.locaTip = "点击加载更多"; 
+				state.isClickBtn = false;
 				break;
 			case 642:
 				console.log(" customData.albumid", customData.albumid)
