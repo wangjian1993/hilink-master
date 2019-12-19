@@ -12,7 +12,7 @@
 			<img src="../../assets/images/img_toutu_red.png" alt />
 			<img src="../../assets/images/logo.png" alt />
 		</div>
-		<!-- 故事机开关 --> 
+		<!-- 故事机开关 -->
 		<div class="devices-status">
 			<div class="devices-status-text">{{ isLine == 0 ? $t('m.off') : $t('m.open') }}</div>
 			<div class="devices-status-time">
@@ -429,8 +429,21 @@ export default {
 							});
 							return;
 						} else {
-							on = self.lampSwitch.on == 1 ? 0 : 0;
-							data = { switch: { on: on } };
+							self.$dialog
+								.confirm({
+									title: this.$t('m.offMsg'),
+									message: this.$t('m.offMsgText')
+								})
+								.then(() => {
+									on = self.lampSwitch.on == 1 ? 0 : 0;
+									data = { switch: { on: on } };
+									let logdate = self.logTime();
+									self.$store.dispatch('setDevInfo', data);
+									self.$store.dispatch('setLoadingFlag', false);
+								})
+								.catch(() => {
+									return;
+								});
 						}
 						break;
 					case 1:
@@ -647,8 +660,8 @@ export default {
 			};
 			this.$store.dispatch('putLocalList', data);
 			this.$store.dispatch('setLocalCid', self.loveCid);
-			this.$store.dispatch("locaFlagActions",false);
-			this.$store.dispatch("loadingImgActions",true);
+			this.$store.dispatch('locaFlagActions', false);
+			this.$store.dispatch('loadingImgActions', true);
 			self.$router.push({
 				name: 'locallist',
 				params: { id: self.loveCid, name: '我的收藏' }

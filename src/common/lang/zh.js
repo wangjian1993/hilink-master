@@ -1,6 +1,8 @@
 export const m = {
   // switchOpen: '已开启', //网易云音乐
 	HomeTitel:'火火兔故事机',
+	offMsg:'确认关机吗?',
+	offMsgText:'下次开机需要来回旋转一次火火兔尾巴',
 	on:'已启用',
 	open:'已开启',
 	off:'已关闭',
