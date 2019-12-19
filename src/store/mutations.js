@@ -238,7 +238,7 @@ const mutations = {
 				state.playMode = customData.playmode;
 				state.musicData = customData;
 				state.upflag = customData.upflag;
-				console.log("customData.upflag================", customData.upflag)
+				console.log("customData================", customData)
 				if (state.upflag != 0 && state.upflag != undefined && state.upflag != 1) {
 					state.upDate = true;
 				} else {

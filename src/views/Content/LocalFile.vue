@@ -5,8 +5,9 @@
 			<div class="loading-box"></div>
 			<div class="file-box">
 				<van-cell v-for="(item, index) in localList.channels" v-if="item.name != '我的收藏'" :title="fileName(item.name)" is-link @click="localClick(item)" />
-			</div>
+			</div>		
 		</div>
+		<!-- <div class="fileMsg"><p>"本地内容"和"我的收藏"数据存储在故事机中,故事机空间大约可以存储2000首歌.</p></div> -->
 	</div>
 </template>
 <script>
@@ -108,5 +109,12 @@ export default {
 			}
 		}
 	}
+}
+.fileMsg{
+	width: 92%;
+	margin: 10px auto;
+	font-size: 12px;
+	color: #000000;
+	opacity: .38;
 }
 </style>

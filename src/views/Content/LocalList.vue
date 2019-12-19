@@ -339,6 +339,10 @@ export default {
 			height: 100%;
 			&:nth-of-type(2) {
 				margin-left: 5px;
+				img {
+					width: 28px;
+					height: 28px;
+				}
 			}
 			img {
 				width: 28px;

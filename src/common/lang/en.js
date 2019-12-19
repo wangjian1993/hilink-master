@@ -1,5 +1,7 @@
 export const m = {
 	HomeTitel:'Alilo story machine',
+	offMsg:"Are you sure it's turned off?",
+	offMsgText:'The next boot requires a back and forth rotation of the Alilo tail',
 	on:'On',
 	open:'On',
 	off:'Off',

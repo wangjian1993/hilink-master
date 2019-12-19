@@ -20,8 +20,11 @@
 				<div v-for="(item, index) in musicList" :key="index">
 					<div v-bind:class="[active == index ? 'active' : '', 'musicList']">
 						<div class="left" @click="show(index)">
-							<p class="inroName">{{ nameRegex(item.name) }}</p>
-							<p class="inroName">{{ item.timelength }}</p>
+							<p class="inroName" :class="item.id == musicData.songid || item.name == musicData.song ? 'textActive' : ''">{{ nameRegex(item.name) }}</p>
+							<p class="inroName" :class="item.id == musicData.songid || item.name == musicData.song ? 'textActive' : ''">{{ item.timelength }}</p>
+						</div>
+						<div class="gitActive" v-if="item.id == musicData.songid || item.name == musicData.song">
+							<span><img src="../../assets/images/gif.gif" alt="" /></span>
 						</div>
 						<div class="right" @click="devicesMusic(1, item, index)" v-if="isLine == 1">
 							<img src="../../assets/images/icon_demand.png" />
@@ -76,7 +79,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapState(['isLine'])
+		...mapState(['isLine','musicData'])
 	},
 	created() {},
 	async mounted() {
