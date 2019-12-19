@@ -5,8 +5,9 @@
 			<div class="loading-box"></div>
 			<div class="file-box">
 				<van-cell v-for="(item, index) in localList.channels" v-if="item.name != '我的收藏'" :title="fileName(item.name)" is-link @click="localClick(item)" />
-			</div>
+			</div>		
 		</div>
+		<div><p>"本地内容"和"我的收藏"数据存储在故事机中,故事机空间大约可以存储2000首歌.</p></div>
 	</div>
 </template>
 <script>
@@ -44,6 +45,8 @@ export default {
 			this.$router.push({ name: 'locallist', params: { id: item.cid, name: item.name } });
 			this.$store.dispatch('setLocalCid', item.cid);
 			this.$store.dispatch('putLocalList', data);
+			this.$store.dispatch("locaFlagActions",false);
+			this.$store.dispatch("loadingImgActions",true);
 		},
 		fileName(name){
 			console.log("name======",name)
@@ -63,6 +66,7 @@ export default {
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json } };
 			self.setDeviceInfo(data);
+			console.log("重新获取本地列表========")
 			self.loading = true;
 		}
 	},

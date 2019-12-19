@@ -20,7 +20,7 @@
 				<div v-for="(item, index) in musicList" :key="index">
 					<div v-bind:class="[active == index ? 'active' : '', 'musicList']">
 						<div class="left" @click="show(index)">
-							<p class="inroName">{{ item.name }}</p>
+							<p class="inroName">{{ nameRegex(item.name) }}</p>
 							<p class="inroName">{{ item.timelength }}</p>
 						</div>
 						<div class="right" @click="devicesMusic(1, item, index)" v-if="isLine == 1">
@@ -43,7 +43,7 @@
 							<img src="../../assets/images/sc.png" />
 							<p>收藏</p>
 						</div>
-						<div class="playCell" @click="devicesMusic(3, item)" :class="item.copyrightId == 0?'isDown':''">
+						<div class="playCell" @click="devicesMusic(3, item)" :class="item.copyrightId == 0 ? 'isDown' : ''">
 							<img src="../../assets/images/icon_download_1.png" />
 							<p>下载</p>
 						</div>
@@ -119,6 +119,10 @@ export default {
 	},
 	methods: {
 		//播放音乐
+		nameRegex(name) {
+			let regex = /[!.、_ 0-9]/g;
+			return name.replace(regex, '');
+		},
 		play(src, index) {
 			if (src == this.src) {
 				if (this.audio.paused) {
@@ -210,6 +214,12 @@ export default {
 							}
 						]
 					};
+					self.$toast({
+						message: '歌曲点播成功',
+						position: 'bottom',
+						duration: '3000',
+						className: 'toastActive'
+					});
 					break;
 				case 2:
 					body = {
@@ -232,8 +242,8 @@ export default {
 					});
 					break;
 				case 3:
-				console.log("item",item)
-					if(item.copyrightId == 0){
+					console.log('item', item);
+					if (item.copyrightId == 0) {
 						self.$toast({
 							message: '应版权方要求.暂无法下载',
 							position: 'bottom',
@@ -285,7 +295,7 @@ export default {
 <style lang="less" scoped>
 @import url('../../assets/css/cloud/common.less');
 @import url('../../assets/css/cloud/listenDetail.less');
-.isDown{
-	opacity: .3;
+.isDown {
+	opacity: 0.3;
 }
 </style>

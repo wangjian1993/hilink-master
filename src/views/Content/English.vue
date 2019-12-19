@@ -52,9 +52,9 @@
 								<img :src="item.coverpath" alt="" class="path-img" />
 								<img src="../../assets/images/xz.png" alt="" class="path-xz" v-if="item.id == albumid[2].album && !setCheck" />
 							</div>
-							<p>{{ item.name }}</p>					
+							<p>{{ item.name }}</p>
 							<div class="song-check" v-show="setCheck">
-								<input type="radio" :id="item.id" name="item3" :checked="item.id == albumid[2].album" :value="item.id"/>
+								<input type="radio" :id="item.id" name="item3" :checked="item.id == albumid[2].album" :value="item.id" />
 								<label :for="item.id"></label>
 							</div>
 						</li>
@@ -120,6 +120,7 @@ export default {
 			radioActive2: 0,
 			radioActive3: 0,
 			radioActive4: 0,
+			isClick: false,
 			title: this.$t('m.Learning')
 		};
 	},
@@ -145,7 +146,7 @@ export default {
 	created() {
 		this.getEnglishData();
 		this.devicesAction();
-		console.log("albumid========",this.albumid)
+		console.log('albumid========', this.albumid);
 	},
 	methods: {
 		radioCheck(id, type, index) {
@@ -166,8 +167,10 @@ export default {
 				default:
 					break;
 			}
+			console.log('id============', id);
 			self.musicList[type].album = id;
-			console.log("self.musicList===",self.musicList)
+			self.isClick = true;
+			console.log('self.musicList===', self.musicList);
 		},
 		//获取歌曲资源
 		getEnglishData() {
@@ -191,7 +194,8 @@ export default {
 		},
 		changeResult(id, index) {
 			let self = this;
-			console.log("self.musicList[index].album========",self.musicList[index].album)
+			console.log('self.musicList[index].album========', self.musicList[index].album);
+			self.isClick = true;
 			self.musicList[index].album = id;
 		},
 		//设置默认歌曲
@@ -200,18 +204,39 @@ export default {
 			self.setCheck = !self.setCheck;
 			// self.englishAcitve =[];
 			if (!self.setCheck) {
-				var body = {
-					from: 'DID:0',
-					to: 'UID:-1',
-					action: 637,
-					list: self.musicList
-				};
+				if (self.isClick) {
+					console.log('111111111111');
+					var body = {
+						from: 'DID:0',
+						to: 'UID:-1',
+						action: 637,
+						list: self.musicList
+					};
+				} else {
+					console.log('22222222222', self.albumid);
+					var body = {
+						from: 'DID:0',
+						to: 'UID:-1',
+						action: 637,
+						list: self.albumid
+					};
+				}
+				// var body = {
+				// 	from: 'DID:0',
+				// 	to: 'UID:-1',
+				// 	action: 637,
+				// 	list: self.musicList
+				// };
 				let json = JSON.stringify(body);
-				console.log(" self.musicList======", self.musicList)
 				let data = { custom: { function: json, name: 'function' } };
 				self.setDeviceSongsInfo(data, 'englishBack');
-				self.$store.dispatch('setEnglishData', self.musicList);
-				self.musicList = self.musicList;
+				if (self.isClick) {
+					self.$store.dispatch('setEnglishData', self.musicList);
+					self.musicList = self.musicList;
+				} else {
+					self.$store.dispatch('setEnglishData', self.albumid);
+					self.musicList = self.albumid;
+				}
 			}
 		},
 		cloudAlbum(id) {

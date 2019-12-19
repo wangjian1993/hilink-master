@@ -15,8 +15,8 @@
 		<!-- 故事机开关 -->
 		<div class="devices-status">
 			<div class="devices-status-text">{{ isLine == 0 ? $t('m.off') : $t('m.open') }}</div>
-			<div class="devices-status-time" :class="deviceTime == 0 ? 'timeActive' : ''">
-				<div>
+			<div class="devices-status-time">
+				<div v-show="deviceTime != 0 && isLine == 1">
 					<p>
 						<van-count-down :time="deviceTime" @finish="deviceTimeFinish()">
 							<template v-slot="timeData">
@@ -26,12 +26,12 @@
 							</template>
 						</van-count-down>
 					</p>
-					<p>{{ $t('m.timer') }}</p>
+					<p>{{ deviceTime == 0 ? $t('m.timer') : $t('m.timeroff') }}</p>
 				</div>
 			</div>
-			<!-- <div class="devices-status-btn" @click="devicesSwitch(0)">
+			<div class="devices-status-btn" @click="devicesSwitch(0)">
 				<p :class="isLine == 1 ? 'switchAcitve' : ''"><img :src="switchIcon()" alt /></p>
-			</div> -->
+			</div>
 		</div>
 		<div class="devices-audio" style="background: #F7F7F7;">
 			<!-- 歌曲控制 -->
@@ -116,7 +116,7 @@
 					<li @click="onConfirm()" :class="isLine == 0 ? '' : 'lineAcitve'">
 						<div class="devices-audio-else-text">
 							<div :class="this.$i18n.locale == 'en-US' ? 'enActive' : 'zhActive'">
-								<p>{{ $t('m.timer') }}</p>
+								<p>{{ deviceTime == 0 ? $t('m.timer') : $t('m.timeroff') }}</p>
 								<p :class="deviceTime == 0 ? '' : 'colorActice'" v-if="deviceTime != 0 && isLine == 1">
 									<van-count-down :time="deviceTime">
 										<template v-slot="timeData">
@@ -267,7 +267,6 @@ export default {
 			'loadingFlag',
 			'devName',
 			'isBubble',
-			'istimePopu',
 			'istimePopu',
 			'upflag'
 		]),
@@ -430,8 +429,21 @@ export default {
 							});
 							return;
 						} else {
-							on = self.lampSwitch.on == 1 ? 0 : 0;
-							data = { switch: { on: on } };
+							self.$dialog
+								.confirm({
+									title: this.$t('m.offMsg'),
+									message: this.$t('m.offMsgText')
+								})
+								.then(() => {
+									on = self.lampSwitch.on == 1 ? 0 : 0;
+									data = { switch: { on: on } };
+									let logdate = self.logTime();
+									self.$store.dispatch('setDevInfo', data);
+									self.$store.dispatch('setLoadingFlag', false);
+								})
+								.catch(() => {
+									return;
+								});
 						}
 						break;
 					case 1:
@@ -647,7 +659,9 @@ export default {
 				songs: []
 			};
 			this.$store.dispatch('putLocalList', data);
-			console.log('self.loveCid', self.loveCid);
+			this.$store.dispatch('setLocalCid', self.loveCid);
+			this.$store.dispatch('locaFlagActions', false);
+			this.$store.dispatch('loadingImgActions', true);
 			self.$router.push({
 				name: 'locallist',
 				params: { id: self.loveCid, name: '我的收藏' }

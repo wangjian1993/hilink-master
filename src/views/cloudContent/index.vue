@@ -64,7 +64,7 @@
 				</div>
 			</div> -->
 			<!--广告位-->
-			<div class="banner" @click="goVideoDetail(link)"><img class="content" :src="getVideoAdPath" /></div>
+			<!-- <div class="banner" @click="goVideoDetail(link)"><img class="content" :src="getVideoAdPath" /></div> -->
 			<!--性格养成 -->
 			<div class="part">
 				<div class="title">

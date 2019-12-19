@@ -50,6 +50,7 @@ const mutations = {
 		state.devName = data;
 	},
 	setswitch(state, data) {
+		// if (state.isLine == 0) {
 		state.lampSwitch = data;
 		state.isLine = data;
 		state.audioInfo.song = null
@@ -60,6 +61,7 @@ const mutations = {
 		state.earLight.on = 0
 		state.faceLight.on = 0
 		state.lookData = 0
+		// }
 	},
 	setDeviceTimeFn(state, data) {
 		state.deviceTime = 0;
@@ -67,11 +69,27 @@ const mutations = {
 	setisDeviceid(state, data) {
 		state.isBubble = data;
 	},
+	defeatedMutation(state, data) {
+		state.ifDefeated = data;
+	},
 	setistimePopu(state, data) {
 		state.istimePopu = data;
 	},
-	isShareDevie(state,data){
-		state.isShare =data;
+	locaTipMutation(state, data) {
+		state.locaTip = data;
+	},
+	isShareDevie(state, data) {
+		state.isShare = data;
+	},
+	locaFlagMutation(state, data) {
+		state.locaFlag = data;
+	},
+	isClickBtnMutation(state, data) {
+		state.isClickBtn = data;
+	},
+	loadingImgMutation(state, data) {
+		state.loadingImg = data;
+		console.log("state.loadingImg", state.loadingImg)
 	},
 	resultData(state, resData) {
 		let type = resData;
@@ -95,6 +113,7 @@ const mutations = {
 				break;
 			case 'Music':
 				if (state.isLine == 1) {
+					// let regex = /[!.、_ 0-9]/g;
 					state.audioInfo.song = resData.data.song;
 					state.audioInfo.cutSong = resData.data.cutSong;
 					state.audioInfo.play = resData.data.play;
@@ -133,10 +152,12 @@ const mutations = {
 			var tmp = Date.parse(new Date()).toString();
 			tmp = parseInt(tmp.substr(0, 10));
 			if (tmp < data.timestamp) {
+				console.log("timestamp1111111111111")
 				let t = 28800000;
 				let m = (data.timestamp - tmp) * 1000;
 				state.deviceTime = m - t;
 			} else {
+				console.log("timestamp2222222222222")
 				state.deviceTime = 0;
 			}
 			state.lookData = data.babylock;
@@ -151,7 +172,7 @@ const mutations = {
 		}
 		let action = customData.action;
 		state.loadingFlag = true;
-		console.log("action=======",action)
+		console.log("action=======", action)
 		switch (action) {
 			case 910:
 				state.playMode = customData.playmode;
@@ -175,12 +196,27 @@ const mutations = {
 					channel: -1,
 					songs: []
 				};
-				let array = state.localSongList.songs
-				state.localSongList.songs = array.concat(customData.songs);
+				let array = state.localSongList.songs;
+				if (state.songsCid != customData.channel) {
+					return;
+				}
+				// state.localSongList.songs = array.concat(customData.songs);
+				let list = array.concat(customData.songs);
+				const res = new Map();
+				let songList = list.filter((list) => !res.has(list.name) && res.set(list.name, 1));
+				state.localSongList.songs = songList;
 				state.localSongList.channel = customData.channel;
-				state.localSongList.total = customData.total;
 				state.localTotal = customData.total;
-				state.limitNumber = Math.ceil(customData.total / 6);
+				state.limitNumber = Math.ceil(customData.total / 4);
+				console.log("customData.total==========", customData.total);
+				console.log("state.limitNumber==========", state.limitNumber);
+				console.log("songsCid==========", state.songsCid);
+				state.localSongList.total = customData.total;
+				state.ifDefeated = false;
+				state.locaFlag = true;
+				state.loadingImg = false;
+				state.locaTip = "点击加载更多"; 
+				state.isClickBtn = false;
 				break;
 			case 642:
 				console.log(" customData.albumid", customData.albumid)
@@ -216,8 +252,8 @@ const mutations = {
 
 				break;
 			case 204:
-				
-				break;	
+
+				break;
 			case 424:
 				if (customData.ret == 0) {
 					this.$toast({

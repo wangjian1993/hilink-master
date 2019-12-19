@@ -51,7 +51,7 @@ export default {
 			let self = this;
 			if (self.isLine == 0) {
 				self.$toast({
-					message: '请旋转火火兔的尾巴开机',
+					message: '若上次是通过app关机，则需要来回旋转一次火火兔尾巴开机',
 					position: 'bottom',
 					duration: '3000',
 					className: 'toastActive'
