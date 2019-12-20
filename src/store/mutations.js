@@ -145,6 +145,7 @@ const mutations = {
 		}
 	},
 	getDeviceResult(state, data) {
+		console.log("get获取数据====",data)
 		if (data.action == 104) {
 			var tmp = Date.parse(new Date()).toString();
 			tmp = parseInt(tmp.substr(0, 10));
@@ -252,14 +253,14 @@ const mutations = {
 
 				break;
 			case 424:
-				if (customData.ret == 0) {
-					this.$toast({
-						message: '歌曲点播成功',
-						position: 'bottom',
-						duration: '3000',
-						className: 'toastActive'
-					});
-				}
+				// if (customData.ret == 0) {
+				// 	this.$toast({
+				// 		message: '歌曲点播成功',
+				// 		position: 'bottom',
+				// 		duration: '3000',
+				// 		className: 'toastActive'
+				// 	});
+				// }
 				break;
 			case 632:
 				// state.istimePopu =true;

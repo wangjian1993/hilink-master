@@ -7,8 +7,16 @@
 			<div class="local-list" v-if="loading">
 				<ul>
 					<li v-for="(opt, index) in localSongList.songs">
-						<p @click="localSongPut(index)" :class="cid == musicData.channel && index == musicData.idx ? 'textActive' : ''">{{ opt.name }}</p>
-						<span><img v-if="cid == musicData.channel && index == musicData.idx ? 'textActive' : ''" src="../../assets/images/gif.gif" alt="" /></span>
+						<p @click="localSongPut(index)" :class="cid == musicData.channel && index == musicData.idx && opt.name == musicData.song ? 'textActive' : ''">
+							{{ opt.name }}
+						</p>
+						<span>
+							<img
+								v-if="cid == musicData.channel && index == musicData.idx && opt.name == musicData.song ? 'textActive' : ''"
+								src="../../assets/images/gif.gif"
+								alt=""
+							/>
+						</span>
 						<span @click="songDel(opt, index)"><img src="../../assets/images/delete.png" alt="" /></span>
 					</li>
 					<p class="moreBtn" @click="listMore()" v-if="locaFlag">{{ locaTip }}</p>
@@ -42,17 +50,18 @@ export default {
 			isMore: true,
 			isNull: false,
 			isBottom: false,
-			
+
 			// tip: '点击加载更多...',
 			sumPage: 0,
 			ifDefeated: false
 		};
 	},
 	computed: {
-		...mapState(['localSongList', 'localTotal', 'musicData', 'loadingFlag', 'limitNumber', 'locaFlag', 'locaTip', 'isClickBtn','loadingImg'])
+		...mapState(['localSongList', 'localTotal', 'musicData', 'loadingFlag', 'limitNumber', 'locaFlag', 'locaTip', 'isClickBtn', 'loadingImg'])
 	},
 	created() {
 		this.$store.dispatch('isClickBtnActions', false);
+		// this.$store.dispatch('getDeviceAll');
 		this.cid = this.$route.params.id;
 		this.cname = this.$route.params.name;
 		if (this.$route.params.name == '我的收藏') {
@@ -98,12 +107,14 @@ export default {
 					let list = self.localSongList.songs;
 					if (self.delIndex < self.musicData.idx) {
 						self.musicData.idx = self.musicData.idx - 1;
+						console.log('self.musicData.idx', self.musicData.idx);
 					}
 					self.delPage = self.delPage + 1;
 					list.splice(self.delIndex, 1);
 					if (list.length == 0) {
 						self.beginNumber = 0;
 					}
+					// self.$store.dispatch('getDeviceAll');
 				}
 			};
 		}
@@ -120,7 +131,7 @@ export default {
 				channel: self.cid,
 				offset: 0
 			};
-			console.log("body=========",body);
+			console.log('body=========', body);
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json, name: 'function' } };
 			self.setDeviceSongsInfo(data, 'songsListBack');
@@ -212,7 +223,7 @@ export default {
 		}, 400),
 		listMore() {
 			let that = this;
-			console.log("that.ifDefeated",that.ifDefeated)
+			console.log('that.ifDefeated', that.ifDefeated);
 			if (that.ifDefeated) {
 				that.getLocalSong(0);
 				return;
