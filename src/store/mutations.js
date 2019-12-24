@@ -25,6 +25,9 @@ const mutations = {
 		// 	state.localSongList = data;
 		// }
 	},
+	[types.SET_PLAY_HISTORY](state, history) {
+	    state.playHistory = history
+	},
 	[types.SET_MUSICDATA](state, data) {
 		state.musicData = data;
 	},

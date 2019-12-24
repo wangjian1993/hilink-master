@@ -75,8 +75,8 @@ export default new Router({
 		//火火兔云内容搜索页
 		{
 			path: '/cloudContent/search',
-			name: 'cloudSearch',
-			component: () => import('@/views/cloudContent/search.vue'),
+			name: 'search',
+			component: () => import('@/views/cloud/search.vue'),
 			meta: {
 				title: "搜索",
 				keepAlive: true,
@@ -104,7 +104,15 @@ export default new Router({
 		{
 			path: '/cloudContent/allDown',
 			name: 'cloudAllDown',
-			component: () => import( /* webpackChunkName: "cloudListenDetail" */ '@/views/cloudContent/allDown.vue'),
+			component: () => import( /* webpackChunkName: "cloudListenDetail" */ '@/views/cloud/allDown.vue'),
+			meta: {
+				keepAlive: false,
+			}
+		},
+		{
+			path: '/cloudContent/allEnshrine',
+			name: 'cloudAllEnshrine',
+			component: () => import( /* webpackChunkName: "cloudListenDetail" */ '@/views/cloud/allEnshrine.vue'),
 			meta: {
 				keepAlive: false,
 			}
@@ -136,6 +144,72 @@ export default new Router({
 			meta: {
 				title: "视频推荐",
 				keepAlive: false
+			}
+		},
+		{
+			path: '/cloudContent/home',
+			name: 'cloudHome',
+			component: () => import('@/views/cloud/home.vue'),
+			meta: {
+				title: "火火兔早教",
+				keepAlive: true
+			}
+		},
+		{
+			path: "/cloudContent/albumList",
+			name: 'albumList',
+			component: () => import('@/views/cloud/albumList.vue'),
+			meta: {
+				title: "专辑列表"
+			}
+		},
+		{
+			path: "/cloudContent/ssec",
+			name: "ssec",
+			component: () => import('@/views/cloud/ssec.vue'),
+			meta: {
+				title: "听讲赏学"
+			}
+		},
+		{
+			path: "/cloudContent/albumDetail",
+			name: 'albumDetail',
+			component: () => import('@/views/cloud/albumDetail.vue'),
+			meta: {
+				title: "专辑详情"
+			}
+		},
+		{
+			path: "/cloudContent/rank",
+			name: 'rank',
+			component: () => import('@/views/cloud/rank.vue'),
+			meta: {
+				title: "排行榜",
+				keepAlive: true
+			}
+		},
+		{
+			path: "/cloudContent/differentAge",
+			name: 'differentAge',
+			component: () => import('@/views/cloud/differentAge.vue'),
+			meta: {
+				title: "分龄推荐"
+			}
+		},
+		{
+			path: "/cloudContent/video",
+			name: "video",
+			component: () => import('@/views/cloud/video.vue'),
+			meta: {
+				title: "视频"
+			}
+		},
+		{
+			path: "/cloudContent/history",
+			name: "history",
+			component: () => import('@/views/cloud/history.vue'),
+			meta: {
+				title: "历史记录"
 			}
 		},
 	]

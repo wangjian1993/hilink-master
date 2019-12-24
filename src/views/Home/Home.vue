@@ -682,7 +682,7 @@ export default {
 				return;
 			}
 			if (type == 0) {
-				url = 'cloudIndex'; //火火兔内容云
+				url = 'cloudHome'; //火火兔内容云
 			} else if (type == 1) {
 				url = 'english'; //启蒙英语
 			} else if (type == 2) {

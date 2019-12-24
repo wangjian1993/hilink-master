@@ -1,6 +1,6 @@
 <template>
 	<div class="app">
-		<music-list :items="playHistory"></music-list>
+		<music-list :items="playHistory" :isHistory="true"></music-list>
 	</div>
 </template>
 <script>

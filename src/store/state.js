@@ -1,3 +1,4 @@
+import {loadPlay} from '../assets/js/cache.js'
 const state = {
 	devicesInfo: [], //设备信息
 	timePopup: false,
@@ -61,7 +62,9 @@ const state = {
 	ifDefeated:false,
 	locaTip:"加载中...",
 	isClickBtn:false,
-	loadingImg:true
+	loadingImg:true,
+	historyList:[],
+	playHistory: loadPlay(), // 播放历史
 };
 
 export default state;

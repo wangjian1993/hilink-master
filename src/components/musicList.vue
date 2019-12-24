@@ -1,5 +1,6 @@
 <template>
 	<div class="content">
+		<div class="center" v-if="items.length == 0"><p>暂无更多</p></div>
 		<div v-for="(item, index) in items" :key="index">
 			<div class="music_cell">
 				<div class="music_cell_index" v-show="showIndex">{{ index + 1 }}</div>
@@ -12,12 +13,16 @@
 						<span>{{ item.browse }}次</span>
 					</div>
 				</div>
+				<div class="gitActive" v-if="item.id == musicData.songid || item.name == musicData.song">
+					<img src="../assets/images/gif.gif" alt="" />
+				</div>
 				<div class="music_cell_right" @click="listenOrOffline(item.path, index, item.id, item)" v-show="isLine == 0">
 					<img class="secondImg" :src="active != index ? require('../assets/images/icon_listen_pause.png') : require('../assets/images/icon_listen_playing.png')" />
 					<span>试听</span>
 				</div>
 				<div class="music_cell_right" @click="devicesMusic(1, item, index)" v-show="isLine == 1">
-					<img class="secondImg" src="../assets/images/huiben_xiangqing_black.png" />
+					<img class="secondImg" src="../assets/images/zanting-2.png" v-if="item.id == musicData.songid || item.name == musicData.song"/>
+					<img class="secondImg" src="../assets/images/bofang-2.png" v-else/>			
 					<span>点播</span>
 				</div>
 			</div>
@@ -32,7 +37,7 @@
 				</div>
 				<div class="show_cell_cell" @click="devicesMusic(3, item)">
 					<img src="../assets/images/icon_download_1.png" v-if="item.copyrightId == 0" alt class="downloadImg" />
-					<img src="../assets/images/icon_download_1.png" v-if="item.copyrightId == 1" alt />
+					<img src="../assets/images/icon_download_1.png" v-else alt />
 					<p :class="item.copyrightId == 0 ? 'downloadImg' : ''">下载</p>
 				</div>
 			</div>
@@ -61,13 +66,18 @@ export default {
 		},
 		total: {
 			type: Number
+		},
+		isHistory:{
+			type:Boolean,
+			default: false
 		}
 	},
 	data() {
 		return {
 			$audio: null,
 			active: -1,
-			showActive: -1
+			showActive: -1,
+			isPaused:false,
 		};
 	},
 	watch: {
@@ -76,10 +86,10 @@ export default {
 		},
 		items(newVal) {
 			//清除特殊符号
-			let regex = /[!.、0-9]/g;
-			newVal.forEach((v, i) => {
-				v.name = v.name.replace(regex, '');
-			});
+			// let regex = /[!.、0-9]/g;
+			// newVal.forEach((v, i) => {
+			// 	v.name = v.name.replace(regex, '');
+			// });
 		},
 		isReload(newVal) {
 			this.active = -1;
@@ -87,7 +97,7 @@ export default {
 	},
 	mounted() {},
 	computed: {
-		...mapState(['isLine'])
+		...mapState(['isLine','musicData'])
 	},
 	created() {
 		this.$audio = new Audio();
@@ -106,18 +116,25 @@ export default {
 		play(src, index, id, data) {	
 			this.$store.dispatch('savePlayHistory', data);
 			this.$audio.pause();
+			console.log("试听====")
 			if (src == this.src) {
-				if (this.$audio.paused) {
-					this.active = index;
-					this.$audio.play();
-				} else {
-					this.$audio.pause();
+				if (this.isPaused) {
+					console.log("试听====33333")
 					this.active = -1;
+					this.$audio.pause();
+					this.isPaused =false;
+				} else {
+					console.log("试听====4444")
+					this.$audio.play();
+					this.active = index;
+					this.isPaused =true;
 				}
 			} else {
+				console.log("试听====22222")
 				//统计
 				this.active = index;
 				this.$audio.pause();
+				this.isPaused =true
 				this.src = this.$audio.src = src;
 				this.$audio.play();
 				this.$audio.onended = () => {
@@ -130,6 +147,9 @@ export default {
 		//展示点播，下载
 		showMore(index) {
 			if (this.isLine == 0) {
+				return;
+			}
+			if(this.isHistory){
 				return;
 			}
 			if (this.showActive == index) {
@@ -268,16 +288,22 @@ export default {
 	flex-direction: column;
 	align-items: center;
 }
+.center{
+	text-align: center;
+	width:100%;
+	font-size: 14px;
+}
 .music_cell {
 	width: 100%;
 	margin: 0 auto;
 	height: 50px;
 	display: flex;
-	justify-content: space-between;
-	align-items: center;
+	position: relative;
+	// justify-content: space-between;
+	// align-items: center;
 	margin-top: 15px;
 	p {
-		width: 262px;
+		width: 230px;
 		height: 20px;
 		font-size: 16px;
 		color: #333333;
@@ -286,7 +312,8 @@ export default {
 		white-space: nowrap;
 	}
 	.music_cell_left {
-		padding-left: 15px;
+		width: 75%;
+		padding-left: 10px;
 	}
 	.music_cell_left_sub {
 		margin-top: 10px;
@@ -305,13 +332,19 @@ export default {
 		}
 	}
 	.music_cell_index {
+		width: 5%;
 		font-size: 14px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 	.selectInx {
 		color: #4da6ff;
 	}
 }
 .music_cell_right {
+	position:absolute;
+	right: 0;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -356,5 +389,17 @@ export default {
 }
 .downloadImg {
 	opacity: 0.3;
+}
+.gitActive{
+	width: 5%;
+	width: 28px;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.gitActive img{
+	width: 28px;
+	height:28px;
 }
 </style>

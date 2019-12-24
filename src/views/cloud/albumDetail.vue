@@ -19,7 +19,8 @@
 						</div>
 					</div>
 				</div>
-				<div class="album-icon" v-if="isLine == 1"><img src="../../assets/images/download_list.png" class="head_download" @click="goDownload" /></div>
+				<div class="album-icon" v-if="isLine == 1"><img src="../../assets/images/download.png" class="head_download" @click="goDownload(1)" /></div>
+				<div class="album-icon1" v-if="isLine == 1"><img src="../../assets/images/favorites.png" class="head_download" @click="goDownload(2)" /></div>
 			</div>
 			<van-tabs v-model="active" color="#4da6ff">
 				<van-tab title="列表"><music-list :items="musicList" :total="total" :audioInfoData="audioInfoData.id" :routeLeave="routeLeave"></music-list></van-tab>
@@ -127,8 +128,13 @@ export default {
 			});
 		},
 		//批量下载
-		goDownload() {
-			this.$router.push({ name: 'cloudAllDown', query: { id: this.audioId } });
+		goDownload(type) {
+			if(type == 1) {
+				this.$router.push({ name: 'cloudAllDown', query: { id: this.audioId } });
+			}else if(type == 2){
+				this.$router.push({ name: 'cloudAllEnshrine', query: { id: this.audioId } });
+			}
+			
 		},
 		goEnshrine() {}
 	},
@@ -165,7 +171,7 @@ export default {
 	.album-icon {
 		width: 100%;
 		position: absolute;
-		bottom: 10px;
+		bottom: 5px;
 		right: 20px;
 		text-align: right;
 		// display: flex;
@@ -176,6 +182,18 @@ export default {
 		// right: 20px;
 		// width: 28px;
 		// height: 28px;
+	}
+	.album-icon1{
+		width: 100%;
+		position: absolute;
+		bottom: 5px;
+		right: 60px;
+		text-align: right;
+		// display: flex;
+		img {
+			width: 32px;
+			height: 32px;
+		}
 	}
 }
 .head_coverpath {
@@ -218,7 +236,7 @@ export default {
 		}
 	}
 	.head_content_tag {
-		margin-top: 24px;
+		margin-top: 15px;
 		span {
 			font-size: 11px;
 			padding: 5px 9px;

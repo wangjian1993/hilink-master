@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import axios from "./api/index"
+
 import './assets/css/cloud/video.css' //公共css
 import 'amfe-flexible'
 import App from './App.vue'
@@ -10,7 +11,8 @@ import VueVideoPlayer from 'vue-video-player'
 import 'video.js/dist/video-js.css'
 import base64 from './assets/js/base64'
 import VueI18n from 'vue-i18n'
-const vConsole = new Vconsole()
+import VueLazyLoad from "vue-lazyload";
+const vConsole = new Vconsole() 
 Vue.use(vConsole)
 // hilink sdk公共函数
 import hilink from './hilink/index'
@@ -18,6 +20,10 @@ import './assets/css/app.css' //公共css
 Vue.use(hilink);
 Vue.use(VueI18n);
 Vue.prototype.$base64 = base64;
+Vue.use(VueLazyLoad, {
+  error: "./assets/static/fm_mask.png",
+  loading: "./assets/static/fm_mask.png"
+});
 //vant按需加载组件
 import {
 	Button,
