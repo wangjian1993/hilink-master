@@ -246,7 +246,13 @@ export default {
 			if (this.setCheck) {
 				return;
 			}
-			this.$router.push({ name: 'cloudListenDetail', query: { id: id } });
+			// this.$router.push({ name: 'cloudListenDetail', query: { id: id } });
+			this.$router.push({
+				name: 'albumDetail',
+				query: {
+					id: id
+				}
+			});
 		},
 		//回调函数转换
 		praseResponseData(resData) {

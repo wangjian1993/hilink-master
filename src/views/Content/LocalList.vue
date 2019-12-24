@@ -150,17 +150,19 @@ export default {
 			}
 			let page = self.beginNumber * 4 - self.delPage;
 			var sumPage;
-			if (0 < page) {
-				sumPage = page;
-			} else {
+			if (page < 0) {
+				console.log("11111111")
 				sumPage = 0;
+			} else {
+				console.log("222222222")
+				sumPage = page;
 			}
 			let body = {
 				from: 'DID:0',
 				to: 'UID:-1',
 				action: 401,
 				channel: self.cid,
-				offset: self.beginNumber * 4 - self.delPage
+				offset: sumPage
 			};
 			let json = JSON.stringify(body);
 			console.log('json============', json);
