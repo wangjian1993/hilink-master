@@ -203,7 +203,7 @@
 				</li>
 			</ul>
 		</div>
-		<van-popup v-model="$store.state.upDate && $store.state.isShare" class="updata-box" round :close-on-click-overlay="false" position="bottom">
+		<van-popup v-model="$store.state.upDate && $store.state.isShare && isLine ==1" class="updata-box" round :close-on-click-overlay="false" position="bottom">
 			<div v-if="upflag == 2">
 				<div class="updata-msg">检测到设备有最新固件.是否升级?</div>
 				<div class="updata-btn">

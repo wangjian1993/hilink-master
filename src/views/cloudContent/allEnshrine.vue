@@ -2,17 +2,16 @@
 	<div class="container">
 		<v-header :title="title"></v-header>
 		<div class="music-list">
-			<p class="downMsg">*应版权方要求,部分歌曲暂无法提供下载</p>
 			<van-checkbox-group v-model="result" checked-color="#07c160" ref="checkboxGroup" :max="checkboxMax">
 				<van-cell-group>
 					<van-cell v-for="(item, index) in musicList" :title="item.name"  clickable
-			      :key="index"  @click="toggle(index)" :class="item.copyrightId == 0?'isDown':''">
-						<van-checkbox :name="index"  ref="checkboxes" slot="right-icon"  v-if="item.copyrightId == 1"/>			
+			      :key="index"  @click="toggle(index)">
+						<van-checkbox :name="index"  ref="checkboxes" slot="right-icon"/>			
 					</van-cell>
 				</van-cell-group>
 			</van-checkbox-group>
 		</div>
-		<div class="downBtn" @click="downAllList()">下载</div>
+		<div class="downBtn" @click="downAllList()">收藏</div>
 		<!-- <div class="loadingding center" v-show="isLoaded"><van-loading size="50px" color="#81b4ff">加载中...</van-loading></div>
 		<p class="PageBottom">暂无更多</p> -->
 	</div>
@@ -36,7 +35,7 @@ export default {
 			showTab: true,
 			checkboxMax:8,
 			loadingFlag: true,
-			title: '批量下载'
+			title: '批量收藏'
 		};
 	},
 	created() {},
@@ -58,7 +57,7 @@ export default {
 			if (data.errcode == 0) {
 				this.loadingFlag = true;
 				this.$toast({
-					message: '歌曲添加下载成功',
+					message: '歌曲添加收藏成功',
 					position: 'bottom',
 					duration: '2000',
 					className: 'toastActive'
@@ -74,7 +73,7 @@ export default {
 			self.$refs.checkboxes[index].toggle();
 			if(self.result.length == 8){
 				this.$toast({
-					message: '批量下载每次最多添加八首',
+					message: '批量收藏每次最多添加八首',
 					position: 'bottom',
 					duration: '2000',
 					className: 'toastActive'
@@ -87,7 +86,7 @@ export default {
 			console.log("self.result=====",self.result);
 			if(self.result.length == 0){
 				self.$toast({
-					message: '请选择要下载的歌曲',
+					message: '请选择要收藏的歌曲',
 					position: 'bottom',
 					duration: '2000',
 					className: 'toastActive'
@@ -101,39 +100,39 @@ export default {
 				dataArray.push(self.musicList[item]);
 			});
 			var songsData = [];
-			// dataArray.forEach(function(item, index) {
-			// 	let path = item.path.indexOf('https:') > -1 ? item.path.replace('https', 'http') : item.path;
-			// 	let json = {
-			// 		id: item.music_id || item.radioid,
-			// 		name: item.name,
-			// 		url: path
-			// 	};
-			// 	songsData.push(json);
-			// });
-			// var body = {
-			// 	from: 'DID:0',
-			// 	to: 'UID:-1',
-			// 	action: 416,
-			// 	songs: songsData
-			// };
 			dataArray.forEach(function(item, index) {
 				let path = item.path.indexOf('https:') > -1 ? item.path.replace('https', 'http') : item.path;
 				let json = {
-					id: item.id.toString(),
+					id: item.music_id || item.radioid,
 					name: item.name,
-					fmt: 'mp3',
-					url: item.path
+					url: path
 				};
 				songsData.push(json);
 			});
 			var body = {
 				from: 'DID:0',
 				to: 'UID:-1',
-				action: 409,
-				songlistname: '最新下载',
-				songlistid: self.info.id,
+				action: 416,
 				songs: songsData
 			};
+			// dataArray.forEach(function(item, index) {
+			// 	let path = item.path.indexOf('https:') > -1 ? item.path.replace('https', 'http') : item.path;
+			// 	let json = {
+			// 		id: item.id.toString(),
+			// 		name: item.name,
+			// 		fmt: 'mp3',
+			// 		url: item.path
+			// 	};
+			// 	songsData.push(json);
+			// });
+			// var body = {
+			// 	from: 'DID:0',
+			// 	to: 'UID:-1',
+			// 	action: 409,
+			// 	songlistname: '最新下载',
+			// 	songlistid: self.info.id,
+			// 	songs: songsData
+			// };
 			let json = JSON.stringify(body);
 			console.log("收藏====",json)
 			let data = { custom: { function: json, name: 'function' } };

@@ -7,9 +7,12 @@
 				<div>
 					<div class="musicName">{{ info.name }}</div>
 					<div class="musicMusic">共{{ info.musicCount }}首</div>
-				</div>
-				<div class="all-down" @click="allDownClick()" v-if="isLine == 1">
-					<p><img src="../../assets/images/icon_download_no.png" alt="" /></p>
+					<div class="all-down" @click="allDownClick()" v-if="isLine == 1">
+						<p><img src="../../assets/images/icon_download_no.png" alt="" /></p>
+					</div>
+					<!-- <div class="all-love" @click="allDownClick()" v-if="isLine == 1">
+						<p><img src="../../assets/images/sc.png" alt="" /></p>
+					</div> -->
 				</div>
 			</div>
 			<div class="musicIntro">
