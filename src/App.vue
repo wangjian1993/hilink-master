@@ -182,6 +182,8 @@ html {
 .van-toast {
 	background: rgba(217, 217, 217, 0.95);
 	color: #000000;
-	border-radius: 35px;
+	border-radius: 15px;
+	max-width: 260px;
+	text-align: left;
 }
 </style>

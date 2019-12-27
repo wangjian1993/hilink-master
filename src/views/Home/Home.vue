@@ -16,7 +16,14 @@
 		<div class="devices-status">
 			<div class="devices-status-text">{{ isLine == 0 ? $t('m.off') : $t('m.open') }}</div>
 			<div class="devices-status-time">
-				<div v-show="deviceTime != 0 && isLine == 1">
+				<div class="devices-cell" v-show="isLine == 1">
+					<img v-if="musicData.battery <= 25" src="../../assets/images/ic_dianchi_1.png" alt="" />
+					<img v-if="musicData.battery <= 55 && musicData.battery > 25" src="../../assets/images/ic_dianchi_2.png" alt="" />
+					<img v-if="musicData.battery <= 75 && musicData.battery > 50" src="../../assets/images/ic_dianchi_3.png" alt="" />
+					<img v-if="musicData.battery <= 100 && musicData.battery > 75" src="../../assets/images/ic_dianchi_4.png" alt="" />
+					<p>剩余电量</p>
+				</div>
+				<!-- <div v-show="deviceTime != 0 && isLine == 1">
 					<p>
 						<van-count-down :time="deviceTime" @finish="deviceTimeFinish()">
 							<template v-slot="timeData">
@@ -27,7 +34,7 @@
 						</van-count-down>
 					</p>
 					<p>{{ deviceTime == 0 ? $t('m.timer') : $t('m.timeroff') }}</p>
-				</div>
+				</div> -->
 			</div>
 			<div class="devices-status-btn" @click="devicesSwitch(0)">
 				<p :class="isLine == 1 ? 'switchAcitve' : ''"><img :src="switchIcon()" alt /></p>
@@ -203,7 +210,7 @@
 				</li>
 			</ul>
 		</div>
-		<van-popup v-model="$store.state.upDate && $store.state.isShare && isLine ==1" class="updata-box" round :close-on-click-overlay="false" position="bottom">
+		<van-popup v-model="$store.state.upDate && $store.state.isShare && isLine == 1" class="updata-box" round :close-on-click-overlay="false" position="bottom">
 			<div v-if="upflag == 2">
 				<div class="updata-msg">检测到设备有最新固件.是否升级?</div>
 				<div class="updata-btn">
@@ -268,7 +275,8 @@ export default {
 			'devName',
 			'isBubble',
 			'istimePopu',
-			'upflag'
+			'upflag',
+			'musicData'
 		]),
 		deviceTime: {
 			get() {
