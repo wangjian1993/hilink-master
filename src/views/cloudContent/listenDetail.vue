@@ -7,12 +7,12 @@
 				<div>
 					<div class="musicName">{{ info.name }}</div>
 					<div class="musicMusic">共{{ info.musicCount }}首</div>
-					<div class="all-down" @click="allDownClick()" v-if="isLine == 1">
-						<p><img src="../../assets/images/icon_download_no.png" alt="" /></p>
+					<div class="all-down" @click="allDownClick(0)" v-if="isLine == 1">
+						<p><img src="../../assets/images/yunduanxiazai.png" alt="" /></p>
 					</div>
-					<!-- <div class="all-love" @click="allDownClick()" v-if="isLine == 1">
-						<p><img src="../../assets/images/sc.png" alt="" /></p>
-					</div> -->
+					<div class="all-love" @click="allDownClick(1)" v-if="isLine == 1">
+						<p><img src="../../assets/images/aixin.png" alt="" /></p>
+					</div>
 				</div>
 			</div>
 			<div class="musicIntro">
@@ -30,7 +30,8 @@
 							<span><img src="../../assets/images/gif.gif" alt="" /></span>
 						</div>
 						<div class="right" @click="devicesMusic(1, item, index)" v-if="isLine == 1">
-							<img src="../../assets/images/icon_demand.png" />
+							<img src="../../assets/images/zanting-3.png" v-if="item.id == musicData.songid || item.name == musicData.song"/>
+							<img src="../../assets/images/bofang-3.png" v-else/>
 							<div style="color: #000000;">点播</div>
 						</div>
 						<div class="playCell" @click="play(item.path, index)" v-if="isLine == 0">
@@ -161,12 +162,16 @@ export default {
 			// console.log("getMilliseconds======",getMilliseconds)
 			return getHours + ':' + getMinutes + ':' + getSeconds + ':' + getMilliseconds;
 		},
-		allDownClick() {
+		allDownClick(type) {
 			let id = this.$route.query.id;
 			if (!parseInt(id)) {
 				return;
 			}
-			this.$router.push({ name: 'cloudAllDown', query: { id: id } });
+			if(type == 1){
+				this.$router.push({ name: 'cloudAllEnshrine', query: { id: id } });
+			}else if(type == 0){
+				this.$router.push({ name: 'cloudAllDown', query: { id: id } });
+			}
 		},
 		//显示点播收藏
 		show(index) {
@@ -204,7 +209,7 @@ export default {
 								language: '国语',
 								name: item.name,
 								albumname: item.specialname,
-								albumid: item.special_id,
+								albumid: self.info.id,
 								type: 5,
 								total: self.total,
 								index: index,

@@ -5,9 +5,8 @@
 			<p class="downMsg">*应版权方要求,部分歌曲暂无法提供下载</p>
 			<van-checkbox-group v-model="result" checked-color="#07c160" ref="checkboxGroup" :max="checkboxMax">
 				<van-cell-group>
-					<van-cell v-for="(item, index) in musicList" :title="item.name"  clickable
-			      :key="index"  @click="toggle(index)" :class="item.copyrightId == 0?'isDown':''">
-						<van-checkbox :name="index"  ref="checkboxes" slot="right-icon"  v-if="item.copyrightId == 1"/>			
+					<van-cell v-for="(item, index) in musicList" :title="item.name" clickable :key="index" @click="toggle(index)" :class="item.copyrightId == 0 ? 'isDown' : ''">
+						<van-checkbox :name="index" ref="checkboxes" slot="right-icon" v-if="item.copyrightId == 1" />
 					</van-cell>
 				</van-cell-group>
 			</van-checkbox-group>
@@ -34,7 +33,7 @@ export default {
 			isLoaded: false,
 			showIndex: -1,
 			showTab: true,
-			checkboxMax:8,
+			checkboxMax: 8,
 			loadingFlag: true,
 			title: '批量下载'
 		};
@@ -67,12 +66,21 @@ export default {
 			}
 		};
 	},
+	mounted() {
+		window.addEventListener('scroll', this.handlescroll);
+	},
+	deactivated() {
+		sessionStorage.setItem('scrollTop', this.scrollTop);
+	},
+	activated() {
+		document.body.scrollTop = document.documentElement.scrollTop = window.pageYOffset = sessionStorage.getItem('scrollTop');
+	},
 	methods: {
 		toggle(index) {
 			let self = this;
-			console.log(index)
+			console.log(index);
 			self.$refs.checkboxes[index].toggle();
-			if(self.result.length == 8){
+			if (self.result.length == 8) {
 				this.$toast({
 					message: '批量下载每次最多添加八首',
 					position: 'bottom',
@@ -84,8 +92,8 @@ export default {
 		downAllList() {
 			let self = this;
 			var dataArray = [];
-			console.log("self.result=====",self.result);
-			if(self.result.length == 0){
+			console.log('self.result=====', self.result);
+			if (self.result.length == 0) {
 				self.$toast({
 					message: '请选择要下载的歌曲',
 					position: 'bottom',
@@ -135,7 +143,7 @@ export default {
 				songs: songsData
 			};
 			let json = JSON.stringify(body);
-			console.log("收藏====",json)
+			console.log('收藏====', json);
 			let data = { custom: { function: json, name: 'function' } };
 			self.setDeviceSongsInfo(data, 'songAllDown');
 		},
@@ -163,13 +171,13 @@ export default {
 <style lang="less" scoped>
 @import url('../../assets/css/cloud/common.less');
 @import url('../../assets/css/cloud/listenDetail.less');
-.downMsg{
+.downMsg {
 	width: 100%;
 	text-align: center;
 	font-size: 14px;
 	color: #c81624;
 }
-.isDown{
-	opacity:.4;
+.isDown {
+	opacity: 0.4;
 }
 </style>

@@ -334,6 +334,7 @@ export default {
 					action: 4000,
 					setupgrade: 1
 				};
+				// localStorage.setItem("updata", true);
 			}
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json } };

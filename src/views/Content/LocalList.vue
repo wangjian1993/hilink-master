@@ -160,7 +160,7 @@ export default {
 				to: 'UID:-1',
 				action: 401,
 				channel: self.cid,
-				offset: self.beginNumber * 4 - self.delPage
+				offset:sumPage
 			};
 			let json = JSON.stringify(body);
 			console.log('json============', json);

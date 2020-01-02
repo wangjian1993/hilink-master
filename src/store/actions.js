@@ -199,6 +199,7 @@ export default {
 			console.log("userName=======", userName)
 			if (userName) {
 				//相同手机
+				console.log("1111")
 				if (deviceid == json.devId) {
 					commit("setisDeviceid", false);
 				} else {
@@ -207,6 +208,7 @@ export default {
 				}
 			} else {
 				//不同手机
+				console.log("2222")
 				commit("setisDeviceid", true);
 				localStorage.setItem(json.devId, json.devId);
 				localStorage.setItem("iphone", true);

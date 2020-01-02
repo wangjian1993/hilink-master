@@ -6,29 +6,31 @@
 			<div class="search" @click="goSearch">
 				<div class="searchIcon center"><img src="../../assets/images/home_icon_search.png" /></div>
 				<div class="searchInput">
-					<van-cell-group><van-field class="field" v-model="serchValue" :placeholder=search /></van-cell-group>
+					<van-cell-group><van-field class="field" v-model="serchValue" :placeholder="search" /></van-cell-group>
 				</div>
 				<div class="selectIcon center"><img src="../../assets/images/home_icon_shaixuan.png" /></div>
 			</div>
 			<!--标签-->
 			<div class="label">
-				<div class="labelCell center" @click="goListen(1)">{{$t('m.Songs')}}</div>
-				<div class="labelCell center" @click="goListen(2)">{{$t('m.Stories')}}</div>
-				<div class="labelCell center" @click="goListen(3)">{{$t('m.English')}}</div>
-				<div class="labelCell center" @click="goListen(4)">{{$t('m.Classics')}}</div>
+				<div class="labelCell center" @click="goListen(1)">{{ $t('m.Songs') }}</div>
+				<div class="labelCell center" @click="goListen(2)">{{ $t('m.Stories') }}</div>
+				<div class="labelCell center" @click="goListen(3)">{{ $t('m.English') }}</div>
+				<div class="labelCell center" @click="goListen(4)">{{ $t('m.Classics') }}</div>
 			</div>
 			<!--轮播-->
 			<div class="swiper">
 				<van-swipe :autoplay="3000" class="swipe">
-					<van-swipe-item v-for="(image, index) in swiperList" :key="index" @click="goDetail(image.link)" v-if="image.linktype == 2"><img :src="image.path" /></van-swipe-item>
+					<van-swipe-item v-for="(image, index) in swiperList" :key="index" @click="goDetail(image.link)" v-if="image.linktype == 2">
+						<img :src="image.path" />
+					</van-swipe-item>
 				</van-swipe>
 			</div>
 			<!--精品推荐-->
 			<div class="part">
 				<div class="title">
 					<div class="titleLeft">
-						<div class="titleLeftTop">{{$t('m.Featured')}}</div>
-						<div class="titleLeftBottom">{{$t('m.Recommended')}}</div>
+						<div class="titleLeftTop">{{ $t('m.Featured') }}</div>
+						<div class="titleLeftBottom">{{ $t('m.Recommended') }}</div>
 					</div>
 					<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
 				</div>
@@ -47,7 +49,7 @@
 				</div>
 			</div>
 			<!--视频推荐-->
-		<!-- 	<div class="part">
+			<!-- 	<div class="part">
 				<div class="title">
 					<div class="titleLeft">
 						<div class="titleLeftTop">{{$t('m.Videos')}}</div>
@@ -69,8 +71,8 @@
 			<div class="part">
 				<div class="title">
 					<div class="titleLeft">
-						<div class="titleLeftTop">{{$t('m.Build')}}</div>
-						<div class="titleLeftBottom">{{$t('m.Nurture')}}</div>
+						<div class="titleLeftTop">{{ $t('m.Build') }}</div>
+						<div class="titleLeftBottom">{{ $t('m.Nurture') }}</div>
 					</div>
 					<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
 				</div>
@@ -93,8 +95,8 @@
 			<div class="part">
 				<div class="title">
 					<div class="titleLeft">
-						<div class="titleLeftTop">{{$t('m.Radio')}}</div>
-						<div class="titleLeftBottom">{{$t('m.Learn')}}</div>
+						<div class="titleLeftTop">{{ $t('m.Radio') }}</div>
+						<div class="titleLeftBottom">{{ $t('m.Learn') }}</div>
 					</div>
 					<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
 				</div>
@@ -113,8 +115,8 @@
 			<div class="part">
 				<div class="title">
 					<div class="titleLeft">
-						<div class="titleLeftTop">{{$t('m.Chinese')}}</div>
-						<div class="titleLeftBottom">{{$t('m.Grow')}}</div>
+						<div class="titleLeftTop">{{ $t('m.Chinese') }}</div>
+						<div class="titleLeftBottom">{{ $t('m.Grow') }}</div>
 					</div>
 					<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
 				</div>
@@ -136,8 +138,8 @@
 			<div class="part">
 				<div class="title">
 					<div class="titleLeft">
-						<div class="titleLeftTop">{{$t('m.Financial')}}</div>
-						<div class="titleLeftBottom">{{$t('m.Start')}}</div>
+						<div class="titleLeftTop">{{ $t('m.Financial') }}</div>
+						<div class="titleLeftBottom">{{ $t('m.Start') }}</div>
 					</div>
 					<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
 				</div>
@@ -159,8 +161,8 @@
 			<div class="part">
 				<div class="title">
 					<div class="titleLeft">
-						<div class="titleLeftTop">{{$t('m.EQ')}}</div>
-						<div class="titleLeftBottom">{{$t('m.Help')}}</div>
+						<div class="titleLeftTop">{{ $t('m.EQ') }}</div>
+						<div class="titleLeftBottom">{{ $t('m.Help') }}</div>
 					</div>
 					<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
 				</div>
@@ -182,8 +184,8 @@
 			<div class="part">
 				<div class="title">
 					<div class="titleLeft">
-						<div class="titleLeftTop">{{$t('m.Children')}}</div>
-						<div class="titleLeftBottom">{{$t('m.Sweet')}}</div>
+						<div class="titleLeftTop">{{ $t('m.Children') }}</div>
+						<div class="titleLeftBottom">{{ $t('m.Sweet') }}</div>
 					</div>
 					<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
 				</div>
@@ -205,8 +207,8 @@
 			<div class="part content-buttom">
 				<div class="title">
 					<div class="titleLeft">
-						<div class="titleLeftTop">{{$t('m.Latest')}}</div>
-						<div class="titleLeftBottom">{{$t('m.New')}}</div>
+						<div class="titleLeftTop">{{ $t('m.Latest') }}</div>
+						<div class="titleLeftBottom">{{ $t('m.New') }}</div>
 					</div>
 					<div class="titleRight"><!-- <img src="../../assets/images/home_icon_more.png"/> --></div>
 				</div>
@@ -224,7 +226,7 @@
 					</div>
 				</div>
 			</div>
-			<p class="PageBottom" v-show="isShowNoMore">{{$t('m.Classics')}}暂无更多</p>
+			<p class="PageBottom" v-show="isShowNoMore">{{ $t('m.Classics') }}暂无更多</p>
 		</div>
 		<div class="loadingding center" v-show="isLoaded"><van-loading size="30px" vertical color="#007DFF">加载中</van-loading></div>
 		<!-- <div class="goTop" v-show="isBottom" @click="goTop"><img src="../../assets/images/top.png" /></div> -->
@@ -254,8 +256,8 @@ export default {
 			page: 0,
 			isShowNoMore: false,
 			isBottom: false,
-			search:'',
-			title:this.$t('m.AliloCloud')
+			search: '',
+			title: this.$t('m.AliloCloud')
 		};
 	},
 	created() {},
@@ -281,10 +283,9 @@ export default {
 		},
 		//跳转听儿歌页
 		goListen(type) {
-			this.$router.push({ name: 'cloudListen' });
-			console.log(type);
+			this.$router.push({ name: 'cloudListen', query: { type: type } });
 			this.$store.state.params = type;
-		},
+		}
 		//回到顶部
 		// goTop() {
 		// 	let scrollTop = document.documentElement.scrollTop || document.body.crollTop;
@@ -299,7 +300,7 @@ export default {
 		// }
 	},
 	async mounted() {
-		this.search = this.$i18n.t('m.Search')
+		this.search = this.$i18n.t('m.Search');
 		//轮播
 		this.isLoaded = true;
 		await http

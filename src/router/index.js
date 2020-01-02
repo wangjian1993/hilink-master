@@ -109,6 +109,14 @@ export default new Router({
 				keepAlive: false,
 			}
 		},
+		{
+			path: '/cloudContent/allEnshrine',
+			name: 'cloudAllEnshrine',
+			component: () => import( /* webpackChunkName: "cloudListenDetail" */ '@/views/cloudContent/allEnshrine.vue'),
+			meta: {
+				keepAlive: false,
+			}
+		},
 		//火火兔云内容主播详情页面
 		{
 			path: '/cloudContent/hostDetail',

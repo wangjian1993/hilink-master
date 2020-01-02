@@ -1,150 +1,41 @@
 <template>
-	<div class="container">
+	<div class="app">
 		<v-header :title="title"></v-header>
-		<van-tabs v-model="active" color="#81b4ff" @click="refresh" class="tabs">
-			<van-tab title="0">
-				<div slot="title" class="tab">
-					{{ $t('m.Latest') }}
-					<van-icon name="arrow-down" class="arrowDown" />
-				</div>
-				<div>
-					<div class="cell" v-for="(item, index) in dataList" :key="index" @click="goDetail(item.id)" v-if="item.musicCount != 0">
-						<div class="cellImgBox"><img :src="item.coverpath" class="cellImg" /></div>
-						<div>
-							<div class="cellName van-ellipsis">{{ item.name }}</div>
-							<div class="cellMusic">共{{ item.musicCount }}首</div>
-						</div>
-					</div>
-				</div>
-			</van-tab>
-			<van-tab title="1">
-				<div slot="title" class="tab">
-					{{ $t('m.Rankings') }}
-					<van-icon name="arrow-down" class="arrowDown" />
-				</div>
-				<div>
-					<div class="cell" v-for="(item, index) in dataList" :key="index" @click="goDetail(item.id)" v-if="item.musicCount != 0">
-						<div class="cellImgBox"><img :src="item.coverpath" class="cellImg" /></div>
-						<div>
-							<div class="cellName">{{ item.name }}</div>
-							<div class="cellMusic">共{{ item.musicCount }}首</div>
-						</div>
-					</div>
-				</div>
-			</van-tab>
-			<p class="PageBottom" v-show="isShowNoMore">暂无更多</p>
-		</van-tabs>
-		<div class="loadingding center" v-show="isLoaded"><van-loading size="30px" color="#007DFF" vertical>加载中</van-loading></div>
+		<album-list :type="dataType"></album-list>
 	</div>
 </template>
 
 <script>
-import http from '../../api/index.js';
 import Header from '@/components/header.vue';
+import albumList from '../../components/AlbumList.vue';
 export default {
 	data() {
 		return {
-			active: 0,
-			type: 1,
-			dataList: [],
-			tabTitle: 0,
-			isLoaded: true,
-			page: 0,
-			isShowNoMore: false,
-			params: null,
-			pageNum: 0,
-			total: 0,
-			title: this.$t('m.AliloCloud')
+			dataType: -1,
+			title: null
 		};
-	},
-	activated() {
-		//获取页面数据
-		this.isLoaded = true;
-		var type = this.tabTitle == 0 ? 1 : 2;
-		this.isShowNoMore = false;
-		this.params = this.$store.state.params;
-		http.getAlbumsData(type, 0, this.params)
-			.then(res => {
-				this.dataList = res.data.content.list;
-				this.total = res.data.content.total;
-				this.pageNum = Math.ceil(res.data.content.total / 20);
-				this.isLoaded = false;
-			})
-			.catch(err => {
-				console.log(err);
-			});
-		var that = this;
-		window.onscroll = function() {
-			//变量scrollTop是滚动条滚动时，距离顶部的距离
-			var scrollTop = document.documentElement.scrollTop || document.body.scrollTop; //变量windowHeight是可视区的高度
-			var windowHeight = document.documentElement.clientHeight || document.body.clientHeight; //变量scrollHeight是滚动条的总高度
-			var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight; //滚动条到底部的条件
-			console.log("加载更多============================");
-			console.log("scrollTop===",scrollTop)
-			console.log("windowHeight===",windowHeight)
-			console.log("scrollHeight===",scrollHeight)
-			if (scrollTop + windowHeight >= scrollHeight) {
-				if (that.dataList.length >= that.total) {
-					console.log("没有了==================")
-					that.isShowNoMore = true;
-					return;
-				}
-				++that.page;
-				//刷新数据
-				var type = that.tabTitle == 0 ? 1 : 2;
-				console.log('执行================');
-				http.getAlbumsData(type, that.page, that.params)
-					.then(res => {
-						console.log('请求数据================');
-						that.dataList = that.dataList.concat(res.data.content.list);
-					})
-					.catch(err => {
-						console.log(err);
-					});
-			}
-		};
-	},
-	beforeRouteLeave(to, from, next) {
-		next();
-		this.page = 0;
-	},
-	methods: {
-		//刷新数据
-		async refresh(name, title) {
-			this.isShowNoMore = false;
-			if (name == this.tabTitle) {
-				return;
-			}
-			this.page = 0;
-			this.tabTitle = name;
-			this.isLoaded = true;
-			var type = name == 0 ? 1 : 2;
-			await http
-				.getAlbumsData(type, this.page, this.params)
-				.then(res => {
-					this.dataList = res.data.content.list;
-					this.total = res.data.content.total;
-					this.pageNum = Math.ceil(res.data.content.total / 20);
-				})
-				.catch(err => {
-					console.log(err);
-				});
-			this.isLoaded = false;
-		},
-		goDetail(item) {
-			this.$router.push({ name: 'cloudListenDetail', query: { id: item } });
-		}
 	},
 	components: {
-		'v-header': Header
+		'v-header': Header,
+		albumList
+	},
+	created() {
+		this.dataType = this.$route.query.type;
+		if(this.dataType == 1){
+			this.title = '听儿歌';
+		}else if(this.dataType == 2){
+			this.title = '讲故事';
+		}else if(this.dataType == 3){
+			this.title = '学英语';
+		}else if(this.dataType == 4){
+			this.title = '赏国学';
+		}
+	},
+	beforeRouteLeave(to, from, next) {
+		// 销毁组件，避免通过vue-router再次进入时，仍是上次的history缓存的状态
+		this.$destroy(true);
+		next();
 	}
 };
 </script>
-
-<style lang="less" scoped>
-@import url('../../assets/css/cloud/common.less');
-@import url('../../assets/css/cloud/listen.less');
-.tabs{
-	margin-bottom: 40px;
-}
-</style>
+<style lang="less" scoped></style>
