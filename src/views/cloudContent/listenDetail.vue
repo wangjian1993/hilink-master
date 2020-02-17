@@ -10,9 +10,9 @@
 					<div class="all-down" @click="allDownClick(0)" v-if="isLine == 1">
 						<p><img src="../../assets/images/yunduanxiazai.png" alt="" /></p>
 					</div>
-					<div class="all-love" @click="allDownClick(1)" v-if="isLine == 1">
+					<!-- <div class="all-love" @click="allDownClick(1)" v-if="isLine == 1">
 						<p><img src="../../assets/images/aixin.png" alt="" /></p>
-					</div>
+					</div> -->
 				</div>
 			</div>
 			<div class="musicIntro">
@@ -24,7 +24,7 @@
 					<div v-bind:class="[active == index ? 'active' : '', 'musicList']">
 						<div class="left" @click="show(index)">
 							<p class="inroName" :class="item.id == musicData.songid || item.name == musicData.song ? 'textActive' : ''">{{ nameRegex(item.name) }}</p>
-							<p class="inroName" :class="item.id == musicData.songid || item.name == musicData.song ? 'textActive' : ''">{{ item.timelength }}</p>
+							<p class="inroName" :class="item.id == musicData.songid || item.name == musicData.song ? 'textActive' : ''">{{ item.timelength}}</p>
 						</div>
 						<div class="gitActive" v-if="item.id == musicData.songid || item.name == musicData.song">
 							<span><img src="../../assets/images/gif.gif" alt="" /></span>

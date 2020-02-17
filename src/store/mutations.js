@@ -202,6 +202,14 @@ const mutations = {
 					return;
 				}
 				// state.localSongList.songs = array.concat(customData.songs);
+				if(customData.total == 0){
+					state.ifDefeated = false;
+					state.locaFlag = true;
+					state.loadingImg = false;
+					state.locaTip = "此文件夹为空";
+					state.isClickBtn = false;
+					return;
+				}
 				let list = array.concat(customData.songs);
 				const res = new Map();
 				let songList = list.filter((list) => !res.has(list.name) && res.set(list.name, 1));

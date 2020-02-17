@@ -66,15 +66,6 @@ export default {
 			}
 		};
 	},
-	mounted() {
-		window.addEventListener('scroll', this.handlescroll);
-	},
-	deactivated() {
-		sessionStorage.setItem('scrollTop', this.scrollTop);
-	},
-	activated() {
-		document.body.scrollTop = document.documentElement.scrollTop = window.pageYOffset = sessionStorage.getItem('scrollTop');
-	},
 	methods: {
 		toggle(index) {
 			let self = this;
@@ -109,21 +100,6 @@ export default {
 				dataArray.push(self.musicList[item]);
 			});
 			var songsData = [];
-			// dataArray.forEach(function(item, index) {
-			// 	let path = item.path.indexOf('https:') > -1 ? item.path.replace('https', 'http') : item.path;
-			// 	let json = {
-			// 		id: item.music_id || item.radioid,
-			// 		name: item.name,
-			// 		url: path
-			// 	};
-			// 	songsData.push(json);
-			// });
-			// var body = {
-			// 	from: 'DID:0',
-			// 	to: 'UID:-1',
-			// 	action: 416,
-			// 	songs: songsData
-			// };
 			dataArray.forEach(function(item, index) {
 				let path = item.path.indexOf('https:') > -1 ? item.path.replace('https', 'http') : item.path;
 				let json = {
