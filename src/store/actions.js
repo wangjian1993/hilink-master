@@ -1,5 +1,7 @@
 import * as types from "./mutation-type.js";
-
+import {
+  savePlay
+} from '../assets/js/cache'
 export default {
 
 	//获取设备全部信息
@@ -92,6 +94,11 @@ export default {
 		commit
 	}, data) {
 		commit("loadingImgMutation", data)
+	},
+	savePlayHistory({
+		commit
+	}, data) {
+		commit(types.SET_PLAY_HISTORY, savePlay(data))
 	},
 	//获取设备信息
 	getDevCacheAll() {

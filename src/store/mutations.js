@@ -25,6 +25,9 @@ const mutations = {
 		// 	state.localSongList = data;
 		// }
 	},
+	[types.SET_PLAY_HISTORY](state, history) {
+	    state.playHistory = history
+	},
 	[types.SET_MUSICDATA](state, data) {
 		state.musicData = data;
 	},
@@ -133,11 +136,8 @@ const mutations = {
 					let type = resData.data.function;
 					state.upflag = type.upflag;
 					console.log("type.upflag===============");
-					// var isupDate = localStorage.getItem("updata")
 					if (state.upflag != 0 && state.upflag != undefined && state.upflag != 1) {
-						// if (!supDate) {
-							state.upDate = true;
-						// }
+						state.upDate = true;
 					} else {
 						state.upDate = false;
 					}
@@ -148,7 +148,7 @@ const mutations = {
 		}
 	},
 	getDeviceResult(state, data) {
-		console.log("get获取数据====", data)
+		console.log("get获取数据====",data)
 		if (data.action == 104) {
 			var tmp = Date.parse(new Date()).toString();
 			tmp = parseInt(tmp.substr(0, 10));
@@ -202,14 +202,6 @@ const mutations = {
 					return;
 				}
 				// state.localSongList.songs = array.concat(customData.songs);
-				if(customData.total == 0){
-					state.ifDefeated = false;
-					state.locaFlag = true;
-					state.loadingImg = false;
-					state.locaTip = "此文件夹为空";
-					state.isClickBtn = false;
-					return;
-				}
 				let list = array.concat(customData.songs);
 				const res = new Map();
 				let songList = list.filter((list) => !res.has(list.name) && res.set(list.name, 1));
@@ -224,7 +216,7 @@ const mutations = {
 				state.ifDefeated = false;
 				state.locaFlag = true;
 				state.loadingImg = false;
-				state.locaTip = "点击加载更多";
+				state.locaTip = "点击加载更多"; 
 				state.isClickBtn = false;
 				break;
 			case 642:

@@ -278,7 +278,7 @@ export default {
 .content-box {
 	width: 92%;
 	height: 100%;
-	margin: 30px auto 0;
+	margin: 5px auto 0;
 	.content-title-zh {
 		font-size: 18px;
 		color: #333333;

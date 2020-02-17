@@ -2,7 +2,7 @@
 	<div class="content">
 		<van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
 			<div class="tab_item" v-for="(item, index) in dataList" :key="index" @click="goDetail(item.id)">
-				<img :src="item.coverpath" class="tab-item-coverpath" alt />
+				<img v-lazy="item.coverpath" class="tab-item-coverpath" alt />
 				<div class="tab_item_right">
 					<p class="van-ellipsis">{{ item.name }}</p>
 					<p class="description">{{ item.description }}</p>
@@ -61,7 +61,12 @@ export default {
 		},
 		goDetail(id) {
 			//统计
-			this.$router.push({ name: 'cloudListenDetail', query: { id: id } });
+			this.$router.push({
+				name: 'albumDetail',
+				query: {
+					id: id
+				}
+			});
 		}
 	}
 };
