@@ -26,7 +26,7 @@ const mutations = {
 		// }
 	},
 	[types.SET_PLAY_HISTORY](state, history) {
-	    state.playHistory = history
+		state.playHistory = history
 	},
 	[types.SET_MUSICDATA](state, data) {
 		state.musicData = data;
@@ -45,6 +45,13 @@ const mutations = {
 	},
 	[types.SET_UPFLAG](state, data) {
 		state.upDate = data;
+	},
+	[types.SET_AUDIO_DOM](state, data) {
+		state.$audio = data;
+	},
+	[types.SET_AUDIO_ID](state, data) {
+		state.audioId = data
+		console.log("试听===", data)
 	},
 	setDevName(state, data) {
 		state.devName = data;
@@ -148,7 +155,7 @@ const mutations = {
 		}
 	},
 	getDeviceResult(state, data) {
-		console.log("get获取数据====",data)
+		console.log("get获取数据====", data)
 		if (data.action == 104) {
 			var tmp = Date.parse(new Date()).toString();
 			tmp = parseInt(tmp.substr(0, 10));
@@ -163,6 +170,7 @@ const mutations = {
 			}
 			state.lookData = data.babylock;
 			state.musicData = data;
+			state.battery = data.battery
 			state.playMode = data.playmode;
 		}
 	},
@@ -216,7 +224,7 @@ const mutations = {
 				state.ifDefeated = false;
 				state.locaFlag = true;
 				state.loadingImg = false;
-				state.locaTip = "点击加载更多"; 
+				state.locaTip = "点击加载更多";
 				state.isClickBtn = false;
 				break;
 			case 642:
@@ -241,6 +249,7 @@ const mutations = {
 			case 104:
 				state.playMode = customData.playmode;
 				state.musicData = customData;
+				state.battery = customData.battery
 				state.upflag = customData.upflag;
 				console.log("customData================", customData)
 				if (state.upflag != 0 && state.upflag != undefined && state.upflag != 1) {

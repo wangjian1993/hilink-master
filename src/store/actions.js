@@ -1,6 +1,6 @@
 import * as types from "./mutation-type.js";
 import {
-  savePlay
+	savePlay
 } from '../assets/js/cache'
 export default {
 
@@ -54,6 +54,16 @@ export default {
 		commit
 	}, data) {
 		commit(types.ENGLISHDATA, data);
+	},
+	setAudioId({
+		commit
+	}, data) {
+		commit(types.SET_AUDIO_ID, data);
+	},
+	setAudioDom({
+		commit
+	}, data) {
+		commit(types.SET_AUDIO_DOM, data);
 	},
 	setDeviceidFlag({
 		commit

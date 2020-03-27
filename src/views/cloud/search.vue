@@ -6,7 +6,7 @@
 			<div class="search">
 				<div class="searchIcon center"><img src="../../assets/images/home_icon_search.png" /></div>
 				<div class="searchInput">
-					<van-cell-group><van-field class="field" v-model="serchValue" :placeholder="$t('m.Search')" @change="SearchResult" /></van-cell-group>
+					<van-cell-group><van-field class="field" v-model="serchValue" :placeholder="$t('m.Search')" @change="SearchResult" ref="blurSearch" /></van-cell-group>
 				</div>
 			</div>
 			<div class="cancel" :class="this.$i18n.locale == 'en-US' ? 'searchActive' : ''" @click="goBack">{{ cancelOrDeleteFn }}</div>
@@ -46,7 +46,7 @@
 								<p class="inroName">{{ item.name }}</p>
 								<p class="inroName">{{ item.timelength }}</p>
 							</div>
-							<div class="playCell" @click="devicesMusic(1,item)">
+							<div class="playCell" @click="devicesMusic(1, item)">
 								<img src="../../assets/images/icon_demand.png" />
 								<p>点播</p>
 							</div>
@@ -57,9 +57,14 @@
 								<img src="../../assets/images/icon_listen_playing.png" class="rightImg" v-show="toIndex == index" />
 								<div class="rightTry">试听</div>
 							</div>
-							<div class="playCell" @click="devicesMusic(2,item)">
+							<div class="playCell" @click="devicesMusic(2, item)">
 								<img src="../../assets/images/sc.png" />
 								<p>收藏</p>
+							</div>
+							<div class="playCell" @click="devicesMusic(3, item)">
+								<img src="../../assets/images/icon_download_1.png" v-if="item.copyrightId == 0" alt class="downloadImg" />
+								<img src="../../assets/images/icon_download_1.png" v-else alt />
+								<p :class="item.copyrightId == 0 ? 'downloadImg' : ''">下载</p>
 							</div>
 						</div>
 					</div>
@@ -88,7 +93,7 @@ export default {
 			toIndex: -1,
 			isNoMore: false,
 			showIndex: -1,
-			title:this.$t('m.Search')
+			title: this.$t('m.Search')
 			// cancelOrDelete:'取消',
 		};
 	},
@@ -138,6 +143,7 @@ export default {
 						}
 					});
 					this.singleList = res.data.content.list;
+					this.$refs.blurSearch.blur();
 				})
 				.catch(err => {
 					console.log(err);
@@ -190,7 +196,7 @@ export default {
 		},
 		devicesMusic: _debounce(function(type, item) {
 			let self = this;
-			console.log(type)
+			console.log(type);
 			var body;
 			var path = item.path.indexOf('https:') > -1 ? item.path.replace('https', 'http') : item.path;
 			switch (type) {
@@ -242,20 +248,29 @@ export default {
 						]
 					};
 					self.$toast({
-						message: "歌曲添加收藏成功",
-						position: "bottom",
-						duration: "3000",
-						className: "toastActive"
+						message: '歌曲添加收藏成功',
+						position: 'bottom',
+						duration: '3000',
+						className: 'toastActive'
 					});
 					break;
 				case 3:
+					if (item.copyrightId == 0) {
+						self.$toast({
+							message: '应版权方要求,暂无法下载',
+							position: 'bottom',
+							duration: '3000',
+							className: 'toastActive'
+						});
+						return;
+					}
 					var id = item.music_id.toString();
 					body = {
 						from: 'DID:0',
 						to: 'UID:-1',
 						action: 409,
 						songlistname: '最新下载',
-						songlistid:id,
+						songlistid: id,
 						songs: [
 							{
 								id: id,
@@ -265,7 +280,7 @@ export default {
 							}
 						]
 					};
-					console.log("body===",body)
+					console.log('body===', body);
 					self.$toast({
 						message: '歌曲下载添加成功',
 						position: 'bottom',
@@ -278,7 +293,7 @@ export default {
 			}
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json, name: 'function' } };
-			self.$store.dispatch("setDevInfo", data);
+			self.$store.dispatch('setDevInfo', data);
 		}, 300)
 	},
 	beforeRouteLeave(to, from, next) {
@@ -292,12 +307,12 @@ export default {
 	},
 	computed: {
 		cancelOrDeleteFn: function() {
-			let self =this
+			let self = this;
 			if (self.serchValue) {
-				return self.cancelOrDelete = this.$t('m.Empty');
+				return (self.cancelOrDelete = this.$t('m.Empty'));
 			} else {
 				self.isShowResult = false;
-				return self.cancelOrDelete = this.$t('m.CANCEL');
+				return (self.cancelOrDelete = this.$t('m.CANCEL'));
 			}
 		}
 	}

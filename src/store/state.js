@@ -65,6 +65,9 @@ const state = {
 	loadingImg:true,
 	historyList:[],
 	playHistory: loadPlay(), // 播放历史
+	audioId:-1,
+	$audio: new Audio(),
+	battery:0
 };
 
 export default state;

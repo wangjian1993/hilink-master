@@ -17,10 +17,10 @@
 			<div class="devices-status-text">{{ isLine == 0 ? $t('m.off') : $t('m.open') }}</div>
 			<div class="devices-status-time">
 				<div class="devices-cell" v-show="isLine == 1">
-					<img v-if="musicData.battery <= 25" src="../../assets/images/ic_dianchi_1.png" alt="" />
-					<img v-if="musicData.battery <= 55 && musicData.battery > 25" src="../../assets/images/ic_dianchi_2.png" alt="" />
-					<img v-if="musicData.battery <= 75 && musicData.battery > 50" src="../../assets/images/ic_dianchi_3.png" alt="" />
-					<img v-if="musicData.battery <= 100 && musicData.battery > 75" src="../../assets/images/ic_dianchi_4.png" alt="" />
+					<img v-if="battery <= 25" src="../../assets/images/ic_dianchi_1.png" alt="" />
+					<img v-if="battery <= 55 && battery > 25" src="../../assets/images/ic_dianchi_2.png" alt="" />
+					<img v-if="battery <= 75 && battery > 50" src="../../assets/images/ic_dianchi_3.png" alt="" />
+					<img v-if="battery <= 100 && battery > 75" src="../../assets/images/ic_dianchi_4.png" alt="" />
 					<p>剩余电量</p>
 				</div>
 				<!-- <div v-show="deviceTime != 0 && isLine == 1">
@@ -226,6 +226,10 @@
 				<div class="updata-msg">2/2 设备正在重启...</div>
 				<div class="updata-btn" @click="cloneDevic()"><p>确定</p></div>
 			</div>
+			<div v-if="upflag == 5">
+				<div class="updata-msg">设备升级失败...</div>
+				<div class="updata-btn" @click="cloneDevic()"><p>确定</p></div>
+			</div>
 		</van-popup>
 		<div class="popup1" v-if="modePopup" @click="modePopupClick()"></div>
 		<div class="popup" v-if="timePopup" @click="popupClick()"></div>
@@ -276,7 +280,8 @@ export default {
 			'isBubble',
 			'istimePopu',
 			'upflag',
-			'musicData'
+			'musicData',
+			'battery'
 		]),
 		deviceTime: {
 			get() {

@@ -72,6 +72,7 @@ export default {
 			let self = this;
 			console.log(index)
 			self.$refs.checkboxes[index].toggle();
+			console.log("self.result.length",self.result.length)
 			if(self.result.length == 8){
 				this.$toast({
 					message: '批量下载每次最多添加八首',

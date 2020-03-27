@@ -13,16 +13,14 @@
 						<span>{{ item.browse }}次</span>
 					</div>
 				</div>
-				<div class="gitActive" v-if="item.id == musicData.songid || item.name == musicData.song">
-					<img src="../assets/images/gif.gif" alt="" />
-				</div>
+				<div class="gitActive" v-if="item.id == musicData.songid || item.name == musicData.song"><img src="../assets/images/gif.gif" alt="" /></div>
 				<div class="music_cell_right" @click="listenOrOffline(item.path, index, item.id, item)" v-show="isLine == 0">
 					<img class="secondImg" :src="active != index ? require('../assets/images/icon_listen_pause.png') : require('../assets/images/icon_listen_playing.png')" />
 					<span>试听</span>
 				</div>
 				<div class="music_cell_right" @click="devicesMusic(1, item, index)" v-show="isLine == 1">
-					<img class="secondImg" src="../assets/images/zanting-2.png" v-if="item.id == musicData.songid || item.name == musicData.song"/>
-					<img class="secondImg" src="../assets/images/bofang-2.png" v-else/>			
+					<img class="secondImg" src="../assets/images/task_icon_pause@3x.png" v-if="item.id == musicData.songid || item.name == musicData.song" />
+					<img class="secondImg" src="../assets/images/task_icon_play@3x.png" v-else />
 					<span>点播</span>
 				</div>
 			</div>
@@ -67,17 +65,20 @@ export default {
 		total: {
 			type: Number
 		},
-		isHistory:{
-			type:Boolean,
+		isHistory: {
+			type: Boolean,
 			default: false
+		},
+		audioInfoData: {
+			type: Number
 		}
 	},
 	data() {
 		return {
-			$audio: null,
+			// $audio: null,
 			active: -1,
 			showActive: -1,
-			isPaused:false,
+			isPaused: false
 		};
 	},
 	watch: {
@@ -86,10 +87,15 @@ export default {
 		},
 		items(newVal) {
 			//清除特殊符号
-			// let regex = /[!.、0-9]/g;
-			// newVal.forEach((v, i) => {
-			// 	v.name = v.name.replace(regex, '');
-			// });
+			let regex = /[!.、0-9]/g;
+			newVal.forEach((v, i) => {
+				if (v.name.indexOf('.') != -1) {
+					let str = v.name.split('.');
+					v.name = str[1];
+				} else {
+					v.name = v.name;
+				}
+			});
 		},
 		isReload(newVal) {
 			this.active = -1;
@@ -97,10 +103,10 @@ export default {
 	},
 	mounted() {},
 	computed: {
-		...mapState(['isLine','musicData'])
+		...mapState(['isLine', 'musicData', 'audioId', '$audio'])
 	},
 	created() {
-		this.$audio = new Audio();
+		// this.$audio = new Audio();
 	},
 	methods: {
 		//试听播放或者离线
@@ -113,29 +119,32 @@ export default {
 			this.play(src, index, id, data);
 		},
 		//手机播放音乐
-		play(src, index, id, data) {	
+		play(src, index, id, data) {
+			let self = this;
 			this.$store.dispatch('savePlayHistory', data);
 			this.$audio.pause();
-			console.log("试听====")
-			if (src == this.src) {
+			console.log('试听====', id);
+			console.log('试听====1111111111', self.audioId);
+			if (id == self.audioId) {
 				if (this.isPaused) {
-					console.log("试听====33333")
+					console.log('试听====33333');
 					this.active = -1;
 					this.$audio.pause();
-					this.isPaused =false;
+					this.isPaused = false;
 				} else {
-					console.log("试听====4444")
+					console.log('试听====4444');
 					this.$audio.play();
 					this.active = index;
-					this.isPaused =true;
+					this.isPaused = true;
 				}
 			} else {
-				console.log("试听====22222")
 				//统计
+				// self.audioId = id;
+				this.$store.dispatch('setAudioId', id);
 				this.active = index;
 				this.$audio.pause();
-				this.isPaused =true
-				this.src = this.$audio.src = src;
+				this.isPaused = true;
+				this.$audio.src = src;
 				this.$audio.play();
 				this.$audio.onended = () => {
 					this.active = -1;
@@ -149,7 +158,7 @@ export default {
 			if (this.isLine == 0) {
 				return;
 			}
-			if(this.isHistory){
+			if (this.isHistory) {
 				return;
 			}
 			if (this.showActive == index) {
@@ -183,7 +192,7 @@ export default {
 								language: '国语',
 								name: item.name,
 								albumname: item.specialname,
-								albumid: item.special_id,
+								albumid: self.audioInfoData,
 								type: 5,
 								total: self.total,
 								index: index,
@@ -288,9 +297,9 @@ export default {
 	flex-direction: column;
 	align-items: center;
 }
-.center{
+.center {
 	text-align: center;
-	width:100%;
+	width: 100%;
 	font-size: 14px;
 }
 .music_cell {
@@ -343,7 +352,7 @@ export default {
 	}
 }
 .music_cell_right {
-	position:absolute;
+	position: absolute;
 	right: 0;
 	display: flex;
 	flex-direction: column;
@@ -390,7 +399,7 @@ export default {
 .downloadImg {
 	opacity: 0.3;
 }
-.gitActive{
+.gitActive {
 	width: 5%;
 	width: 28px;
 	height: 100%;
@@ -398,8 +407,8 @@ export default {
 	justify-content: center;
 	align-items: center;
 }
-.gitActive img{
+.gitActive img {
 	width: 28px;
-	height:28px;
+	height: 28px;
 }
 </style>

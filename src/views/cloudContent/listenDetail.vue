@@ -30,8 +30,8 @@
 							<span><img src="../../assets/images/gif.gif" alt="" /></span>
 						</div>
 						<div class="right" @click="devicesMusic(1, item, index)" v-if="isLine == 1">
-							<img src="../../assets/images/zanting-3.png" v-if="item.id == musicData.songid || item.name == musicData.song"/>
-							<img src="../../assets/images/bofang-3.png" v-else/>
+							<img src="../../assets/images/task_icon_pause@3x.png" v-if="item.id == musicData.songid || item.name == musicData.song"/>
+							<img src="../../assets/images/task_icon_pause@3x.png" v-else/>
 							<div style="color: #000000;">点播</div>
 						</div>
 						<div class="playCell" @click="play(item.path, index)" v-if="isLine == 0">

@@ -19,8 +19,8 @@
 						</div>
 					</div>
 				</div>
-				<div class="album-icon" v-if="isLine == 1"><img src="../../assets/images/download.png" class="head_download" @click="goDownload(1)" /></div>
-				<div class="album-icon1" v-if="isLine == 1"><img src="../../assets/images/favorites.png" class="head_download" @click="goDownload(2)" /></div>
+				<div class="album-icon"><img src="../../assets/images/download.png" class="head_download" @click="goDownload(1)" /></div>
+				<!-- <div class="album-icon1" v-if="isLine == 1"><img src="../../assets/images/favorites.png" class="head_download" @click="goDownload(2)" /></div> -->
 			</div>
 			<van-tabs v-model="active" color="#4da6ff">
 				<van-tab title="列表"><music-list :items="musicList" :total="total" :audioInfoData="audioInfoData.id" :routeLeave="routeLeave"></music-list></van-tab>
@@ -124,7 +124,9 @@ export default {
 					let m = (parseInt(v.timelength / 60) + '').padStart(2, '0');
 					v.timelengths = m + ':' + s;
 				});
-				that.isLoaded=true;
+				setTimeout(function(){
+					that.isLoaded=true;
+				},1000)
 			});
 		},
 		//批量下载
@@ -198,13 +200,16 @@ export default {
 }
 .head_coverpath {
 	width: 100%;
-	height: 204px;
+	height: 180px;
 	background-size: 100% 100%;
 	filter: blur(25px);
 }
 .head_content {
 	position: absolute;
-	top: 20%;
+	top: 8%;
+	left: 0;
+	bottom: 0;
+	right: 0;
 	width: 96%;
 	padding-left: 30px;
 	color: #ffffff;
@@ -213,6 +218,7 @@ export default {
 	text-overflow: ellipsis;
 	display: flex;
 	align-items: center;
+	z-index: 1000;
 	.head_content_right {
 		font-size: 16px;
 		line-height: 16px;

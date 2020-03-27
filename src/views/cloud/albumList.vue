@@ -1,7 +1,7 @@
 <template>
 	<div class="app">
 		<v-header :title="title"></v-header>
-		<van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="loadingData">
+		<van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="loadingData" v-show="isLoaded">
 			<div class="tab_item" v-for="(item, index) in dataList" :key="index" @click="goDetail(item.id)">
 				<img v-lazy="item.coverpath" class="tab-item-coverpath" alt />
 				<div class="tab_item_right">
@@ -12,7 +12,7 @@
 				</div>
 			</div>
 		</van-list>
-		<!-- <div class="loadingding center" v-show="!isLoaded"><van-loading size="30px" vertical color="#007DFF">加载中</van-loading></div> -->
+		<div class="loadingding center" v-show="!isLoaded"><van-loading size="30px" vertical color="#007DFF">加载中</van-loading></div>
 	</div>
 </template>
 
@@ -36,10 +36,15 @@ export default {
 	created() {},
 	mounted() {
 		this.name = this.$route.query.name;
+		this.loadingData();
 	},
 	methods: {
 		loadingData() {
 			var that = this;
+			setTimeout(function() {
+				that.isLoaded = true;
+			}, 500);
+			console.log('11111======', that.isLoaded);
 			switch (this.name) {
 				case '精品推荐': //精品推荐
 					this.title = '精品推荐';
@@ -120,7 +125,6 @@ export default {
 			console.log(this.dataLis);
 			// 加载状态结束
 			this.loading = false;
-			// this.isLoaded =true;
 			// 数据全部加载完成
 			console.log('this.dataList.length', this.dataList.length);
 			console.log('this.total', this.total);
