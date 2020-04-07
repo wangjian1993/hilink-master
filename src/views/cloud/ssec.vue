@@ -1,18 +1,20 @@
 <template>
 	<div class="app">
 		<v-header :title="title"></v-header>
-		<album-list :type="dataType"></album-list>
+		<album-list :dataList="dataList" v-show="isLoaded"></album-list>
+		<div class="loadingding center" v-show="!isLoaded"><van-loading size="30px" color="#81b4ff">加载中...</van-loading></div>
 	</div>
 </template>
 
 <script>
 import Header from '@/components/header.vue';
-import albumList from '../../components/AlbumList.vue';
+import albumList from '../../components/new/AlbumList.vue';
 export default {
 	data() {
 		return {
-			dataType: -1,
-			title: null
+			dataList: [],
+			title: null,
+			isLoaded: false
 		};
 	},
 	components: {
@@ -20,16 +22,25 @@ export default {
 		albumList
 	},
 	created() {
-		this.dataType = this.$route.query.type;
-		if(this.dataType == 1){
-			this.title = '听儿歌';
-		}else if(this.dataType == 2){
-			this.title = '讲故事';
-		}else if(this.dataType == 3){
-			this.title = '学英语';
-		}else if(this.dataType == 4){
-			this.title = '赏国学';
-		}
+		this.title = this.$route.query.title;
+		this.$axios
+			.getSSECData({
+				categoryId: this.$route.query.id,
+				type: 1,
+				channelId: 66,
+				pageNo: 1,
+				pageSize: 50
+			})
+			.then(res => {
+				res.data.data.list.forEach((v, i) => {
+					v.coverImage = v.coverImage + '?x-oss-process=image/resize,w_54/quality,Q_80';
+				});
+				this.dataList = res.data.data.list;
+				this.isLoaded = true;
+			})
+			.catch(err => {
+				console.log(err);
+			});
 	},
 	beforeRouteLeave(to, from, next) {
 		// 销毁组件，避免通过vue-router再次进入时，仍是上次的history缓存的状态

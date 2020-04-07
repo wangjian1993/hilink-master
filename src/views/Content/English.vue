@@ -183,10 +183,12 @@ export default {
 		//故事机播放模式
 		devicesAction() {
 			let self = this;
+			var timestamp = parseInt(new Date().getTime() / 1000);
 			var body = {
 				from: 'DID:0',
 				to: 'UID:-1',
-				action: 641
+				action: 641,
+				time:timestamp
 			};
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json, name: 'function' } };
@@ -203,6 +205,7 @@ export default {
 			let self = this;
 			self.setCheck = !self.setCheck;
 			// self.englishAcitve =[];
+			var timestamp = parseInt(new Date().getTime() / 1000);
 			if (!self.setCheck) {
 				if (self.isClick) {
 					console.log('111111111111');
@@ -210,7 +213,8 @@ export default {
 						from: 'DID:0',
 						to: 'UID:-1',
 						action: 637,
-						list: self.musicList
+						list: self.musicList,
+						time:timestamp
 					};
 				} else {
 					console.log('22222222222', self.albumid);
@@ -218,7 +222,8 @@ export default {
 						from: 'DID:0',
 						to: 'UID:-1',
 						action: 637,
-						list: self.albumid
+						list: self.albumid,
+						time:timestamp
 					};
 				}
 				// var body = {

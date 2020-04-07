@@ -5,15 +5,21 @@
 			<p class="downMsg">*应版权方要求,部分歌曲暂无法提供下载</p>
 			<van-checkbox-group v-model="result" checked-color="#07c160" ref="checkboxGroup" :max="checkboxMax">
 				<van-cell-group>
-					<van-cell v-for="(item, index) in musicList" :title="item.name"  clickable
-			      :key="index"  @click="toggle(index)" :class="item.copyrightId == 0?'isDownActive':''">
-						<van-checkbox :name="index"  ref="checkboxes" slot="right-icon"  v-if="item.copyrightId == 1"/>			
+					<van-cell
+						v-for="(item, index) in musicList"
+						:title="item.name"
+						clickable
+						:key="index"
+						@click="toggle(index)"
+						:class="item.copyrightId == 0 ? 'isDownActive' : ''"
+					>
+						<van-checkbox :name="index" ref="checkboxes" slot="right-icon" v-if="item.isDownload == 1"/>
 					</van-cell>
 				</van-cell-group>
 			</van-checkbox-group>
 		</div>
 		<div class="downBtn" @click="downAllList()">下载</div>
-		<div class="loadingding center" v-show="!isLoaded"><van-loading size="50px" color="#81b4ff">加载中...</van-loading></div>
+		<div class="loadingding center" v-show="!isLoaded"><van-loading size="30px" color="#81b4ff">加载中...</van-loading></div>
 	</div>
 </template>
 
@@ -33,26 +39,38 @@ export default {
 			isLoaded: false,
 			showIndex: -1,
 			showTab: true,
-			checkboxMax:8,
+			checkboxMax: 8,
 			loadingFlag: true,
 			title: '批量下载'
 		};
 	},
-	created() {
-	},
+	created() {},
 	async mounted() {
-		// this.isLoaded = true;
-		await http
-			.getSpecialInfo(this.$route.query.id)
-			.then(res => {
-				//转换播放时间
-				this.musicList = res.data.content.musicList;
-				this.isLoaded =true;
+		let that = this;
+		await that.$axios
+			.getAudioData({
+				audioGroupId: this.$route.query.id,
+				channelId: 66,
+				pageSize: 200,
+				pageNo: this.pageNo
 			})
-			.catch(err => {
-				console.log(err);
+			.then(res => {
+				if (res.data.success) {
+					that.audioInfoData = res.data.data;
+					// that.total = res.data.data.total;
+
+					//转换格式
+					res.data.data.audioVoList.forEach((v, i) => {
+						let s = (parseInt(v.timeLength % 60) + '').padStart(2, '0');
+						let m = (parseInt(v.timeLength / 60) + '').padStart(2, '0');
+						v.timelengths = m + ':' + s;
+					});
+					that.musicList = that.musicList.concat(res.data.data.audioVoList);
+					that.isLoaded = true;
+				} else {
+					that.noMoreData = true;
+				}
 			});
-		this.audio = new Audio();
 		window['songAllDown'] = resultStr => {
 			let data = this.praseResponseData(resultStr);
 			if (data.errcode == 0) {
@@ -70,10 +88,10 @@ export default {
 	methods: {
 		toggle(index) {
 			let self = this;
-			console.log(index)
+			console.log(index);
 			self.$refs.checkboxes[index].toggle();
-			console.log("self.result.length",self.result.length)
-			if(self.result.length == 8){
+			console.log('self.result.length', self.result);
+			if (self.result.length == 8) {
 				this.$toast({
 					message: '批量下载每次最多添加八首',
 					position: 'bottom',
@@ -85,8 +103,8 @@ export default {
 		downAllList() {
 			let self = this;
 			var dataArray = [];
-			console.log("self.result=====",self.result);
-			if(self.result.length == 0){
+			console.log('self.result=====', self.result);
+			if (self.result.length == 0) {
 				self.$toast({
 					message: '请选择要下载的歌曲',
 					position: 'bottom',
@@ -103,22 +121,24 @@ export default {
 			});
 			var songsData = [];
 			dataArray.forEach(function(item, index) {
-				let path = item.path.indexOf('https:') > -1 ? item.path.replace('https', 'http') : item.path;
+				let path = item.url.indexOf('https:') > -1 ? item.url.replace('https', 'http') : item.url;
 				let json = {
 					id: item.id.toString(),
 					name: item.name,
 					fmt: 'mp3',
-					url: item.path
+					url: path
 				};
 				songsData.push(json);
 			});
+			var timestamp = parseInt(new Date().getTime() / 1000);
 			var body = {
 				from: 'DID:0',
 				to: 'UID:-1',
 				action: 409,
 				songlistname: '最新下载',
-				songlistid: self.info.id,
-				songs: songsData
+				songlistid: self.audioInfoData.id,
+				songs: songsData,
+				time:timestamp,
 			};
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json, name: 'function' } };
@@ -148,13 +168,13 @@ export default {
 <style lang="less" scoped>
 @import url('../../assets/css/cloud/common.less');
 @import url('../../assets/css/cloud/listenDetail.less');
-.downMsg{
+.downMsg {
 	width: 100%;
 	text-align: center;
 	font-size: 14px;
 	color: #c81624;
 }
-.isDownActive{
-	opacity: .4;
+.isDownActive {
+	opacity: 0.4;
 }
 </style>

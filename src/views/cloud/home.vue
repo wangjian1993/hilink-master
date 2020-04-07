@@ -1,103 +1,68 @@
 <template>
 	<div class="app">
-		<!-- 搜索 -->
-		<div class="cloud-content" v-if="!isLoaded">
+		<!-- 轮播 -->
+		<div class="content" v-show="isLoaded">
 			<div class="search-box">
 				<router-link to="/cloudContent/search" class="search">
 					<img src="../../assets/images/home_icon_search.png" />
 					<div class="search-text">搜索</div>
-					<div class="search-rigth"></div>
 				</router-link>
+				<div class="history" @click="goHistory"><img src="../../assets/images/historyIcon.png" alt="" /></div>
 			</div>
-			<!-- 轮播 -->
-			<van-swipe :autoplay="3000" class="van_swipe">
-				<van-swipe-item v-for="(item, index) in bannerData" :key="index" v-if="item.linktype == 2" @click="swiperClick(item.link, item.linktype)">
-					<img :src="item.path" />
+			<van-swipe :autoplay="3000" class="van_swipe" indicator-color="white">
+				<van-swipe-item v-for="(item, index) in bannerData" :key="index" v-if="swipeSlip(item.links)" @click="swiperClick(item.links)">
+					<img v-lazy="item.coverImage" />
 				</van-swipe-item>
 			</van-swipe>
-
 			<!-- tab -->
 			<div class="options">
-				<div class="option_item" @click="goListen(1)">
-					<img src="../../assets/images/home_icon_erge.png" />
-					<div>听儿歌</div>
+				<div class="option_item" @click="goListen(item.referId, item.name)" v-for="(item, index) in categoryList" :key="index">
+					<img :src="item.url" />
+					<div>{{ item.name }}</div>
 				</div>
-				<div class="option_item" @click="goListen(2)">
-					<img src="../../assets/images/home_icon_gushi.png" />
-					<div>讲故事</div>
-				</div>
-				<div class="option_item" @click="goListen(3)">
-					<img src="../../assets/images/home_icon_yingyu.png" />
-					<div>学英语</div>
-				</div>
-				<div class="option_item" @click="goListen(4)">
-					<img src="../../assets/images/home_icon_guoxue.png" />
-					<div>赏国学</div>
-				</div>
-				<router-link tag="div" to="/cloudContent/rank" class="option_item">
+				<router-link tag="div" to="/cloud/rank" class="option_item">
 					<img src="../../assets/images/home_icon_paihang.png" />
 					<div>排行榜</div>
 				</router-link>
 			</div>
 			<!-- 历史记录 宝宝哄睡 -->
-			<div class="history_baby">
-				<img src="../../assets/images/home_lishi.png" @click="goHistory" />
-				<img src="../../assets/images/home_hongshui.png" @click="goSleepZone" />
-			</div>
+			<!-- <div class="history_baby">
+				<div><img src="../../assets/images/home_lishi.png" @click="goHistory" /></div>
+				<div><img src="../../assets/images/home_hongshui.png" @click="goSleepZone" /></div>
+			</div> -->
 			<!-- 分年龄推荐 -->
 			<div class="title">
 				<p class="main-name">分龄推荐</p>
-				<!-- <p class="sub-name">{{title}}</p> -->
-				<router-link tag="div" to="/cloudContent/differentAge">
+				<!-- <router-link tag="div" :to="{ path: '/differentAge', query: { id: ageId } }">
 					更多
 					<img src="../../assets/images/more.png" class="more" alt />
-				</router-link>
+				</router-link> -->
 			</div>
-			<van-tabs v-model="active" color="#4da6ff" @change="getAgeData" swipeable>
-				<van-tab title="0-1岁"><music-list :items="ageData" :albumId="albumId" :total="total" name="2760" :showIndex="false" :isReload="isReload"></music-list></van-tab>
-				<van-tab title="1-2岁"><music-list :items="ageData" :albumId="albumId" :total="total" name="2761" :showIndex="false" :isReload="isReload"></music-list></van-tab>
-				<van-tab title="2-3岁"><music-list :items="ageData" :albumId="albumId" :total="total" name="2762" :showIndex="false" :isReload="isReload"></music-list></van-tab>
-				<van-tab title="3-4岁"><music-list :items="ageData" :albumId="albumId" :total="total" name="2763" :showIndex="false" :isReload="isReload"></music-list></van-tab>
-				<van-tab title="4-5岁"><music-list :items="ageData" :albumId="albumId" :total="total" name="2764" :showIndex="false" :isReload="isReload"></music-list></van-tab>
-				<van-tab title="5-6岁"><music-list :items="ageData" :albumId="albumId" :total="total" name="2765" :showIndex="false" :isReload="isReload"></music-list></van-tab>
-			</van-tabs>
-			<div class="next" @click="nextSong">
-				<img src="../../assets/images/icon_refresh.png" alt />
-				<span>换一批</span>
+			<swiper-customize :dataList="ageData"></swiper-customize>
+			<div class="content_list" v-for="(item, index) in activityVoList" :key="item + index">
+				<list v-if="item.type == 40 && item.styleStr[2] == '两'" :name="item.name" :item="item.resList" :id="item.id" :num="2" :size="165" :isShowMore="true"></list>
+				<list v-if="item.type == 40 && item.styleStr[2] == '三'" :name="item.name" :item="item.resList" :id="item.id" :num="3" :size="105" :isShowMore="true"></list>
+				<list v-if="item.type == 10" :name="item.name" :item="item.resList" :id="item.id" :num="3" :size="1050" :isShowMore="false"></list>
+				<swiper-list v-if="item.type == 40 && item.styleStr[2] == '多'" :name="item.name" :item="item.resList" :num="6" :id="item.id"></swiper-list>
+				<video-list v-if="item.type == 50" :name="item.name" :item="item.resList" :id="item.id" :num="2"></video-list>
 			</div>
-			<!-- 精品推荐 -->
-			<list :name="title[0].name" :title="title[0].title" :item="recommend" :num="title[0].num" :size="105" :isShowMore="true"></list>
-			<!-- 英语启蒙 -->
-			<list :name="title[10].name" :title="title[10].title" :item="yingyuData" :num="title[10].num" :size="163" :isShowMore="false"></list>
-			<!-- 国学经典 -->
-			<list :name="title[5].name" :title="title[5].title" :item="gxxtData" :num="title[5].num" :size="105" :isShowMore="true"></list>
-			<!-- 最新上线 -->
-			<list :name="title[9].name" :title="title[9].title" :item="newData" :num="title[9].num" :size="105" :isShowMore="true"></list>
-			<!-- 安全教育知识普及 -->
-			<list :name="title[11].name" :title="title[11].title" :item="safeData" :num="title[11].num" :size="348" :isShowMore="false"></list>
-			<!-- 性格养成 -->
-			<list :name="title[2].name" :title="title[2].title" :item="musicXGYC" :num="title[2].num" :size="105" :isShowMore="true"></list>
-			<!-- 自信与勇气 -->
-			<list :name="title[12].name" :title="title[12].title" :item="confidentData" :num="title[12].num" :size="105" :isShowMore="true"></list>
-			<!-- 视频推荐 -->
-			<!-- <video-list :name="title[1].name" :title="title[1].title" :item="videoData" :num="title[1].num"></video-list> -->
-			<!-- 付费精选 -->
-			<!-- 情商培养 -->
-			<list :name="title[7].name" :title="title[7].title" :item="qspyData" :num="title[7].num" :size="165" :isShowMore="true"></list>
-			<!-- 财商启蒙 -->
-			<list :name="title[6].name" :title="title[6].title" :item="csqmData" :num="title[6].num" :size="165" :isShowMore="true"></list>
-			<!-- 哄睡儿歌 -->
-			<!-- <list :name="title[8].name" :title="title[8].title" :item="sleepData" :num="title[8].num"></list> -->
+			<!-- 回到顶部 -->
+			<div class="bottom"></div>
 		</div>
-		<!-- <div class="bottom"></div> -->
-		<div class="loadingding center" v-show="isLoaded"><van-loading size="30px" vertical color="#007DFF">加载中</van-loading></div>
+		<div class="loadingding center" v-show="!isLoaded"><van-loading size="30px" vertical color="#007DFF">加载中</van-loading></div>
 	</div>
 </template>
 <script>
-import { mapState } from 'vuex';
-import musicList from '../../components/musicList.vue';
-const List = () => import('@/components/list');
-const videoList = () => import('@/components/videoList');
+// import Swiper from "../../assets/js/swiper.min.js";
+import musicList from '../../components/new/musicList.vue';
+import SwiperCustomize from '../../components/new/SwiperCustomize.vue';
+const List = () => import('@/components/new/list');
+const swiperList = () => import('@/components/new/swiperList');
+const videoList = () => import('@/components/new/videoList');
+const payList = () => import('@/components/new/payList');
+const fmList = () => import('@/components/new/FMList');
+const scrollInto = () => import('@/components/new/scrollInto');
+// let swiper;
 export default {
 	data() {
 		return {
@@ -115,112 +80,151 @@ export default {
 			newData: [], //最新上架
 			yingyuData: [], //英语启蒙
 			safeData: [], //安全教育普及
-			confidentData: [], //自信与勇气
+			confidentData: [], //认知启蒙
+
+			recommendID: [], //最新推荐
+			videoDataID: [], //视频
+			videoAdID: [], //视频广告
+			musicXGYCID: [],
+			payDataID: [],
+			HostFMDataID: [],
+			gxxtDataID: [], //国学熏陶
+			csqmDataID: [],
+			qspyDataID: [], //情商培养
+			sleepDataID: [], //哄睡儿歌
+			newDataID: [], //最新上架
+			yingyuDataID: [], //英语启蒙
+			safeDataID: [], //安全教育普及
+			confidentDataID: [], //认知启蒙
+			babyID: '',
 			page: 0, //页数
 			count: 0, //总页数
 			sunCount: 0, //总条数
 			isLoading: true,
 			backToTop: false, //回到顶部按钮
-			isLoaded: true,
-			title: [
-				{
-					name: '精品推荐',
-					title: '最热门的内容都在这里',
-					num: 6
-				},
-				{
-					name: '视频推荐',
-					title: '益智视频,精彩不断',
-					num: 6
-				},
-				{
-					name: '性格养成',
-					title: '从小养成好性格',
-					num: 3
-				},
-				{
-					name: '付费精选',
-					title: '学习知识好帮手',
-					num: 4
-				},
-				{
-					name: '优选主播',
-					title: '陪孩子一起听世界',
-					num: 3
-				},
-				{
-					name: '国学熏陶',
-					title: '培养孩子良好品德素养',
-					num: 6
-				},
-				{
-					name: '财商启蒙',
-					title: '孩子的财商是这么玩出来的',
-					num: 4
-				},
-				{
-					name: '情商培养',
-					title: '从小就坐聪明人',
-					num: 4
-				},
-				{
-					name: '哄睡儿歌',
-					title: '小摇床,轻轻晃,月亮伴我入梦乡',
-					num: 4
-				},
-				{
-					name: '最新上架',
-					title: '好多新内容,快来听听吧',
-					num: 6
-				},
-				{
-					name: '英语启蒙',
-					title: '好多新内容,快来听听吧',
-					num: 2
-				},
-				{
-					name: '安全教育知识普及',
-					title: '好多新内容,快来听听吧',
-					num: 3
-				},
-				{
-					name: '自信与勇气',
-					title: '好多新内容,快来听听吧',
-					num: 3
-				}
-			],
 			active: 0,
 			tabActive: 0,
 			isReload: 1, //播放列表样式重载
 			ageData: [], //分龄数据
-			albumId: 0,
-			total: 0
+			categoryList: [], //banner分类数据,
+			ageId: '', //分龄推荐专辑id集
+			babyAvator: '', //宝宝头像
+			isShowLoading: true,
+			hasBaby: false, //是否有宝宝
+			activityVoList: [],
+			isLoaded: false
 		};
 	},
-	computed: {
-		...mapState(['isLine'])
-	},
 	created() {
-		this.bannerList();
-		this.getRecommendData();
-		this.getNewSpecialsData();
+		this.getData();
+		// this.getCommonToken();
+		// this.getRecommendData();
+	},
+	activated() {
+		document.title = '火火兔早教';
 	},
 	mounted() {
-		// Bus.$on("reLoad", data => {
 		localStorage.getItem('deviceType');
-		// });
 	},
 	methods: {
-		// 轮播图
-		bannerList() {
-			var that = this;
-			that.$axios.getBannerList().then(function(res) {
-				that.bannerData = res.data.content.bannerList;
+		async getData() {
+			this.$axios.getCategoryCode({ code: 'all', channelId: 66 }).then(res => {
+				this.categoryList = res.data.data;
 			});
+			await this.$axios.differAge({ channelId: 80 }).then(res => {
+				res.data.data[0].title = '默认成长推荐';
+				this.ageData.push(res.data.data);
+			});
+			await this.$axios.differAge({ channelId: 80, birthDate: '2020-03-24' }).then(res => {
+				res.data.data[0].title = '0-1岁成长推荐';
+				this.ageData.push(res.data.data);
+			});
+			await this.$axios.differAge({ channelId: 80, birthDate: '2019-03-24' }).then(res => {
+				res.data.data[0].title = '1-3岁成长推荐';
+				this.ageData.push(res.data.data);
+			});
+			await this.$axios.differAge({ channelId: 80, birthDate: '2017-03-24' }).then(res => {
+				res.data.data[0].title = '3+成长推荐';
+				this.ageData.push(res.data.data);
+			});
+			this.$axios.getHomeData().then(res => {
+				let result = res.data.data.activityVoList;
+				//轮播
+				result[0].resList.forEach((v, i) => {
+					v.linkType = v.links.split(';')[0];
+					v.link = v.links.split(';')[1];
+					v.coverImage = v.coverImage + '?x-oss-process=image/resize,w_345/quality,Q_80';
+				});
+				this.bannerData = result[0].resList;
+				this.babyID = result[1].id;
+				//分龄推荐
+				let idGroup = [];
+				result[2].resList.forEach((v, i) => {
+					idGroup.push(v.id);
+				});
+				this.ageId = idGroup = idGroup.join(',');
+				//
+				//精品推荐
+				this.recommend = result[3].resList;
+				this.recommend.forEach((v, i) => {
+					v.coverImage = v.coverImage + '?x-oss-process=image/resize,w_105/quality,Q_80';
+				});
+				this.recommendID = result[3].id;
+				//英语启蒙
+				this.yingyuData = result[4].resList;
+				this.yingyuData.forEach((v, i) => {
+					v.coverImage = v.coverImage + '?x-oss-process=image/resize,w_163/quality,Q_80';
+				});
+				this.yingyuDataID = result[4].id;
+				//国学熏陶
+				this.gxxtData = result[5].resList;
+				this.gxxtData.forEach((v, i) => {
+					v.coverImage = v.coverImage + '?x-oss-process=image/resize,w_105/quality,Q_80';
+				});
+				this.gxxtDataID = result[5].id;
+				//最新上架
+				this.newData = result[6].resList;
+				this.newData.forEach((v, i) => {
+					v.coverImage = v.coverImage + '?x-oss-process=image/resize,w_105/quality,Q_80';
+				});
+				this.newDataID = result[6].id;
+				//性格养成
+				this.musicXGYC = result[7].resList;
+				this.musicXGYC.forEach((v, i) => {
+					v.coverImage = v.coverImage + '?x-oss-process=image/resize,w_105/quality,Q_80';
+				});
+				this.musicXGYCID = result[7].id;
+				//认知启蒙
+				this.confidentData = result[8].resList;
+				this.confidentData.forEach((v, i) => {
+					v.coverImage = v.coverImage + '?x-oss-process=image/resize,w_105/quality,Q_80';
+				});
+				this.confidentDataID = result[8].id;
+				//精彩动画
+				this.videoData = result[9].resList.splice(0, 2);
+				this.videoData.forEach((v, i) => {
+					v.coverImage = v.coverImage + '?x-oss-process=image/resize,w_163/quality,Q_80';
+				});
+				this.videoDataID = result[9].id;
+
+				this.activityVoList = result.splice(3);
+				console.log(this.activityVoList);
+				this.isLoaded = true;
+			});
+		},
+		goSearchPage() {
+			this.$router.push('./search');
+		},
+		swipeSlip(id) {
+			let linkType = id.split('+')[0];
+			return linkType == 40;
 		},
 		//宝宝哄睡
 		goSleepZone() {
-			this.$router.push({ name: 'albumList', query: { name: '宝宝哄睡' } });
+			this.$router.push({
+				path: '/albumList',
+				query: { name: '宝宝哄睡', id: this.babyID }
+			});
 		},
 		//历史记录
 		goHistory() {
@@ -229,71 +233,12 @@ export default {
 		//专辑列表
 		getRecommendData() {
 			var that = this;
-			//精品推荐
-			that.$axios.recommendSpecial(0, 7).then(function(res) {
-				that.recommend = res.data.content.list.sort(that.randomArray);
-			});
-			//视频
-			that.$axios.getVideoData().then(function(res) {
-				that.videoData = res.data.content.list;
-			});
-			//习惯养成
-			that.$axios.getMusicXGYC(0, 6).then(res => {
-				that.musicXGYC = res.data.content.list;
-			});
 			//付费精选
 			that.$axios.getPayData().then(function(res) {
 				that.payData = res.data.content.list;
-			});
-			// 国学熏陶
-			that.$axios.getgxxtData(0, 6).then(res => {
-				that.gxxtData = res.data.content.list;
-			});
-			//财商启蒙
-			that.$axios.getcsqmData(0, 6).then(res => {
-				that.csqmData = res.data.content.list;
-			});
-			//情商培养
-			that.$axios.getqspyData(0, 4).then(res => {
-				that.qspyData = res.data.content.list;
-			});
-			//分龄推荐
-			that.$axios.getSpecialInfo('2760').then(res => {
-				that.ageData = res.data.content.musicList.splice(0, 5);
-				console.log('res.data.content.info.id=========', res.data.content.info.id);
-				that.albumId = res.data.content.info.id;
-				that.total = res.data.content.total;
-				//转换格式
-				that.ageData.forEach((v, i) => {
-					let s = (parseInt(v.timelength % 60) + '').padStart(2, '0');
-					let m = (parseInt(v.timelength / 60) + '').padStart(2, '0');
-					v.timelengths = m + ':' + s;
-				});
-				console.log(that.ageData);
-			});
-			//英语启蒙
-			that.$axios.getAudioSpecialByIDs('2767,2766').then(res => {
-				that.yingyuData = res.data.content.audioSpeicalList;
-			});
-			//安全教育普及
-			that.$axios.getAudioSpecialByIDs('2769,2768,2770,2771').then(res => {
-				res.data.content.audioSpeicalList[1].title = res.data.content.audioSpeicalList[0].title.split('，');
-				that.safeData = res.data.content.audioSpeicalList.splice(1);
-				console.log(that.safeData);
-			});
-			//自信与勇气
-			that.$axios.getAudioSpecialByIDs('2772,2773,2774').then(res => {
-				that.confidentData = res.data.content.audioSpeicalList;
-			});
-			setTimeout(function() {
-				that.isLoaded = false;
-			}, 200);
-		},
-		getNewSpecialsData() {
-			//最新上架
-			let that = this;
-			that.$axios.getNewSpecials().then(res => {
-				that.newData = res.data.content.list;
+				setTimeout(() => {
+					that.isShowLoading = false;
+				}, 500);
 			});
 		},
 		//跳转设备
@@ -314,61 +259,47 @@ export default {
 			else return null;
 		},
 		//跳转听儿歌页
-		goListen(type) {
-			this.$router.push({ name: 'ssec', query: { type: type } });
-			console.log(type);
-			this.$store.state.params = type;
+		goListen(id, name) {
+			console.log(name);
+			this.$router.push({ name: 'ssec', query: { id: id, title: name } });
 		},
-		//换一批
-		nextSong() {
-			this.isReload++;
-			this.$axios.getSpecialInfo(this.active + 2760).then(res => {
-				this.ageData = res.data.content.musicList.splice(parseInt(Math.random() * (res.data.content.musicList.length - 5)), 5);
-				this.ageData.forEach((v, i) => {
-					let s = (parseInt(v.timelength % 60) + '').padStart(2, '0');
-					let m = (parseInt(v.timelength / 60) + '').padStart(2, '0');
-					v.timelengths = m + ':' + s;
-				});
-			});
-		},
-		//获取分龄儿童数据
-		getAgeData(name, title) {
-			this.isReload++;
-			//统计
-			this.$axios.getSpecialInfo(name + 2760).then(res => {
-				this.ageData = res.data.content.musicList.splice(0, 5);
-				this.ageData.forEach((v, i) => {
-					let s = (parseInt(v.timelength % 60) + '').padStart(2, '0');
-					let m = (parseInt(v.timelength / 60) + '').padStart(2, '0');
-					v.timelengths = m + ':' + s;
-				});
-			});
-		},
-
 		//轮播跳转
-		swiperClick(link, typelink) {
-			switch (typelink) {
-				case 1:
-					break;
-				case 2:
+		swiperClick(links) {
+			let linkType = links.split('+')[0];
+			let id = links.split('+')[1];
+			switch (linkType) {
+				case '40':
 					this.$router.push({
 						name: 'albumDetail',
 						query: {
-							id: link
+							id: id
 						}
 					});
 					break;
-				case 3:
+				case '10':
+					this.$router.push({
+						name: 'albumDetail',
+						query: {
+							id: id
+						}
+					});
 					break;
-				case 4:
-					location.href = link;
-					break;
-				case 5:
+				case '20':
+					this.$router.push({
+						path: '/video',
+						query: {
+							id: id
+						}
+					});
 					break;
 				default:
+					window.open(links, '_blank');
 					break;
 			}
 		},
+		// destroyed() {
+		//   window.removeEventListener("scroll", this.toBottom());
+		// },
 		change(e) {
 			console.log(this.$refs.dataNum.dataset.num);
 		}
@@ -376,30 +307,41 @@ export default {
 	components: {
 		List,
 		videoList,
-		musicList
+		payList,
+		fmList,
+		scrollInto,
+		swiperList,
+		musicList,
+		SwiperCustomize
 	},
 	beforeRouteEnter(to, from, next) {
-		next();
+		next(vm => {
+			console.log(from);
+			if (from.path == '/addBaby' || from.path == '/editBaby') {
+				vm.$axios.getBabyData({ userId: localStorage.getItem('userId') }).then(res => {
+					if (res.data.data.length != 0) {
+						vm.hasBaby = true;
+					}
+					res.data.data.forEach((v, i) => {
+						if (v.isAuto == '1') {
+							vm.babyInfo = v;
+						}
+					});
+					vm.babyAvator = vm.babyInfo.head ? vm.babyInfo.head : require('../../assets/images/default.png');
+					vm.exChangeAge(res.data.data);
+				});
+			}
+		});
 	}
 };
 </script>
 
 <style lang="less" scoped>
-@import url('../../assets/css/index/index.less');
+@import url('../../assets/css/cloud/index.less');
+@import url('../../assets/css/cloud/common.less');
 @import url('../../assets/css/swiper.min.css');
 .app {
-	background: #fff;
-	margin-top: 80px;
-	margin-bottom: 50px;
-}
-.loadingding {
-	position: fixed;
-	left: 50%;
-	top: 50%;
-	width: 100px;
-	height: 100px;
-	margin: -50px 0 0 -50px;
-	color: #81b4ff;
-	text-align: center;
+	margin-top: 84px;
+	background: #f7f7f7;
 }
 </style>

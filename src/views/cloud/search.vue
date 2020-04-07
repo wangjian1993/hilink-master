@@ -1,91 +1,68 @@
 <template>
 	<div class="container">
 		<!--顶部-->
-		<v-header :title="title"></v-header>
 		<div class="top center">
 			<div class="search">
 				<div class="searchIcon center"><img src="../../assets/images/home_icon_search.png" /></div>
 				<div class="searchInput">
-					<van-cell-group><van-field class="field" v-model="serchValue" :placeholder="$t('m.Search')" @change="SearchResult" ref="blurSearch" /></van-cell-group>
+					<van-cell-group>
+						<form action="javascript:return true" style="border:0px">
+							<van-field class="field" v-model="serchValue" placeholder="搜索专辑、音频、视频" type="search" @blur="SearchResult" />
+						</form>
+					</van-cell-group>
 				</div>
 			</div>
-			<div class="cancel" :class="this.$i18n.locale == 'en-US' ? 'searchActive' : ''" @click="goBack">{{ cancelOrDeleteFn }}</div>
+			<div class="cancel" @click="goBack">{{ cancelOrDelete }}</div>
 		</div>
 		<!--热门搜索-->
 
 		<div class="hotSearch" v-if="!isShowResult">
-			<div class="hotKey">{{ $t('m.Topsearches') }}</div>
+			<div class="hotKey">热门搜索</div>
 			<div class="hotSearchList">
-				<div class="hotSearchCell" @click="hotSearch('爸爸')">爸爸</div>
-				<div class="hotSearchCell" @click="hotSearch('妈妈')">妈妈</div>
-				<div class="hotSearchCell" @click="hotSearch('火火兔')">火火兔</div>
-				<div class="hotSearchCell" @click="hotSearch('西游记')">西游记</div>
-				<div class="hotSearchCell" @click="hotSearch('三国演义')">三国演义</div>
+				<div class="hotSearchCell" v-for="(item, index) in hotKeyList" :key="index" @click="hotSearch(item.name)">{{ item.name }}</div>
 			</div>
 		</div>
 		<!--搜索结果-->
 		<van-tabs v-model="active" color="#81b4ff" sticky class="tabs" v-if="isShowResult">
+			<van-tab title="音频">
+				<div slot="title" class="tab">音频</div>
+				<div>
+					<div class="search_null" v-if="audioIsRecommend">
+						<img src="../../assets/images/404.png" alt="" />
+						<p>啊哦，沒搜索到~</p>
+					</div>
+					<p class="search_recommend" v-if="audioIsRecommend">为你推荐</p>
+					<music-list :items="singleList"></music-list>
+				</div>
+			</van-tab>
 			<van-tab title="专辑">
 				<div slot="title" class="tab">专辑</div>
 				<div>
-					<div class="cell" v-for="(item, index) in albumList" :key="index" @click="goDetail(item.id)">
-						<div class="imgBox"><img :src="item.coverpath" class="img" /></div>
-						<div>
-							<div class="name">{{ item.name }}</div>
-							<div class="music">共{{ item.musicCount }}首</div>
-						</div>
+					<div class="search_null" v-if="albumIsRecommend">
+						<img src="../../assets/images/404.png" alt="" />
+						<p>啊哦，沒搜索到~</p>
 					</div>
-				</div>
-			</van-tab>
-			<van-tab title="单曲">
-				<div slot="title" class="tab">单曲</div>
-				<div>
-					<div v-for="(item, index) in singleList" :key="index">
-						<div v-bind:class="[toIndex == index ? 'active' : '', 'musicList']">
-							<div class="left" @click="show(index)">
-								<p class="inroName">{{ item.name }}</p>
-								<p class="inroName">{{ item.timelength }}</p>
-							</div>
-							<div class="playCell" @click="devicesMusic(1, item)">
-								<img src="../../assets/images/icon_demand.png" />
-								<p>点播</p>
-							</div>
-						</div>
-						<div class="playOrFavor" v-if="showIndex == index">
-							<div class="right" @click="play(item.path, index)">
-								<img src="../../assets/images/icon_listen_pause.png" class="rightImg" v-show="toIndex != index" />
-								<img src="../../assets/images/icon_listen_playing.png" class="rightImg" v-show="toIndex == index" />
-								<div class="rightTry">试听</div>
-							</div>
-							<div class="playCell" @click="devicesMusic(2, item)">
-								<img src="../../assets/images/sc.png" />
-								<p>收藏</p>
-							</div>
-							<div class="playCell" @click="devicesMusic(3, item)">
-								<img src="../../assets/images/icon_download_1.png" v-if="item.copyrightId == 0" alt class="downloadImg" />
-								<img src="../../assets/images/icon_download_1.png" v-else alt />
-								<p :class="item.copyrightId == 0 ? 'downloadImg' : ''">下载</p>
-							</div>
-						</div>
-					</div>
+					<p class="search_recommend" v-if="albumIsRecommend">为你推荐</p>
+					<album-list :dataList="albumList"></album-list>
 				</div>
 			</van-tab>
 		</van-tabs>
-		<p class="PageBottom" v-show="isNoMore">暂无更多</p>
+		<div style="width:100%;height:80px"></div>
+		<!-- <p class="PageBottom" v-show="isNoMore">暂无更多</p> -->
 		<div class="loadingding center" v-show="isLoaded"><van-loading size="30px" color="#007DFF" vertical>加载中...</van-loading></div>
 	</div>
 </template>
 
 <script>
-import http from '../../api/index.js';
-import { _debounce } from '@/hilink/public';
-import Header from '@/components/header.vue';
+import musicList from '../../components/new/musicList.vue';
+import albumList from '../../components/new/AlbumList.vue';
 export default {
 	data() {
 		return {
 			serchValue: '',
 			albumList: [],
 			singleList: [],
+			videoList: [],
 			isShowResult: false,
 			src: '',
 			isLoaded: false,
@@ -93,13 +70,19 @@ export default {
 			toIndex: -1,
 			isNoMore: false,
 			showIndex: -1,
-			title: this.$t('m.Search')
-			// cancelOrDelete:'取消',
+			dataList: [],
+			audioIsRecommend: false,
+			albumIsRecommend: false,
+			videoIsRecommend: false,
+			hotKeyList: [] //热门关键词
 		};
 	},
+	created() {},
 	mounted() {
 		this.audio = new Audio();
+		this.hotKey();
 	},
+	destroyed() {},
 	methods: {
 		//返回或者清除
 		goBack() {
@@ -110,44 +93,72 @@ export default {
 				this.serchValue = '';
 			}
 		},
+		//热门关键词
+		hotKey() {
+			this.$axios.hotKey({ channelId: 66 }).then(res => {
+				this.hotKeyList = res.data.data;
+				this.serchValue = this.hotKeyList[Math.floor(Math.random() * res.data.data.length)].name;
+			});
+		},
 		//搜索结果
 		async SearchResult() {
 			this.albumList = this.singleList = [];
 			this.isShowResult = true;
 			this.isLoaded = true;
 			this.showIndex = -1;
-			await http
-				.getSearch(1, this.serchValue)
+			await this.$axios
+				.getSearch(66, this.serchValue, 40)
 				.then(res => {
-					this.albumList = res.data.content.list;
+					this.albumIsRecommend = res.data.data.isRecommend;
+					this.albumList = res.data.data.list;
 				})
 				.catch(err => {
 					console.log(err);
 				});
-			await http
-				.getSearch(2, this.serchValue)
+			await this.$axios
+				.getSearch(66, this.serchValue, 10)
 				.then(res => {
-					res.data.content.list.forEach((v, i) => {
-						if (v.timelength / 60 < 10) {
-							if (v.timelength % 60 < 10) {
-								v.timelength = '0' + parseInt(v.timelength / 60) + ':0' + (v.timelength % 60);
+					this.audioIsRecommend = res.data.data.isRecommend;
+					res.data.data.list.forEach((v, i) => {
+						if (v.timeLength / 60 < 10) {
+							if (v.timeLength % 60 < 10) {
+								v.timelengths = '0' + parseInt(v.timeLength / 60) + ':0' + (v.timeLength % 60);
 							} else {
-								v.timelength = '0' + parseInt(v.timelength / 60) + ':' + (v.timelength % 60);
+								v.timelengths = '0' + parseInt(v.timeLength / 60) + ':' + (v.timeLength % 60);
 							}
 						} else {
-							if (v.timelength % 60 < 10) {
-								v.timelength = parseInt(v.timelength / 60) + ':0' + (v.timelength % 60);
+							if (v.timeLength % 60 < 10) {
+								v.timelengths = parseInt(v.timeLength / 60) + ':0' + (v.timeLength % 60);
 							} else {
-								v.timelength = parseInt(v.timelength / 60) + ':' + (v.timelength % 60);
+								v.timelengths = parseInt(v.timeLength / 60) + ':' + (v.timeLength % 60);
 							}
 						}
 					});
-					this.singleList = res.data.content.list;
-					this.$refs.blurSearch.blur();
+					this.singleList = res.data.data.list;
 				})
-				.catch(err => {
-					console.log(err);
-				});
+				.catch(err => {});
+			// await this.$axios
+			// 	.getSearch(66, this.serchValue, 20)
+			// 	.then(res => {
+			// 		this.videoIsRecommend = res.data.data.isRecommend;
+			// 		res.data.data.list.forEach((v, i) => {
+			// 			if (v.timeLength / 60 < 10) {
+			// 				if (v.timeLength % 60 < 10) {
+			// 					v.timelengths = '0' + parseInt(v.timeLength / 60) + ':0' + (v.timeLength % 60);
+			// 				} else {
+			// 					v.timelengths = '0' + parseInt(v.timeLength / 60) + ':' + (v.timeLength % 60);
+			// 				}
+			// 			} else {
+			// 				if (v.timeLength % 60 < 10) {
+			// 					v.timelengths = parseInt(v.timeLength / 60) + ':0' + (v.timeLength % 60);
+			// 				} else {
+			// 					v.timelengths = parseInt(v.timeLength / 60) + ':' + (v.timeLength % 60);
+			// 				}
+			// 			}
+			// 		});
+			// 		this.videoList = res.data.data.list;
+			// 	})
+			// 	.catch(err => {});
 
 			this.isLoaded = false;
 			this.isNoMore = true;
@@ -174,16 +185,11 @@ export default {
 		},
 		//进入详情页
 		goDetail(item) {
-			// this.$router.push({ name: 'cloudListenDetail', query: { id: item } });
-			this.$router.push({
-				name: 'albumDetail',
-				query: {
-					id: item
-				}
-			});
+			this.$router.push({ name: 'cloudListenDetail', params: { id: item } });
 		},
 		//热门搜索
 		hotSearch(val) {
+			console.log(val);
 			this.serchValue = val;
 			this.SearchResult();
 		},
@@ -193,127 +199,38 @@ export default {
 				return;
 			}
 			this.showIndex = index;
-		},
-		devicesMusic: _debounce(function(type, item) {
-			let self = this;
-			console.log(type);
-			var body;
-			var path = item.path.indexOf('https:') > -1 ? item.path.replace('https', 'http') : item.path;
-			switch (type) {
-				case 1:
-					body = {
-						from: 'DID:0',
-						to: 'UID:-1',
-						action: 203,
-						songs: [
-							{
-								id: item.music_id || item.radioid,
-								singer: '',
-								posters: '',
-								language: '国语',
-								name: item.name,
-								albumname: item.specialname,
-								albumid: item.special_id,
-								type: 5,
-								res: [
-									{
-										filesize: '',
-										lrc: '',
-										fmt: 'mp3',
-										duration: item.lengthOfTime,
-										url: path
-									}
-								]
-							}
-						]
-					};
-					self.$toast({
-						message: '歌曲点播成功',
-						position: 'bottom',
-						duration: '3000',
-						className: 'toastActive'
-					});
-					break;
-				case 2:
-					body = {
-						from: 'DID:0',
-						to: 'UID:-1',
-						action: 416,
-						songs: [
-							{
-								id: item.music_id || item.radioid,
-								name: item.name,
-								url: path
-							}
-						]
-					};
-					self.$toast({
-						message: '歌曲添加收藏成功',
-						position: 'bottom',
-						duration: '3000',
-						className: 'toastActive'
-					});
-					break;
-				case 3:
-					if (item.copyrightId == 0) {
-						self.$toast({
-							message: '应版权方要求,暂无法下载',
-							position: 'bottom',
-							duration: '3000',
-							className: 'toastActive'
-						});
-						return;
-					}
-					var id = item.music_id.toString();
-					body = {
-						from: 'DID:0',
-						to: 'UID:-1',
-						action: 409,
-						songlistname: '最新下载',
-						songlistid: id,
-						songs: [
-							{
-								id: id,
-								name: item.name,
-								fmt: 'mp3',
-								url: path
-							}
-						]
-					};
-					console.log('body===', body);
-					self.$toast({
-						message: '歌曲下载添加成功',
-						position: 'bottom',
-						duration: '3000',
-						className: 'toastActive'
-					});
-					break;
-				default:
-					break;
-			}
-			let json = JSON.stringify(body);
-			let data = { custom: { function: json, name: 'function' } };
-			self.$store.dispatch('setDevInfo', data);
-		}, 300)
+		}
+	},
+	components: {
+		musicList,
+		albumList
+	},
+	destroyed() {
+		document.querySelector('body').removeAttribute('style');
+	},
+	beforeRouteEnter(to, from, next) {
+		document.title = '搜索';
+		next();
 	},
 	beforeRouteLeave(to, from, next) {
 		// 销毁组件，避免通过vue-router再次进入时，仍是上次的history缓存的状态
-		// this.$destroy(true)
-		this.audio.pause();
+		if (to.path == '/home') {
+			this.audioIsRecommend = this.albumIsRecommend = this.videoIsRecommend = this.isShowResult = false;
+			this.albumList = this.singleList = this.videoList = [];
+		}
 		next();
 	},
-	components: {
-		'v-header': Header
-	},
 	computed: {
-		cancelOrDeleteFn: function() {
-			let self = this;
-			if (self.serchValue) {
-				return (self.cancelOrDelete = this.$t('m.Empty'));
-			} else {
-				self.isShowResult = false;
-				return (self.cancelOrDelete = this.$t('m.CANCEL'));
-			}
+		cancelOrDelete: {
+			get: function() {
+				if (this.serchValue) {
+					return (this.cancelOrDelete = '清除');
+				} else {
+					this.isShowResult = false;
+					return (this.cancelOrDelete = '取消');
+				}
+			},
+			set: function(v) {}
 		}
 	}
 };
@@ -322,4 +239,79 @@ export default {
 <style lang="less" scoped>
 @import url('../../assets/css/cloud/common.less');
 @import url('../../assets/css/cloud/search.less');
+
+.albumList {
+	width: 100%;
+	padding: 0px 0px;
+}
+.tab_item {
+	width: 100%;
+	height: 80px;
+	display: flex;
+	padding: 13px 15px 13px 15px;
+	font-size: 15px;
+	> img {
+		width: 54px;
+		height: 54px;
+		border-radius: 5px;
+	}
+}
+.tab_item_right {
+	margin-left: 8px;
+	width: 100%;
+	p:nth-child(1) {
+		color: #333333;
+		font-size: 16px;
+		line-height: 16px;
+		padding-top: 6px;
+		width: 260px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	span {
+		color: #999999;
+		font-size: 11px;
+		// line-height: 11px;
+	}
+	img {
+		width: 20px;
+		height: 20px;
+		// opacity: 0.5;
+	}
+}
+.tab_item_right_name {
+	display: flex;
+	position: relative;
+	justify-content: space-between;
+	img {
+		width: 20px;
+		height: 20px;
+		opacity: 1;
+	}
+}
+.search_null {
+	width: 100%;
+	height: 200px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	font-size: 12px;
+	img {
+		width: 150px;
+		height: 150px;
+	}
+	p {
+		margin-top: 20px;
+	}
+}
+.search_recommend {
+	font-size: 20px;
+	margin-left: 15px;
+	margin-top: 16px;
+}
+.container {
+	padding: 0;
+}
 </style>

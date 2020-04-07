@@ -1,143 +1,118 @@
 <template>
-  <div class="content">
-    <div
-      class="video_cell"
-      v-for="(item,index) in videoList"
-      :key="index"
-      @click="goVideo(item.picurl,item.videopath)"
-    >
-      <div class="video_bg_box">
-        <img :src="item.picurl" alt />
-        <p>{{item.count}}集</p>
-      </div>
-      <p class="albumname">{{item.albumname}}</p>
-      <p class="name">{{item.name}}</p>
-    </div>
-  </div>
+	<div class="content">
+		<div class="tab_item" v-for="(item, index) in videoList" :key="index" @click="goVideo(item.picurl, item.videopath, item.id)">
+			<img :src="item.coverImage" alt />
+			<div class="tab_item_right">
+				<div class="tab_item_right_name">
+					<p>{{ item.name }}</p>
+					<img src="../../assets/images/goMore.png" alt="" style="position:absolute;right:0;top:17px;;" />
+				</div>
+				<div style="margin-top:8px;">
+					<img src="../../assets/images/video.png" alt />
+					<span>{{ item.childResCount }}集</span>
+				</div>
+			</div>
+		</div>
+		<div class="bottom"></div>
+	</div>
 </template>
 <script>
 export default {
-  data() {
-    return {
-      videoList: [],
-      id: ""
-    };
-  },
-  created() {
-    document.title = "视频列表";
-    this.id = this.$route.query.id;
-    this.getData();
-  },
-  methods: {
-    getData() {
-      this.$axios
-        .getVideoData()
-        .then(res => {
-          //转换播放时间
-          res.data.content.list.forEach((v, i) => {
-            if (v.timelong / 60 < 10) {
-              if (v.timelong % 60 < 10) {
-                v.timelong =
-                  "0" + parseInt(v.timelong / 60) + ":0" + (v.timelong % 60);
-              } else {
-                v.timelong =
-                  "0" + parseInt(v.timelong / 60) + ":" + (v.timelong % 60);
-              }
-            } else {
-              if (v.timelong % 60 < 10) {
-                v.timelong =
-                  parseInt(v.timelong / 60) + ":0" + (v.timelong % 60);
-              } else {
-                v.timelong =
-                  parseInt(v.timelong / 60) + ":" + (v.timelong % 60);
-              }
-            }
-          });
-          this.videoList = res.data.content.list;
-          console.log(this.videoList);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    },
-    goVideo(picurl, videopath) {
-      //统计
-      if (window._czc) {
-        window._czc.push(["_trackEvent", localStorage.getItem("deviceType")+"-"+"视频模块", "点击", "总计"]);
-      }
-      this.$router.push({
-        path: "/video",
-        query: {
-          id: this.id,
-          src: picurl,
-          videopath: videopath
-        }
-      });
-    }
-  },
-  beforeRouteLeave(to, from, next) {
-    // 销毁组件，避免通过vue-router再次进入时，仍是上次的history缓存的状态
-    this.$destroy(true);
-    next();
-  }
+	data() {
+		return {
+			videoList: [],
+			id: ''
+		};
+	},
+	created() {
+		this.getData();
+	},
+	methods: {
+		getData() {
+			this.$axios
+				.getActiveData({
+					activityId: this.$route.query.id,
+					pageId: 65,
+					channelId: 66,
+					pageSize: 50,
+					pageNo: 1
+				})
+				.then(res => {
+					this.videoList = res.data.data.resList;
+					console.log(this.videoList);
+				})
+				.catch(err => {
+					console.log(err);
+				});
+		},
+		goVideo(picurl, videopath, id) {
+			this.$router.push({
+				name: 'video',
+				query: {
+					id: id,
+					src: picurl,
+					videopath: videopath
+				}
+			});
+		}
+	},
+	beforeRouteLeave(to, from, next) {
+		// 销毁组件，避免通过vue-router再次进入时，仍是上次的history缓存的状态
+		this.$destroy(true);
+		next();
+	}
 };
 </script>
 <style lang="less" scoped>
-.content {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  .video_cell {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-    .albumname {
-      width: 157px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      font-size: 16px;
-      line-height: 16px;
-      color: #252729;
-      margin-top: 13px;
-    }
-    .name {
-      width: 157px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      font-size: 14px;
-      line-height: 14px;
-      color: #a7a9ab;
-      margin-top: 8px;
-    }
-  }
-  .video_bg_box {
-    width: 163px;
-    height: 94px;
-    border-radius: 5px;
-    position: relative;
-    border-radius: 5px;
-    overflow: hidden;
-    img {
-      width: 163px;
-      height: 94px;
-      position: absolute;
-    }
-    p {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      color: #ffffff;
-      font-size: 11px;
-      line-height: 11px;
-      padding: 6px 10px;
-      border-radius: 5px 0px 5px 0px;
-      background: #000000;
-      opacity: 0.5;
-    }
-  }
+.tab_item {
+	width: 92%;
+	margin: 0 auto;
+	height: 80px;
+	display: flex;
+	align-items: center;
+	font-size: 15px;
+	> img {
+		width: 54px;
+		height: 54px;
+		border-radius: 5px;
+	}
+}
+.tab_item_right {
+	width: 100%;
+	margin-left: 8px;
+	p:nth-child(1) {
+		color: #333333;
+		font-size: 16px;
+		line-height: 16px;
+		padding-top: 6px;
+		width: 260px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	span {
+		color: #999999;
+		font-size: 11px;
+		// line-height: 11px;
+	}
+	img {
+		width: 20px;
+		height: 20px;
+		// opacity: 0.5;
+	}
+}
+.tab_item_right_name {
+	display: flex;
+	position: relative;
+	justify-content: space-between;
+	img {
+		width: 20px;
+		height: 20px;
+		opacity: 1;
+	}
+}
+.bottom {
+	width: 100%;
+	height: 50px;
 }
 </style>

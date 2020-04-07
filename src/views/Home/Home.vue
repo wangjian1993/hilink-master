@@ -281,7 +281,8 @@ export default {
 			'istimePopu',
 			'upflag',
 			'musicData',
-			'battery'
+			'battery',
+			'version'
 		]),
 		deviceTime: {
 			get() {
@@ -429,6 +430,7 @@ export default {
 			if (window.hilink != undefined) {
 				var data;
 				var on;
+				var timestamp = parseInt(new Date().getTime() / 1000);
 				if (!self.loadingFlag) {
 					return;
 				}
@@ -450,7 +452,7 @@ export default {
 								})
 								.then(() => {
 									on = self.lampSwitch.on == 1 ? 0 : 0;
-									data = { switch: { on: on } };
+									data = { switch: { on: on, time: timestamp } };
 									let logdate = self.logTime();
 									self.$store.dispatch('setDevInfo', data);
 									self.$store.dispatch('setLoadingFlag', false);
@@ -463,23 +465,23 @@ export default {
 						break;
 					case 1:
 						on = self.earLight.on == 1 ? 0 : 1;
-						data = { earLight: { on: on } };
+						data = { earLight: { on: on, time: timestamp } };
 						break;
 					case 2:
 						on = self.faceLight.on == 1 ? 0 : 1;
-						data = { faceLight: { on: on } };
+						data = { faceLight: { on: on, time: timestamp } };
 						break;
 					case 3:
-						data = { Music: { cutSong: 0 } };
+						data = { Music: { cutSong: 0, time: timestamp } };
 						this.audioInfo.song = this.audioInfo.song;
 						break;
 					case 4:
-						data = { Music: { cutSong: 1 } };
+						data = { Music: { cutSong: 1, time: timestamp } };
 						this.audioInfo.song = this.audioInfo.song;
 						break;
 					case 5:
 						on = self.audioInfo.play == 1 ? 0 : 1;
-						data = { Music: { play: on } };
+						data = { Music: { play: on, time: timestamp } };
 						if (self.audioInfo.song == '') {
 							return;
 						}
@@ -489,7 +491,8 @@ export default {
 							from: 'DID:0',
 							to: 'UID:-1',
 							action: 627,
-							on: 0
+							on: 0,
+							time: timestamp
 						};
 						var json = JSON.stringify(body);
 						data = { custom: { function: json } };
@@ -545,18 +548,21 @@ export default {
 				return;
 			}
 			var body;
+			var timestamp = parseInt(new Date().getTime() / 1000);
 			if (type == 0) {
 				body = {
 					from: 'DID:0',
 					to: 'UID:-1',
-					action: action
+					action: action,
+					time: timestamp
 				};
 			} else {
 				body = {
 					from: 'DID:0',
 					to: 'UID:-1',
 					action: action,
-					on: on
+					on: on,
+					time: timestamp
 				};
 			}
 			self.audioMode = false;
@@ -581,11 +587,13 @@ export default {
 				return;
 			}
 			let on = self.lookData == 1 ? 0 : 1;
+			var timestamp = parseInt(new Date().getTime() / 1000);
 			var body = {
 				from: 'DID:0',
 				to: 'UID:-1',
 				action: 627,
-				on: on
+				on: on,
+				time: timestamp
 			};
 			self.audioMode = false;
 			var json = JSON.stringify(body);
@@ -609,11 +617,13 @@ export default {
 			if (!self.loadingFlag) {
 				return;
 			}
+			var timestamp = parseInt(new Date().getTime() / 1000);
 			var body = {
 				from: 'DID:0',
 				to: 'UID:-1',
 				action: 909,
-				playmode: mode
+				playmode: mode,
+				time: timestamp
 			};
 			self.audioMode = !self.audioMode;
 			self.modePopup = false;
@@ -686,19 +696,30 @@ export default {
 		contentBtn(type) {
 			var url;
 			let self = this;
-			if (self.isLine == 0 && type != 0) {
-				this.$toast({
-					message: this.$t('m.Twist'),
-					position: 'bottom',
-					duration: '3000',
-					className: 'toastActive'
-				});
-				return;
-			}
+			let v = parseInt(this.version, 16); //9();
+			// if (self.isLine == 0 && type != 0) {
+			// 	this.$toast({
+			// 		message: this.$t('m.Twist'),
+			// 		position: 'bottom',
+			// 		duration: '3000',
+			// 		className: 'toastActive'
+			// 	});
+			// 	return;
+			// }
 			if (type == 0) {
-				url = 'cloudHome'; //火火兔内容云
+				if (v < 4063514) {
+					url = 'tcloudIndex';
+				} else {
+					url = 'cloudHome'; //火火兔内容云
+					//url = 'OldIndex';
+				}
 			} else if (type == 1) {
-				url = 'english'; //启蒙英语
+				if (v < 4063514) {
+					url = 'CloudEnglish';
+				} else {
+					//url = 'english'; //启蒙英语
+					url = 'CloudEnglish';
+				}
 			} else if (type == 2) {
 				url = 'localfile';
 			} else if (type == 3) {

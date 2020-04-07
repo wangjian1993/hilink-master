@@ -4,7 +4,7 @@
 	</div>
 </template>
 <script>
-import musicList from '../../components/musicList.vue';
+import musicList from '../../components/new/musicList.vue';
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 export default {
 	data() {

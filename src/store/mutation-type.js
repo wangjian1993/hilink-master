@@ -13,4 +13,5 @@ export const ENGLISHDATA ='ENGLISHDATA';
 export const SET_UPFLAG ="SET_UPFLAG";
 export const SET_PLAY_HISTORY = 'SET_PLAY_HISTORY'
 export const SET_AUDIO_ID ="SET_AUDIO_ID"
-export const SET_AUDIO_DOM="SET_AUDIO_DOM"
+export const SET_AUDIO_DOM="SET_AUDIO_DOM";
+export const SET_VERSION="SET_VERSION"

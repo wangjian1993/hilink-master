@@ -58,10 +58,12 @@ export default {
 		},
 		devicesAction() {
 			let self = this;
+			var timestamp = parseInt(new Date().getTime() / 1000);
 			let body = {
 				from: 'DID:0',
 				to: 'UID:-1',
-				action: 405
+				action: 405,
+				time: timestamp
 			};
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json } };

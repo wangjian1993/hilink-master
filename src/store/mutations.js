@@ -53,6 +53,9 @@ const mutations = {
 		state.audioId = data
 		console.log("试听===", data)
 	},
+	[types.SET_VERSION](state,data){
+		state.version =data;
+	},
 	setDevName(state, data) {
 		state.devName = data;
 	},

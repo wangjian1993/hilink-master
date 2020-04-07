@@ -132,7 +132,11 @@ export default {
 	getDeviceAll({
 		commit
 	}, data) {
-		window.hilink.getDevInfo("0", 'custom', '', "getResultCallback");
+		try {
+			window.hilink.getDevInfo("0", 'custom', '', "getResultCallback");
+		} catch (e) {
+			//TODO handle the exception
+		}
 	},
 	//获取本地歌曲列表
 	getDevLocal({
@@ -213,6 +217,8 @@ export default {
 			let deviceid = localStorage.getItem(json.devId);
 			let userName = localStorage.getItem('iphone');
 			console.log("json==============", json)
+			console.log("设备版本号", json.devInfo.fwv);
+			commit("SET_VERSION", json.devInfo.fwv);
 			console.log("userName=======", userName)
 			if (userName) {
 				//相同手机

@@ -67,7 +67,9 @@ const state = {
 	playHistory: loadPlay(), // 播放历史
 	audioId:-1,
 	$audio: new Audio(),
-	battery:0
+	battery:0,
+	version:null,
+	actionTime:new Date()
 };
 
 export default state;

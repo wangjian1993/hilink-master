@@ -32,7 +32,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapState(['playMode', 'audioInfo','isLine'])
+		...mapState(['playMode', 'audioInfo', 'isLine'])
 	},
 	created() {},
 	watch: {},
@@ -61,16 +61,17 @@ export default {
 			if (window.hilink != undefined) {
 				var data;
 				var on;
+				var timestamp = parseInt(new Date().getTime() / 1000);
 				switch (type) {
 					case 3:
-						data = { Music: { cutSong: 0 } };
+						data = { Music: { cutSong: 0, time: timestamp } };
 						break;
 					case 4:
-						data = { Music: { cutSong: 1} };
+						data = { Music: { cutSong: 1, time: timestamp } };
 						break;
 					case 5:
 						on = self.audioInfo.play == 1 ? 0 : 1;
-						data = { Music: { play: on, name: 'play' } };
+						data = { Music: { play: on, name: 'play', time: timestamp } };
 					default:
 						break;
 				}
@@ -81,11 +82,13 @@ export default {
 		devicesModeAction() {
 			let self = this;
 			let mode = self.playMode == 1 ? 0 : 1;
+			var timestamp = parseInt(new Date().getTime() / 1000);
 			var body = {
 				from: 'DID:0',
 				to: 'UID:-1',
 				action: 909,
-				playmode: mode
+				playmode: mode,
+				time: timestamp
 			};
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json, name: 'function' } };

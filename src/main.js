@@ -6,12 +6,12 @@ import 'amfe-flexible'
 import App from './App.vue'
 import router from './router/index'
 import store from './store/index'
-import Vconsole from 'vconsole'
 import VueVideoPlayer from 'vue-video-player'
 import 'video.js/dist/video-js.css'
 import base64 from './assets/js/base64'
 import VueI18n from 'vue-i18n'
 import VueLazyLoad from "vue-lazyload";
+import Vconsole from 'vconsole'
 const vConsole = new Vconsole() 
 Vue.use(vConsole)
 // hilink sdk公共函数
@@ -49,11 +49,13 @@ import {
 	RadioGroup,
 	Radio,
 	CountDown,
-	List
+	List,
+	ActionSheet,
+	Search
 } from 'vant';
 Vue.use(Tab).use(Tabs).use(Button).use(NavBar).use(Slider).use(Toast).use(DatetimePicker).use(Popup).use(Field).use(
 	Icon).use(Loading).use(NoticeBar).use(Dialog).use(Picker).use(Cell).use(CellGroup).use(CheckboxGroup).use(Checkbox).use(
-	RadioGroup).use(Radio).use(CountDown).use(List);
+	RadioGroup).use(Radio).use(CountDown).use(List).use(ActionSheet).use(Search);
 Vue.use(Swipe).use(SwipeItem);
 Vue.use(VueVideoPlayer)
 Vue.config.productionTip = false

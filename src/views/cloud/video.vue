@@ -1,48 +1,49 @@
 <template>
 	<div class="container">
-		<!-- <v-header :title="dataList.videoAlbum.name"></v-header> -->
-		<div v-show="!isShowVideo" class="album" :style="{ backgroundImage: 'url(' + dataList.videoAlbum.picurl + ')', backgroundSize: '100% 100%' }"></div>
-		<div class="videoBox" v-show="isShowVideo">
-			<video-player
-				class="video-player-box"
-				ref="videoPlayer"
-				:options="playerOptions"
-				:playsinline="true"
-				customEventName="customstatechangedeventname"
-				@play="onPlayerPlay($event)"
-				@pause="onPlayerPause($event)"
-				@ended="onPlayerEnded($event)"
-				@waiting="onPlayerWaiting($event)"
-				@playing="onPlayerPlaying($event)"
-				@loadeddata="onPlayerLoadeddata($event)"
-				@timeupdate="onPlayerTimeupdate($event)"
-				@canplay="onPlayerCanplay($event)"
-				@canplaythrough="onPlayerCanplaythrough($event)"
-				@statechanged="playerStateChanged($event)"
-				@ready="playerReadied"
-			></video-player>
-		</div>
-		<div class="intro">
-			<p class="State">说明:</p>
-			<p class="description">{{ dataList.videoAlbum.description }}</p>
-		</div>
-		<div class="albumListTitle">视频列表({{ dataList.total }})</div>
-		<div class="albumList">
-			<div class="cell" v-for="(item, index) in dataList.list" :key="index" @click="goPlayVideo(item.picurl, item.videopath)">
-				<div class="cellLeft center">
-					<img :src="item.picurl" class="img" />
-					<p class="timelong center">{{ item.timelong }}</p>
+		<div class="content" v-show="isLoaded">
+			<div class="videoBox" v-show="isShowVideo">
+				<video-player
+					class="video-player-box"
+					ref="videoPlayer"
+					:options="playerOptions"
+					:playsinline="true"
+					customEventName="customstatechangedeventname"
+					@play="onPlayerPlay($event)"
+					@pause="onPlayerPause($event)"
+					@ended="onPlayerEnded($event)"
+					@waiting="onPlayerWaiting($event)"
+					@playing="onPlayerPlaying($event)"
+					@loadeddata="onPlayerLoadeddata($event)"
+					@timeupdate="onPlayerTimeupdate($event)"
+					@canplay="onPlayerCanplay($event)"
+					@canplaythrough="onPlayerCanplaythrough($event)"
+					@statechanged="playerStateChanged($event)"
+					@ready="playerReadied"
+				></video-player>
+			</div>
+			<div v-if="!isSearchCome">
+				<div class="intro">
+					<p class="State">{{ dataList.name }}</p>
+					<p class="description">{{ dataList.introduce }}</p>
 				</div>
-				<div class="cellRight">
-					<div>
-						<p class="name">{{ item.name }}</p>
+				<div class="albumListTitle">视频列表({{ dataList.childResCount }})</div>
+				<div class="albumList">
+					<div class="tab_item" v-for="(item, index) in dataList.videoVoList" :key="index" @click="goPlayVideo(item.coverImage, item.url)">
+						<div class="video-img"><img :src="item.coverImage" alt /></div>
+						<div class="tab_item_right">
+							<div class="tab_item_right_name">
+								<p>{{ item.name }}</p>
+							</div>
+							<div style="margin-top:8px;">
+								<img src="../../assets/images/icon_times.png" alt />
+								<span>{{ item.timeLength }}</span>
+							</div>
+						</div>
 					</div>
-					<!-- <div class="play">播放</div> -->
 				</div>
 			</div>
 		</div>
-		<p class="PageBottom">暂无更多</p>
-		<div class="loadingding center" v-show="isLoaded"><van-loading size="30px" color="#007DFF" vertical>加载中...</van-loading></div>
+		<div class="loadingding center" v-show="!isLoaded"><van-loading size="30px" vertical color="#007DFF">加载中</van-loading></div>
 	</div>
 </template>
 
@@ -66,45 +67,59 @@ export default {
 						src: ''
 					}
 				],
-
+				isSearchCome: false, //是否从搜索进入
 				poster: ''
 			},
 			isShowVideo: false,
-			title: null
+			title: null,
+			isLoaded: false
 		};
 	},
 	created() {
-		document.title = '视频';
+		this.isSearchCome = this.$route.query.isSearchCome ? true : false;
+		console.log(this.isSearchCome);
 	},
 	mounted() {
 		this.isLoaded = true;
-		this.$axios
-			.getVideoList(this.$route.query.id)
-			.then(res => {
-				//转换播放时间
-				res.data.content.list.forEach((v, i) => {
-					if (v.timelong / 60 < 10) {
-						if (v.timelong % 60 < 10) {
-							v.timelong = '0' + parseInt(v.timelong / 60) + ':0' + (v.timelong % 60);
+		if (!this.isSearchCome) {
+			this.$axios
+				.getVideoData({
+					videoGroupId: this.$route.query.id,
+					channelId: 66,
+					pageNo: 1,
+					pageSize: 200
+				})
+				.then(res => {
+					//转换播放时间
+					res.data.data.videoVoList.forEach((v, i) => {
+						if (v.timeLength / 60 < 10) {
+							if (v.timeLength % 60 < 10) {
+								v.timeLength = '0' + parseInt(v.timeLength / 60) + ':0' + (v.timeLength % 60);
+							} else {
+								v.timeLength = '0' + parseInt(v.timeLength / 60) + ':' + (v.timeLength % 60);
+							}
 						} else {
-							v.timelong = '0' + parseInt(v.timelong / 60) + ':' + (v.timelong % 60);
+							if (v.timeLength % 60 < 10) {
+								v.timeLength = parseInt(v.timeLength / 60) + ':0' + (v.timeLength % 60);
+							} else {
+								v.timeLength = parseInt(v.timeLength / 60) + ':' + (v.timeLength % 60);
+							}
 						}
-					} else {
-						if (v.timelong % 60 < 10) {
-							v.timelong = parseInt(v.timelong / 60) + ':0' + (v.timelong % 60);
-						} else {
-							v.timelong = parseInt(v.timelong / 60) + ':' + (v.timelong % 60);
-						}
+					});
+					this.dataList = res.data.data;
+					this.isLoaded = true;
+					if (localStorage.getItem('isLogin') == '1') {
+						this.goPlayVideo(this.dataList.videoVoList[0].coverImage, this.dataList.videoVoList[0].url);
 					}
+				})
+				.catch(err => {
+					console.log(err);
 				});
-				this.dataList = res.data.content;
-				this.goPlayVideo(this.dataList.list[0].picurl, this.dataList.list[0].videopath);
-			})
-			.catch(err => {
-				console.log(err);
-			});
+		} else {
+			console.log(this.$route.query);
+			this.goPlayVideo(this.$route.query.src, this.$route.query.videopath);
+		}
 		this.isLoaded = false;
-		console.log(this.dataList);
 	},
 	methods: {
 		//播放视频
@@ -120,9 +135,9 @@ export default {
 				let speed = -Math.ceil(scrollTop / 5);
 				document.documentElement.scrollTop = document.body.scrollTop = scrollTop + speed;
 				scrollTop = scrollTop + speed;
-				if (document.documentElement.scrollTop == 0) {
+				if (document.documentElement.scrollTop <= 0) {
 					clearInterval(timer);
-					console.log(that.$refs.videoPlayer);
+					console.log(that.$refs.videoPlayer, this.isShowVideo);
 				}
 			}, 16);
 		},

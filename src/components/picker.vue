@@ -3,7 +3,7 @@
 		<div class="date-time-div">
 			<van-popup v-model="timePopup" position="bottom" :overlay="false" class="datetimeBox">
 				<p>{{ $t('m.timer') }}</p>
-				<van-picker :columns="columns" :show-toolbar="false" @change="onChange" :item-height="36"/>
+				<van-picker :columns="columns" :show-toolbar="false" @change="onChange" :item-height="36" />
 				<div class="datetime-btn">
 					<p @click="timeCancel()" :class="deviceTime != 0 ? 'cancelText' : ''">{{ deviceTime == 0 ? $t('m.CANCEL') : $t('m.Disable') }}</p>
 					<p @click="timeConfirm()">{{ $t('m.OK') }}</p>
@@ -54,7 +54,7 @@ export default {
 				self.$emit('update:timePopup', false); //弹框隐藏，意为timePopup为false
 			} else {
 				self.$emit('update:timePopup', false); //弹框隐藏，意为timePopup为false
-				self.delDevicesTime(); 
+				self.delDevicesTime();
 				return false;
 			}
 		},
@@ -80,6 +80,7 @@ export default {
 			}
 			self.$emit('update:timePopup', false); //弹框隐藏，意为timePopup为false
 			let time = self.timeCalculate(self.endTime);
+			var timestamp = parseInt(new Date().getTime() / 1000);
 			var body = {
 				from: 'DID:0',
 				to: 'UID:-1',
@@ -87,7 +88,8 @@ export default {
 				timestamp: time,
 				timerid: time.toString(),
 				type: 4,
-				doaction: '{"action":624}'
+				doaction: '{"action":624}',
+				time: timestamp
 			};
 			var json = JSON.stringify(body);
 			var data = { custom: { function: json, name: 'function' } };
@@ -112,12 +114,14 @@ export default {
 		delDevicesTime() {
 			let self = this;
 			console.log('关闭定时关机==========');
+			var timestamp = parseInt(new Date().getTime() / 1000);
 			var body = {
 				from: 'DID:0',
 				to: 'UID:-1',
 				action: 631,
 				type: 4,
-				doaction: 'clear'
+				doaction: 'clear',
+				time: timestamp
 			};
 			var json = JSON.stringify(body);
 			var data = { custom: { function: json, name: 'function' } };
@@ -126,12 +130,14 @@ export default {
 		},
 		getDevicesTime() {
 			let self = this;
+			var timestamp = parseInt(new Date().getTime() / 1000);
 			var body = {
 				from: 'DID:0',
 				to: 'UID:-1',
 				action: 631,
 				type: 4,
-				doaction: 'query'
+				doaction: 'query',
+				time: timestamp
 			};
 			var json = JSON.stringify(body);
 			var data = { custom: { function: json, name: 'function' } };
@@ -184,9 +190,9 @@ export default {
 				text-align: center;
 				font-size: 16px;
 				color: #007dff;
-				&:nth-of-type(1){
-					border-right: .5px solid;
-					border-color: rgba(0, 0, 0,.2)
+				&:nth-of-type(1) {
+					border-right: 0.5px solid;
+					border-color: rgba(0, 0, 0, 0.2);
 				}
 			}
 			.cancelText {

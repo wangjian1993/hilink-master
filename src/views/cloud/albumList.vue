@@ -1,24 +1,26 @@
 <template>
 	<div class="app">
 		<v-header :title="title"></v-header>
-		<van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="loadingData" v-show="isLoaded">
-			<div class="tab_item" v-for="(item, index) in dataList" :key="index" @click="goDetail(item.id)">
-				<img v-lazy="item.coverpath" class="tab-item-coverpath" alt />
-				<div class="tab_item_right">
-					<p class="van-ellipsis">{{ item.name }}</p>
-					<p class="description">{{ item.description }}</p>
-					<img src="../../assets/images/icon_gequ_gray.png" alt />
-					<span>{{ item.musicCount }}首</span>
+		<div class="content" v-show="isLoaded">
+			<van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="loadingData" v-show="isLoaded">
+				<div class="tab_item" v-for="(item, index) in dataList" :key="index" @click="goDetail(item.id)">
+					<img v-lazy="item.coverImage" class="tab-item-coverpath" alt />
+					<div class="tab_item_right">
+						<p class="van-ellipsis">{{ item.name }}</p>
+						<p class="description">{{ item.subName }}</p>
+						<img src="../../assets/images/icon_gequ_gray.png" alt />
+						<span>{{ item.childResCount }}首</span>
+					</div>
 				</div>
-			</div>
-		</van-list>
+			</van-list>
+		</div>
 		<div class="loadingding center" v-show="!isLoaded"><van-loading size="30px" vertical color="#007DFF">加载中</van-loading></div>
 	</div>
 </template>
 
 <script>
 import Header from '@/components/header.vue';
-import albumList from '../../components/AlbumList.vue';
+import albumList from '../../components/new/AlbumList.vue';
 export default {
 	data() {
 		return {
@@ -35,7 +37,7 @@ export default {
 	},
 	created() {},
 	mounted() {
-		this.name = this.$route.query.name;
+		this.title = this.$route.query.name;
 		this.loadingData();
 	},
 	methods: {
@@ -44,85 +46,20 @@ export default {
 			setTimeout(function() {
 				that.isLoaded = true;
 			}, 500);
-			console.log('11111======', that.isLoaded);
-			switch (this.name) {
-				case '精品推荐': //精品推荐
-					this.title = '精品推荐';
-					that.$axios.recommendSpecial(this.page, this.pageSize).then(res => {
-						that.dataList = that.dataList.concat(res.data.content.list);
-						that.total = res.data.content.total;
+			this.$axios
+				.getActiveData({
+					activityId: this.$route.query.id,
+					pageId: 65,
+					channelId: 66,
+					pageSize: 50,
+					pageNo: 1
+				})
+				.then(res => {
+					res.data.data.resList.forEach((v, i) => {
+						v.coverImage = v.coverImage + '?x-oss-process=image/resize,w_54/quality,Q_80';
 					});
-					console.log(that.dataList);
-					break;
-				case '最新上架': //最新上架
-					this.title = '最新上架';
-					that.$axios.getNewSpecials(this.page, this.pageSize).then(res => {
-						that.dataList = that.dataList.concat(res.data.content.list);
-						that.total = res.data.content.total;
-						console.log('that.dataList111111111111', that.dataList);
-					});
-					console.log(this.dataList);
-					break;
-				// 国学熏陶
-				case '国学熏陶':
-					this.title = '国学熏陶';
-					that.$axios.getgxxtData(this.page, this.pageSize).then(res => {
-						that.dataList = res.data.content.list;
-					});
-					break;
-
-				//财商启蒙
-				case '财商启蒙':
-					this.title = '财商启蒙';
-					that.$axios.getcsqmData(this.page, this.pageSize).then(res => {
-						that.dataList = res.data.content.list;
-					});
-					break;
-				//情商培养
-				case '情商培养':
-					this.title = '情商培养';
-					that.$axios.getqspyData(this.page, this.pageSize).then(res => {
-						that.dataList = res.data.content.list;
-					});
-					break;
-				//性格养成
-				case '性格养成':
-					this.title = '性格养成';
-					that.$axios.getMusicXGYC(this.page, this.pageSize).then(res => {
-						that.dataList = res.data.content.list;
-					});
-					break;
-				//英语启蒙
-				case '英语启蒙':
-					this.title = '英语启蒙';
-					that.$axios.getAudioSpecialByIDs('2766,2767').then(res => {
-						that.dataList = res.data.content.audioSpeicalList;
-					});
-					break;
-				//安全教育知识普及
-				case '安全教育知识普及':
-					this.title = '安全教育知识普及';
-					that.$axios.getAudioSpecialByIDs('2768,2769,2770,2771').then(res => {
-						that.dataList = res.data.content.audioSpeicalList;
-					});
-					break;
-				//自信与勇气
-				case '自信与勇气':
-					this.title = '自信与勇气';
-					that.$axios.getAudioSpecialByIDs('2772,2773,2774').then(res => {
-						that.dataList = res.data.content.audioSpeicalList;
-					});
-					break;
-				//宝宝哄睡
-				case '宝宝哄睡':
-					this.title = '宝宝哄睡';
-					that.$axios.getSleepData(this.page, this.pageSize).then(res => {
-						that.dataList = this.dataList.concat(res.data.content.list);
-						that.total = res.data.content.total;
-					});
-					break;
-			}
-			console.log(this.dataLis);
+					this.dataList = res.data.data.resList;
+				});
 			// 加载状态结束
 			this.loading = false;
 			// 数据全部加载完成

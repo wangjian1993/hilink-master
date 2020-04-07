@@ -124,12 +124,14 @@ export default {
 		getSongsTotal(type) {
 			let self = this;
 			self.loading = false;
+			var timestamp = parseInt(new Date().getTime() / 1000);
 			let body = {
 				from: 'DID:0',
 				to: 'UID:-1',
 				action: 401,
 				channel: self.cid,
-				offset: 0
+				offset: 0,
+				time: timestamp
 			};
 			console.log('body=========', body);
 			let json = JSON.stringify(body);
@@ -141,6 +143,7 @@ export default {
 			// if (type == 0) {
 			// 	self.loading = false;
 			// }
+			var timestamp = parseInt(new Date().getTime() / 1000);
 			if (self.beginNumber >= self.limitNumber && !self.ifDefeated) {
 				console.log('没有了000000000000000000===================');
 				self.cangetlocal = true;
@@ -160,7 +163,8 @@ export default {
 				to: 'UID:-1',
 				action: 401,
 				channel: self.cid,
-				offset:sumPage
+				offset:sumPage,
+				time: timestamp
 			};
 			let json = JSON.stringify(body);
 			console.log('json============', json);
@@ -174,6 +178,7 @@ export default {
 				return;
 			}
 			self.delIndex = index;
+			var timestamp = parseInt(new Date().getTime() / 1000);
 			self.$dialog
 				.confirm({
 					title: '提示',
@@ -187,7 +192,8 @@ export default {
 						cid: self.cid,
 						channelname: self.cname,
 						songname: item.name,
-						sidx: index
+						sidx: index,
+						time: timestamp
 					};
 					let json = JSON.stringify(body);
 					let data = { custom: { function: json, name: 'function' } };
@@ -206,12 +212,14 @@ export default {
 			if (!self.loadingFlag) {
 				return;
 			}
+			var timestamp = parseInt(new Date().getTime() / 1000);
 			let body = {
 				from: 'DID:0',
 				to: 'UID:-1',
 				action: 11,
 				channel: self.cid,
-				idx: index
+				idx: index,
+				time: timestamp
 			};
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json, name: 'function' } };
