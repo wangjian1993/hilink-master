@@ -168,7 +168,8 @@ export default new Router({
 			name: "ssec",
 			component: () => import('@/views/cloud/ssec.vue'),
 			meta: {
-				title: "听讲赏学"
+				title: "听讲赏学",
+				keepAlive: false
 			}
 		},
 		{

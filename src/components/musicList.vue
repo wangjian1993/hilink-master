@@ -3,7 +3,7 @@
 		<div class="center" v-if="items.length == 0"><p>暂无更多</p></div>
 		<div v-for="(item, index) in items" :key="index">
 			<div class="music_cell">
-				<div class="music_cell_index" v-show="showIndex">{{ index + 1 }}</div>
+				<!-- <div class="music_cell_index" v-show="showIndex">{{ index + 1 }}</div> -->
 				<div class="music_cell_left" @click="showMore(index)">
 					<p :class="[active == index ? 'selectInx' : '']">{{ item.name }}</p>
 					<div class="music_cell_left_sub">

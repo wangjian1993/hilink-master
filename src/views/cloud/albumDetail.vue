@@ -176,7 +176,7 @@ export default {
 		bottom: 5px;
 		right: 20px;
 		text-align: right;
-		// display: flex;
+		z-index: 2000;
 		img {
 			width: 32px;
 			height: 32px;

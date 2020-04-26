@@ -17,9 +17,7 @@
 <script>
 export default {
 	props: {
-		type: { 
-			type: Number
-		},
+		type:"",
 		name: ''
 	},
 	data() {
@@ -28,22 +26,26 @@ export default {
 			loading: false,
 			finished: false,
 			page: 0,
-			isMore:true
+			isMore: true
 		};
+	},
+	activated() {
+		this.page = 0;
 	},
 	methods: {
 		onLoad() {
 			// 异步更新数据
 			var total;
-			if(!this.isMore){
+			if (!this.isMore) {
 				return false;
 			}
-			this.isMore =false;
+			console.log("this.page====",this.page)
+			this.isMore = false;
 			this.$axios
-				.getAlbumsData(this.page,this.type)
+				.getAlbumsData(this.page, this.type)
 				.then(res => {
 					this.dataList = this.dataList.concat(res.data.content.list);
-					this.total = res.data.content.total;			
+					this.total = res.data.content.total;
 				})
 				.catch(err => {
 					console.log(err);
@@ -54,10 +56,10 @@ export default {
 			// 数据全部加载完成
 			if (this.dataList.length >= this.total) {
 				this.finished = true;
-			}else {
-				this.isMore =true;
+			} else {
+				this.isMore = true;
 				this.page = this.page + 1;
-			}		
+			}
 		},
 		goDetail(id) {
 			//统计

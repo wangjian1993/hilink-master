@@ -100,6 +100,15 @@ export default {
 	mounted() {
 		this.audio = new Audio();
 	},
+	activated() {
+		this.isShowResult = false;
+		this.albumList = [];
+		this.singleList = [];
+		this.isNoMore = false;
+		this.toIndex = -1;
+		this.showIndex = -1;
+		this.active = 0;
+	},
 	methods: {
 		//返回或者清除
 		goBack() {
