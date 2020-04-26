@@ -8,7 +8,7 @@
 				<p class="content-title-en">Children's song</p>
 				<div class="song-list">
 					<ul class="song">
-						<li v-for="(item, index) in englishData[0]" @click="radioCheck(item.id, 0, index)">
+						<li v-for="(item, index) in englishData[104]" @click="radioCheck(item.id, 0, index)">
 							<div class="path-div" @click="cloudAlbum(item.id)">
 								<img :src="item.coverImage" alt="" class="path-img" />
 								<img src="../../assets/images/xz.png" alt="" class="path-xz" v-if="item.id == albumid[0].album && !setCheck" />
@@ -29,7 +29,7 @@
 					<ul class="song">
 						<li v-for="(item, index) in englishData[105]" @click="radioCheck(item.id, 1, index)">
 							<div class="path-div" @click="cloudAlbum(item.id)">
-								<img :src="item.coverpath" alt="" class="path-img" />
+								<img :src="item.coverImage" alt="" class="path-img" />
 								<img src="../../assets/images/xz.png" alt="" class="path-xz" v-if="item.id == albumid[1].album && !setCheck" />
 							</div>
 							<p>{{ item.name }}</p>
@@ -49,7 +49,7 @@
 					<ul class="song">
 						<li v-for="(item, index) in englishData[106]" @click="radioCheck(item.id, 2, index)">
 							<div class="path-div" @click="cloudAlbum(item.id)">
-								<img :src="item.coverpath" alt="" class="path-img" />
+								<img :src="item.coverImage" alt="" class="path-img" />
 								<img src="../../assets/images/xz.png" alt="" class="path-xz" v-if="item.id == albumid[2].album && !setCheck" />
 							</div>
 							<p>{{ item.name }}</p>
@@ -68,7 +68,7 @@
 					<ul class="song">
 						<li v-for="(item, index) in englishData[107]" @click="radioCheck(item.id, 3, index)">
 							<div class="path-div" @click="cloudAlbum(item.id)">
-								<img :src="item.coverpath" alt="" class="path-img" />
+								<img :src="item.coverImage" alt="" class="path-img" />
 								<img src="../../assets/images/xz.png" alt="" class="path-xz" v-if="item.id == albumid[3].album && !setCheck" />
 							</div>
 							<p>{{ item.name }}</p>
@@ -183,10 +183,12 @@ export default {
 		//故事机播放模式
 		devicesAction() {
 			let self = this;
+			var timestamp = parseInt(new Date().getTime() / 1000);
 			var body = {
 				from: 'DID:0',
 				to: 'UID:-1',
-				action: 641
+				action: 641,
+				time:timestamp
 			};
 			let json = JSON.stringify(body);
 			let data = { custom: { function: json, name: 'function' } };
@@ -203,6 +205,7 @@ export default {
 			let self = this;
 			self.setCheck = !self.setCheck;
 			// self.englishAcitve =[];
+			var timestamp = parseInt(new Date().getTime() / 1000);
 			if (!self.setCheck) {
 				if (self.isClick) {
 					console.log('111111111111');
@@ -210,7 +213,8 @@ export default {
 						from: 'DID:0',
 						to: 'UID:-1',
 						action: 637,
-						list: self.musicList
+						list: self.musicList,
+						time:timestamp
 					};
 				} else {
 					console.log('22222222222', self.albumid);
@@ -218,7 +222,8 @@ export default {
 						from: 'DID:0',
 						to: 'UID:-1',
 						action: 637,
-						list: self.albumid
+						list: self.albumid,
+						time:timestamp
 					};
 				}
 				// var body = {

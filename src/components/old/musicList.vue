@@ -19,23 +19,23 @@
 					<span>试听</span>
 				</div>
 				<div class="music_cell_right" @click="devicesMusic(1, item, index)" v-show="isLine == 1">
-					<img class="secondImg" src="../../assets/images/icon_demand.png" v-if="item.id == musicData.songid || item.name == musicData.song" />
-					<img class="secondImg" src="../../assets/images/icon_device_play.png" v-else />
+					<img class="secondImg" src="../../assets/images/icon_device_play.png" v-if="item.id == musicData.songid || item.name == musicData.song" />
+					<img class="secondImg" src="../../assets/images/icon_demand.png" v-else />
 					<span>点播</span>
 				</div>
 			</div>
 			<div class="music_show_cell" v-show="showActive == index">
 				<div class="show_cell_cell" @click="listenOrOffline(item.path, index, item.id, item)">
-					<img class="secondImg" :src="active != index ? require('../../assets/images/icon_listen_pause.png') : require('../../assets/images/icon_listen_playing.png')" />
+					<img class="secondImg" :src="active != index ? require('../../assets/images/icon_shouting.png') : require('../../assets/images/icon_shouting.png')" />
 					<p>试听</p>
 				</div>
 				<div class="show_cell_cell" @click="devicesMusic(2, item)">
-					<img src="../../assets/images/sc.png" alt />
+					<img src="../../assets/images/my_vip_icon.png" alt />
 					<p>收藏</p>
 				</div>
 				<div class="show_cell_cell" @click="devicesMusic(3, item)">
-					<img src="../../assets/images/icon_download_1.png" v-if="item.copyrightId == 0" alt class="downloadImg" />
-					<img src="../../assets/images/icon_download_1.png" v-else alt />
+					<img src="../../assets/images/wDownload.png" v-if="item.copyrightId == 0" alt class="downloadImg" />
+					<img src="../../assets/images/wDownload.png" v-else alt />
 					<p :class="item.copyrightId == 0 ? 'downloadImg' : ''">下载</p>
 				</div>
 			</div>
@@ -144,12 +144,12 @@ export default {
 		},
 		//展示点播，下载
 		showMore(index) {
-			if (this.isLine == 0) {
-				return;
-			}
-			if (this.isHistory) {
-				return;
-			}
+			// if (this.isLine == 0) {
+			// 	return;
+			// }
+			// if (this.isHistory) {
+			// 	return;
+			// }
 			if (this.showActive == index) {
 				this.showActive = -1;
 			} else {
@@ -377,8 +377,8 @@ export default {
 		width: 30%;
 		height: 50px;
 		img {
-			// width: 22px;
-			height: 16px;
+			width: 20px;
+			height: 20px;
 		}
 		p {
 			font-size: 12px;

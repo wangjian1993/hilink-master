@@ -696,7 +696,7 @@ export default {
 		contentBtn(type) {
 			var url;
 			let self = this;
-			let v = parseInt(this.version, 16); //9();
+			let v = parseInt(this.version, 16); //11a;
 			// if (self.isLine == 0 && type != 0) {
 			// 	this.$toast({
 			// 		message: this.$t('m.Twist'),
@@ -707,18 +707,18 @@ export default {
 			// 	return;
 			// }
 			if (type == 0) {
-				if (v < 4063514) {
-					url = 'tcloudIndex';
+				if (v > 4063514) {
+					url = 'cloudHome';
 				} else {
 					url = 'cloudHome'; //火火兔内容云
 					//url = 'OldIndex';
 				}
 			} else if (type == 1) {
-				if (v < 4063514) {
+				if (v > 4063514) {
 					url = 'CloudEnglish';
 				} else {
-					//url = 'english'; //启蒙英语
-					url = 'CloudEnglish';
+					url = 'english'; //启蒙英语
+					//url = 'CloudEnglish';
 				}
 			} else if (type == 2) {
 				url = 'localfile';

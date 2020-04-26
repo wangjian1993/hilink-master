@@ -120,9 +120,6 @@ export default {
 		// this.getCommonToken();
 		// this.getRecommendData();
 	},
-	activated() {
-		document.title = '火火兔早教';
-	},
 	mounted() {
 		localStorage.getItem('deviceType');
 	},
