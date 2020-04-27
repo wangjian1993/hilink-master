@@ -66,7 +66,7 @@ export default {
 	top: 0px;
 	background: #f7f7f7;
 	height: 80px;
-	z-index: 1000;
+	z-index: 5000;
 }
 .home-header {
 	margin-top: 24px;

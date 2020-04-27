@@ -6,7 +6,7 @@
 				<div class="tab_item_right">
 					<p class="van-ellipsis">{{ item.name }}</p>
 					<p class="description">{{ item.description }}</p>
-					<img src="../../assets/images/icon_gequ_gray.png" alt />
+					<img src="../assets/images/icon_gequ_gray.png" alt />
 					<span>{{ item.musicCount }}首</span>
 				</div>
 			</div>
@@ -17,9 +17,7 @@
 <script>
 export default {
 	props: {
-		type: {
-			type: Number
-		},
+		type:"",
 		name: ''
 	},
 	data() {
@@ -31,6 +29,9 @@ export default {
 			isMore: true
 		};
 	},
+	activated() {
+		this.page = 0;
+	},
 	methods: {
 		onLoad() {
 			// 异步更新数据
@@ -38,6 +39,7 @@ export default {
 			if (!this.isMore) {
 				return false;
 			}
+			console.log("this.page====",this.page)
 			this.isMore = false;
 			this.$axios
 				.getAlbumsData(this.page, this.type)
@@ -62,7 +64,7 @@ export default {
 		goDetail(id) {
 			//统计
 			this.$router.push({
-				name: 'OldAlbumDetail',
+				name: 'albumDetail',
 				query: {
 					id: id
 				}

@@ -17,7 +17,7 @@ export default {
 			transitionName: null,
 			path: '',
 			type: 'AliloCloud',
-			title: this.$t('m.AliloCloud')
+			title: this.$t('m.HomeTitel')
 		};
 	},
 	created() {
