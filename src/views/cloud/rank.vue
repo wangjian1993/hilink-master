@@ -2,7 +2,7 @@
   <div class="content">
     <div class="head_bg">
       <img src="../../assets/images/rank_bg.png" alt />
-      <p>{{startTime}}/{{endTime}}</p>
+      <!-- <p>{{startTime}}/{{endTime}}</p> -->
     </div>
     <p class="music_title">歌曲列表</p>
     <music-list :items="musicData" :routeLeave="routeLeave"></music-list>

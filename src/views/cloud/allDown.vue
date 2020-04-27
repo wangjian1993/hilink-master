@@ -3,14 +3,28 @@
 		<v-header :title="title"></v-header>
 		<div class="music-list" v-if="isLoaded">
 			<p class="downMsg">*应版权方要求,部分歌曲暂无法提供下载</p>
-			<van-checkbox-group v-model="result" checked-color="#07c160" ref="checkboxGroup" :max="checkboxMax">
+			<!-- <van-checkbox-group v-model="result" checked-color="#07c160" ref="checkboxGroup" :max="checkboxMax">
 				<van-cell-group>
 					<van-cell v-for="(item, index) in musicList" :title="item.name"  clickable
-			      :key="index"  @click="toggle(index)" :class="item.copyrightId == 0?'isDownActive':''">
-						<van-checkbox :name="index"  ref="checkboxes" slot="right-icon"  v-if="item.copyrightId == 1"/>			
+			      :key="index" :class="item.copyrightId == 0?'isDownActive':''">
+						<van-checkbox :name="index" ref="checkboxes" slot="right-icon"  v-if="item.copyrightId == 1"/>			
+					</van-cell>
+				</van-cell-group>
+			</van-checkbox-group> -->
+			<van-checkbox-group v-model="result" :max="8">
+				<van-cell-group>
+					<van-cell v-for="(item, index) in musicList" clickable :key="index" :title="item.name" @click="toggle(index)">
+						<template #right-icon>
+							<van-checkbox :name="index" ref="checkboxes" />
+						</template>
 					</van-cell>
 				</van-cell-group>
 			</van-checkbox-group>
+			<!-- 	<div class="list-checkbox">
+				<van-checkbox-group v-model="result" :max="8" class="item-checkbox">
+					<van-checkbox v-for="(item, index) in musicList" :name="index" @click="toggle(index)">{{ item.name }}</van-checkbox>
+				</van-checkbox-group>
+			</div> -->
 		</div>
 		<div class="downBtn" @click="downAllList()">下载</div>
 		<div class="loadingding center" v-show="!isLoaded"><van-loading size="50px" color="#81b4ff">加载中...</van-loading></div>
@@ -33,13 +47,12 @@ export default {
 			isLoaded: false,
 			showIndex: -1,
 			showTab: true,
-			checkboxMax:8,
+			checkboxMax: 8,
 			loadingFlag: true,
 			title: '批量下载'
 		};
 	},
-	created() {
-	},
+	created() {},
 	async mounted() {
 		// this.isLoaded = true;
 		await http
@@ -47,7 +60,7 @@ export default {
 			.then(res => {
 				//转换播放时间
 				this.musicList = res.data.content.musicList;
-				this.isLoaded =true;
+				this.isLoaded = true;
 			})
 			.catch(err => {
 				console.log(err);
@@ -70,23 +83,25 @@ export default {
 	methods: {
 		toggle(index) {
 			let self = this;
-			console.log(index)
+			console.log(index);
 			self.$refs.checkboxes[index].toggle();
-			console.log("self.result.length",self.result.length)
-			if(self.result.length == 8){
-				this.$toast({
-					message: '批量下载每次最多添加八首',
-					position: 'bottom',
-					duration: '2000',
-					className: 'toastActive'
-				});
-			}
+			setTimeout(function(){
+				console.log('self.result.length', self.result);
+				if (self.result.length == 8) {
+					self.$toast({
+						message: '批量下载每次最多添加八首',
+						position: 'bottom',
+						duration: '2000',
+						className: 'toastActive'
+					});
+				}
+			},500);
 		},
 		downAllList() {
 			let self = this;
 			var dataArray = [];
-			console.log("self.result=====",self.result);
-			if(self.result.length == 0){
+			console.log('self.result=====', self.result);
+			if (self.result.length == 0) {
 				self.$toast({
 					message: '请选择要下载的歌曲',
 					position: 'bottom',
@@ -148,13 +163,22 @@ export default {
 <style lang="less" scoped>
 @import url('../../assets/css/cloud/common.less');
 @import url('../../assets/css/cloud/listenDetail.less');
-.downMsg{
+.downMsg {
 	width: 100%;
 	text-align: center;
 	font-size: 14px;
 	color: #c81624;
 }
-.isDownActive{
-	opacity: .4;
+.isDownActive {
+	opacity: 0.4;
+}
+.list-checkbox {
+	width: 92%;
+	margin: 0 auto;
+	.van-checkbox {
+		padding: 5px 0;
+		font-size: 16px;
+		color: #000000;
+	}
 }
 </style>

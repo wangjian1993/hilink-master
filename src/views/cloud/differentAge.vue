@@ -34,10 +34,6 @@ export default {
   created(){
     document.title = "分龄推荐"
     this.getAgeData(0)
-     if (window._czc) {
-        console.log("分龄推荐模块模块模块模块模块模块模块");
-        window._czc.push(["_trackEvent", localStorage.getItem("deviceType")+"-"+"分龄推荐模块", "点击", "总计"]);
-      }
   },
   methods: {
     //获取分龄儿童数据

@@ -19,7 +19,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="album-icon"><img src="../../assets/images/download.png" class="head_download" @click="goDownload(1)" /></div>
+				<div class="album-icon" v-if="isLine == 1"><img src="../../assets/images/download.png" class="head_download" @click="goDownload(1)" /></div>
 				<!-- <div class="album-icon1" v-if="isLine == 1"><img src="../../assets/images/favorites.png" class="head_download" @click="goDownload(2)" /></div> -->
 			</div>
 			<van-tabs v-model="active" color="#4da6ff">

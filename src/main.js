@@ -12,8 +12,8 @@ import 'video.js/dist/video-js.css'
 import base64 from './assets/js/base64'
 import VueI18n from 'vue-i18n'
 import VueLazyLoad from "vue-lazyload";
-const vConsole = new Vconsole() 
-Vue.use(vConsole)
+// const vConsole = new Vconsole() 
+// Vue.use(vConsole)
 // hilink sdk公共函数
 import hilink from './hilink/index'
 import './assets/css/app.css' //公共css

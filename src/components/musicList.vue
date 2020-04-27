@@ -1,6 +1,6 @@
 <template>
 	<div class="content">
-		<div class="center" v-if="items.length == 0"><p>暂无更多</p></div>
+		<!-- <div class="center" v-if="items.length == 0"><p>暂无更多</p></div> -->
 		<div v-for="(item, index) in items" :key="index">
 			<div class="music_cell">
 				<!-- <div class="music_cell_index" v-show="showIndex">{{ index + 1 }}</div> -->

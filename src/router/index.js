@@ -68,7 +68,6 @@ export default new Router({
 			name: 'cloudIndex',
 			component: () => import('@/views/cloudContent/index.vue'),
 			meta: {
-				title: "火火兔内容云",
 				keepAlive: true,
 			}
 		},
@@ -88,7 +87,6 @@ export default new Router({
 			name: 'cloudListen',
 			component: () => import('@/views/cloudContent/listen.vue'),
 			meta: {
-				title: "火火兔内容云",
 				keepAlive: true
 			}
 		},

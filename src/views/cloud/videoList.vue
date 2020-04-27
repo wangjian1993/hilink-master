@@ -62,9 +62,6 @@ export default {
     },
     goVideo(picurl, videopath) {
       //统计
-      if (window._czc) {
-        window._czc.push(["_trackEvent", localStorage.getItem("deviceType")+"-"+"视频模块", "点击", "总计"]);
-      }
       this.$router.push({
         path: "/video",
         query: {
