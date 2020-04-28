@@ -48,7 +48,7 @@
 	</div>
 </template>
 <script>
-import musicList from '../../components/musicList.vue';
+import musicList from '@/components/old/musicList';
 import Header from '@/components/header.vue';
 import { mapState } from 'vuex';
 export default {
@@ -67,8 +67,8 @@ export default {
 			description: false,
 			active: 0,
 			routeLeave: false,
-			isLoaded:false,
-			title:null
+			isLoaded: false,
+			title: null
 		};
 	},
 	created() {
@@ -77,11 +77,9 @@ export default {
 		this.getAudioData(id);
 	},
 	computed: {
-		...mapState(["isLine"])
+		...mapState(['isLine'])
 	},
-	mounted() {
-		
-	},
+	mounted() {},
 	methods: {
 		getAll() {
 			if (this.allText) {
@@ -107,7 +105,7 @@ export default {
 			that.$axios.getSpecialInfo(id).then(res => {
 				that.musicList = res.data.content.musicList;
 				that.audioInfoData = res.data.content.info;
-				that.title =res.data.content.info.name;
+				that.title = res.data.content.info.name;
 				that.audioInfoData.tag = that.audioInfoData.tag.split(',');
 				//  console.log(that.audioInfoData.tag.length)
 				that.total = res.data.content.total;
@@ -124,19 +122,18 @@ export default {
 					let m = (parseInt(v.timelength / 60) + '').padStart(2, '0');
 					v.timelengths = m + ':' + s;
 				});
-				setTimeout(function(){
-					that.isLoaded=true;
-				},1000)
+				setTimeout(function() {
+					that.isLoaded = true;
+				}, 1000);
 			});
 		},
 		//批量下载
 		goDownload(type) {
-			if(type == 1) {
+			if (type == 1) {
 				this.$router.push({ name: 'cloudAllDown', query: { id: this.audioId } });
-			}else if(type == 2){
+			} else if (type == 2) {
 				this.$router.push({ name: 'cloudAllEnshrine', query: { id: this.audioId } });
 			}
-			
 		},
 		goEnshrine() {}
 	},
@@ -185,7 +182,7 @@ export default {
 		// width: 28px;
 		// height: 28px;
 	}
-	.album-icon1{
+	.album-icon1 {
 		width: 100%;
 		position: absolute;
 		bottom: 5px;

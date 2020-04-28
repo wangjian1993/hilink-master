@@ -6,7 +6,7 @@
 				<div class="tab_item_right">
 					<p class="van-ellipsis">{{ item.name }}</p>
 					<p class="description">{{ item.description }}</p>
-					<img src="../assets/images/icon_gequ_gray.png" alt />
+					<img src="../../assets/images/icon_gequ_gray.png" alt />
 					<span>{{ item.musicCount }}首</span>
 				</div>
 			</div>

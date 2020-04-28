@@ -71,6 +71,7 @@ const cloudUrl = "https://cloud.alilo.com.cn/baby/api/wx/";
 const aliloUrl = "https://www.alilo.com.cn";
 const tcloudUrl = "https://api.cloud.alilo.com.cn/api/v4/";
 const tttcloudUrl = "https://api.cloud.alilo.com.cn/babying/api/t32/user/";
+const cid = 66;
 //banner轮播图
 export default {
 	/*  新接口------------------------*/
@@ -81,7 +82,7 @@ export default {
 			method: "POST",
 			token: true,
 			params: {
-				channelId: 66,
+				channelId: cid,
 				pageId: 65
 			}
 		});
@@ -136,7 +137,7 @@ export default {
 			url: "http://api.cloud.alilo.com.cn/api/v4/resource/search",
 			method: "post",
 			params: {
-				channelId: channelId,
+				channelId: cid,
 				topNumber: 10,
 				keyWord: keyWord,
 				type: type,
