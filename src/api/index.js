@@ -46,9 +46,10 @@ export function fetch(options, isToken) {
 			instance.interceptors.response.use(function(res) {
 				// console.log(res)
 				if (res.data.code == 2) {
-					// console.log("token过期了", Router);
-					Router.push({
-						name: 'login'
+					console.log("token过期了");
+					axios.get("http://api.cloud.alilo.com.cn/api/v4/login/get-token?appKey=hht&appSecret=hht").then(response => {
+						localStorage.setItem('H1_token', response.data.data);
+						// resolve(config);
 					})
 				}
 				return res;
@@ -67,11 +68,12 @@ export function fetch(options, isToken) {
 			});
 	});
 }
-const cloudUrl = "https://cloud.alilo.com.cn/baby/api/wx/";
+const cloudUrl = "https://cloud.alilo.com.cn/baby/api/hw/";
 const aliloUrl = "https://www.alilo.com.cn";
 const tcloudUrl = "https://api.cloud.alilo.com.cn/api/v4/";
 const tttcloudUrl = "https://api.cloud.alilo.com.cn/babying/api/t32/user/";
 const cid = 66;
+const pageId = 74;
 //banner轮播图
 export default {
 	/*  新接口------------------------*/
@@ -83,7 +85,7 @@ export default {
 			token: true,
 			params: {
 				channelId: cid,
-				pageId: 65
+				pageId: pageId
 			}
 		});
 	},
@@ -485,9 +487,9 @@ export default {
 			url: tcloudUrl + "equipment/get-yyqm",
 			method: "post",
 			token: true,
-			params:{
-				channelId:81,
-				pageId:75
+			params: {
+				channelId: 81,
+				pageId: pageId
 			}
 		})
 	},

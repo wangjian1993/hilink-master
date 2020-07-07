@@ -62,6 +62,8 @@ const videoList = () => import('@/components/new/videoList');
 const payList = () => import('@/components/new/payList');
 const fmList = () => import('@/components/new/FMList');
 const scrollInto = () => import('@/components/new/scrollInto');
+import ActivityVoList from "@/components/activity-vo-list/Index";
+import * as UTILS from '@/utils/index';
 // let swiper;
 export default {
 	data() {
@@ -129,23 +131,24 @@ export default {
 				this.categoryList = res.data.data;
 			});
 			await this.$axios.differAge({ channelId: 80 }).then(res => {
-				res.data.data[0].title = '默认成长推荐';
+				// res.data.data[0].title = '默认成长推荐';
 				this.ageData.push(res.data.data);
 			});
-			await this.$axios.differAge({ channelId: 80, birthDate: '2020-03-24' }).then(res => {
+			await this.$axios.differAge({ channelId: 80, birthDate: UTILS.getDate() }).then(res => {
 				res.data.data[0].title = '0-1岁成长推荐';
 				this.ageData.push(res.data.data);
 			});
-			await this.$axios.differAge({ channelId: 80, birthDate: '2019-03-24' }).then(res => {
+			await this.$axios.differAge({ channelId: 80, birthDate: UTILS.getDate(1) }).then(res => {
 				res.data.data[0].title = '1-3岁成长推荐';
 				this.ageData.push(res.data.data);
 			});
-			await this.$axios.differAge({ channelId: 80, birthDate: '2017-03-24' }).then(res => {
+			await this.$axios.differAge({ channelId: 80, birthDate: UTILS.getDate(3) }).then(res => {
 				res.data.data[0].title = '3+成长推荐';
 				this.ageData.push(res.data.data);
 			});
 			this.$axios.getHomeData().then(res => {
 				let result = res.data.data.activityVoList;
+				console.log(result);
 				//轮播
 				result[0].resList.forEach((v, i) => {
 					v.linkType = v.links.split(';')[0];
@@ -192,20 +195,20 @@ export default {
 				});
 				this.musicXGYCID = result[7].id;
 				//认知启蒙
-				this.confidentData = result[8].resList;
-				this.confidentData.forEach((v, i) => {
-					v.coverImage = v.coverImage + '?x-oss-process=image/resize,w_105/quality,Q_80';
-				});
-				this.confidentDataID = result[8].id;
+				// this.confidentData = result[8].resList;
+				// this.confidentData.forEach((v, i) => {
+				// 	v.coverImage = v.coverImage + '?x-oss-process=image/resize,w_105/quality,Q_80';
+				// });
+				// this.confidentDataID = result[8].id;
 				//精彩动画
-				this.videoData = result[9].resList.splice(0, 2);
-				this.videoData.forEach((v, i) => {
-					v.coverImage = v.coverImage + '?x-oss-process=image/resize,w_163/quality,Q_80';
-				});
-				this.videoDataID = result[9].id;
+				// this.videoData = result[9].resList.splice(0, 2);
+				// this.videoData.forEach((v, i) => {
+				// 	v.coverImage = v.coverImage + '?x-oss-process=image/resize,w_163/quality,Q_80';
+				// });
+				// this.videoDataID = result[9].id;
 
-				this.activityVoList = result.splice(3);
-				console.log(this.activityVoList);
+				// this.activityVoList = result.splice(3);
+				// console.log(this.activityVoList);
 				this.isLoaded = true;
 			});
 		},
@@ -309,7 +312,8 @@ export default {
 		scrollInto,
 		swiperList,
 		musicList,
-		SwiperCustomize
+		SwiperCustomize,
+		ActivityVoList
 	},
 	beforeRouteEnter(to, from, next) {
 		next(vm => {
